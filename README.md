@@ -13,6 +13,15 @@ python3 -m http.server 5173
 - 演示模式：http://localhost:5173/app/?demo 直接读取 `vault/`，所有修改只留在页面内存里，刷新就没了。适合课堂展示，也用于自动测试。
 - 安装成 App：用 Chrome 打开后，点地址栏右侧的“安装”图标。
 
+## 发布（GitHub Pages）
+
+网站地址：https://raven2950.github.io/thsis_2627/
+
+- 访客打开看到的是只读发布版，默认进入关键词地图。
+- 你自己用的时候，点右上角「打开我的库」，选电脑上的 `vault/` 文件夹，就是可以编辑的完整版，不需要再开本地服务器。
+- 要更新网站，在 Finder 里双击 `发布.command`。它会提交改动并推送，GitHub Action（`.github/workflows/pages.yml`，构建脚本在 `scripts/build-site.sh`）大约一分钟后重新发布。
+- 不会上传、也不会发布的内容：`vault/附件/`、所有 PDF、`vault/私密/`。仓库是公开的，其余内容在 GitHub 上都能被看到。
+
 ## 笔记约定
 
 每篇笔记用 `kind` 属性区分类型：`材料`、`概念`、`研究问题`、`方向`。文件放在哪个文件夹不影响识别。
