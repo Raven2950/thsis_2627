@@ -1,0 +1,11 @@
+# Never leaves this computer (the repo is public)
+vault/附件/
+vault/私密/
+*.pdf
+# Obsidian's per-device state
+vault/.obsidian/workspace*.json
+vault/.obsidian/cache
+vault/.trash/
+.DS_Store
+# local build output
+_site/

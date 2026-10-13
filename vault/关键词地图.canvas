@@ -1,0 +1,239 @@
+{
+	"nodes": [
+		{
+			"id": "grp-0",
+			"type": "group",
+			"label": "核心需求",
+			"color": "5",
+			"x": -382,
+			"y": 321,
+			"width": 307,
+			"height": 365
+		},
+		{
+			"id": "grp-1",
+			"type": "group",
+			"label": "技术现状",
+			"color": "6",
+			"x": 217,
+			"y": 484,
+			"width": 371,
+			"height": 237
+		},
+		{
+			"id": "grp-2",
+			"type": "group",
+			"label": "产品与服务",
+			"color": "2",
+			"x": -37,
+			"y": 323,
+			"width": 317,
+			"height": 227
+		},
+		{
+			"id": "grp-3",
+			"type": "group",
+			"label": "获取与支持",
+			"color": "4",
+			"x": 85,
+			"y": 69,
+			"width": 300,
+			"height": 167
+		},
+		{
+			"id": "grp-4",
+			"type": "group",
+			"label": "社会价值",
+			"color": "1",
+			"x": -201,
+			"y": 98,
+			"width": 190,
+			"height": 117
+		},
+		{
+			"id": "f703f3d7d05f1995",
+			"type": "file",
+			"file": "概念/沟通与AAC.md",
+			"x": -314,
+			"y": 371,
+			"width": 160,
+			"height": 60,
+			"color": "5"
+		},
+		{
+			"id": "6997077dc378b0b7",
+			"type": "file",
+			"file": "概念/用户已有技术生态.md",
+			"x": 247,
+			"y": 654,
+			"width": 160,
+			"height": 60,
+			"color": "6"
+		},
+		{
+			"id": "746b8d3b12e51fee",
+			"type": "text",
+			"text": "111\n",
+			"x": -306,
+			"y": 425,
+			"width": 220,
+			"height": 140,
+			"color": "3"
+		},
+		{
+			"id": "2ee2c41ccb2af6fe",
+			"type": "file",
+			"file": "概念/视障与读屏技术.md",
+			"x": 385,
+			"y": 599,
+			"width": 160,
+			"height": 44,
+			"color": "6"
+		},
+		{
+			"id": "e2d133eea4bfa271",
+			"type": "file",
+			"file": "概念/数字服务可及性.md",
+			"x": 17,
+			"y": 479,
+			"width": 160,
+			"height": 44,
+			"color": "2"
+		},
+		{
+			"id": "45bb8fd6c64c2626",
+			"type": "file",
+			"file": "概念/产品形态选择.md",
+			"x": 106,
+			"y": 427,
+			"width": 160,
+			"height": 44,
+			"color": "2"
+		},
+		{
+			"id": "d1485241412dc618",
+			"type": "file",
+			"file": "概念/个性化与定制.md",
+			"x": -7,
+			"y": 373,
+			"width": 160,
+			"height": 44,
+			"color": "2"
+		},
+		{
+			"id": "a8df68af2d7f371a",
+			"type": "file",
+			"file": "概念/身份与赋权.md",
+			"x": -171,
+			"y": 148,
+			"width": 160,
+			"height": 44,
+			"color": "1"
+		},
+		{
+			"id": "aab8a782638927d0",
+			"type": "file",
+			"file": "概念/现有工具的局限.md",
+			"x": 296,
+			"y": 534,
+			"width": 160,
+			"height": 44,
+			"color": "6"
+		},
+		{
+			"id": "af7588d047ff1cfd",
+			"type": "file",
+			"file": "概念/独立与依赖的张力.md",
+			"x": -352,
+			"y": 622,
+			"width": 160,
+			"height": 44,
+			"color": "5"
+		},
+		{
+			"id": "5164d890607122a7",
+			"type": "file",
+			"file": "概念/日常活动可达性.md",
+			"x": -264,
+			"y": 576,
+			"width": 160,
+			"height": 44,
+			"color": "5"
+		},
+		{
+			"id": "3220038dcc318252",
+			"type": "file",
+			"file": "概念/成本与获取障碍.md",
+			"x": 210,
+			"y": 172,
+			"width": 160,
+			"height": 44,
+			"color": "4"
+		},
+		{
+			"id": "02b63011ab8be414",
+			"type": "file",
+			"file": "概念/培训、支持与社群.md",
+			"x": 115,
+			"y": 119,
+			"width": 160,
+			"height": 44,
+			"color": "4"
+		}
+	],
+	"edges": [
+		{
+			"id": "37d2a11685c931a3",
+			"fromNode": "f703f3d7d05f1995",
+			"toNode": "6997077dc378b0b7"
+		},
+		{
+			"id": "a05ca34a8ff77c31",
+			"fromNode": "aab8a782638927d0",
+			"toNode": "5164d890607122a7",
+			"label": "造成困难"
+		},
+		{
+			"id": "d9abe0b01760605d",
+			"fromNode": "45bb8fd6c64c2626",
+			"toNode": "d1485241412dc618",
+			"label": "影响方式"
+		},
+		{
+			"id": "0b8ac5c035d53bc3",
+			"fromNode": "d1485241412dc618",
+			"toNode": "af7588d047ff1cfd",
+			"label": "支持独立"
+		},
+		{
+			"id": "7146b6590e511f57",
+			"fromNode": "3220038dcc318252",
+			"toNode": "6997077dc378b0b7",
+			"label": "制约现状"
+		},
+		{
+			"id": "37a6d0cf3ffc52d2",
+			"fromNode": "e2d133eea4bfa271",
+			"toNode": "aab8a782638927d0",
+			"label": "涉及方"
+		},
+		{
+			"id": "e61177e66e5d89ab",
+			"fromNode": "a8df68af2d7f371a",
+			"toNode": "45bb8fd6c64c2626",
+			"label": "影响感受"
+		},
+		{
+			"id": "20708acea85c2451",
+			"fromNode": "02b63011ab8be414",
+			"toNode": "d1485241412dc618",
+			"label": "促进实现"
+		},
+		{
+			"id": "a90c8e7c20846d8f",
+			"fromNode": "2ee2c41ccb2af6fe",
+			"toNode": "e2d133eea4bfa271",
+			"label": "依赖前提"
+		}
+	]
+}

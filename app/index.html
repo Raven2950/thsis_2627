@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thesis Web</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="theme-color" content="#2f5d50">
+  <script type="importmap">
+  {
+    "imports": {
+      "js-yaml": "https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.mjs",
+      "marked": "https://cdn.jsdelivr.net/npm/marked@12.0.2/lib/marked.esm.js",
+      "dompurify": "https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.es.mjs",
+      "d3-force": "https://cdn.jsdelivr.net/npm/d3-force@3.0.0/+esm"
+    }
+  }
+  </script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#/list">Thesis Web</a>
+    <nav>
+      <a href="#/list" data-nav="list">列表</a>
+      <a href="#/map" data-nav="map">地图</a>
+      <a href="#/gaps" data-nav="gaps">缺口</a>
+      <a href="#/inbox" data-nav="inbox">收件箱<span class="nav-count"></span></a>
+      <a href="#/options" data-nav="options">选项</a>
+      <a href="#/settings" data-nav="settings">设置</a>
+    </nav>
+    <div class="vault-status" id="vaultStatus"></div>
+  </header>
+  <main id="main"></main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

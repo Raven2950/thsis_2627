@@ -1,0 +1,16 @@
+{
+  "name": "Thesis Web",
+  "short_name": "Thesis Web",
+  "description": "个人 thesis 材料仓库：读写 Obsidian 库，回忆、关联、找缺口。",
+  "start_url": "./#/list",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf9f6",
+  "theme_color": "#2f5d50",
+  "lang": "zh-CN",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
