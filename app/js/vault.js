@@ -21,13 +21,21 @@ const kvGet = key => idb('readonly', s => s.get(key)).catch(() => undefined);
 const kvSet = (key, val) => idb('readwrite', s => s.put(val, key)).catch(() => {});
 
 export const canWrite = 'showDirectoryPicker' in window;
+const SKIP_DIRS = new Set(['_site', 'node_modules']);
+
+// Picked the project folder (the one holding app/ and vault/) instead of the vault? Use its vault/.
+async function vaultInside(handle) {
+  const has = async name => { try { await handle.getDirectoryHandle(name); return true; } catch (e) { return false; } };
+  if (!(await has('材料')) && !(await has('_系统')) && (await has('vault'))) return handle.getDirectoryHandle('vault');
+  return handle;
+}
 
 class FsVault {
   constructor(handle) { this.handle = handle; this.name = handle.name; this.readOnly = false; }
 
   async *walk(dir = this.handle, prefix = '') {
     for await (const [name, h] of dir.entries()) {
-      if (name.startsWith('.')) continue;                       // .obsidian, .trash, .git
+      if (name.startsWith('.') || (h.kind === 'directory' && SKIP_DIRS.has(name))) continue;   // .obsidian, .git, build output
       if (h.kind === 'directory') yield* this.walk(h, `${prefix}${name}/`);
       else yield { path: prefix + name, handle: h };
     }
@@ -142,7 +150,8 @@ export async function hasPublished(base) {
 }
 
 export async function pickVault() {
-  const handle = await window.showDirectoryPicker({ id: 'thesis-vault', mode: 'readwrite' });
+  const picked = await window.showDirectoryPicker({ id: 'thesis-vault', mode: 'readwrite' });
+  const handle = await vaultInside(picked);
   await kvSet('vault', handle);
   return new FsVault(handle);
 }
@@ -154,12 +163,18 @@ export async function restoreVault() {
   const handle = await kvGet('vault');
   if (!handle) return null;
   const perm = await handle.queryPermission({ mode: 'readwrite' });
-  return perm === 'granted' ? { vault: new FsVault(handle) } : { pending: handle };
+  if (perm !== 'granted') return { pending: handle };
+  const inner = await vaultInside(handle);
+  if (inner !== handle) await kvSet('vault', inner);
+  return { vault: new FsVault(inner) };
 }
 
 export async function regrant(handle) {
   const perm = await handle.requestPermission({ mode: 'readwrite' });
-  return perm === 'granted' ? new FsVault(handle) : null;
+  if (perm !== 'granted') return null;
+  const inner = await vaultInside(handle);
+  if (inner !== handle) await kvSet('vault', inner);
+  return new FsVault(inner);
 }
 
 export function pickSnapshot() {
