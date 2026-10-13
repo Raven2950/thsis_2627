@@ -7,13 +7,15 @@ import { parseLinks, addLinkToBody, removeLinkFromBody } from './links.js';
 const VOCAB_PATH = '_系统/词表.md';
 const INBOX_PATH = '_系统/收件箱.json';
 export const MAP_PATH = '关键词地图.canvas';  // JSON Canvas, opens in Obsidian too
-const ORG_PATH = '_系统/地图整理.json';       // map groups, AI arrows, pinned / hidden keywords
+const ORG_PATH = '_系统/地图整理.json';
+const TR_PATH = '_系统/译文.json';            // Chinese → English for my own writing (translate.js)       // map groups, AI arrows, pinned / hidden keywords
 const TEMPLATES = '_模板/';          // Obsidian templates carry kind: 材料 but are not materials
 
 let vault = null;
 const notes = new Map();           // path -> { path, name, data, body, mtime }
 let inbox = [];                    // AI candidates waiting for keep / cancel
 let files = [];                    // every file path in the vault (images, PDFs…)
+let translations = {};             // source text -> English
 const listeners = new Set();
 
 const baseName = path => path.split('/').at(-1).replace(/\.md$/, '');
@@ -38,6 +40,7 @@ export const store = {
     for (const f of await vault.readAll()) if (!f.path.startsWith(TEMPLATES)) index(f.path, f.text, f.mtime);
     try { inbox = JSON.parse((await vault.read(INBOX_PATH))?.text || '{}').entries || []; } catch (e) { inbox = []; }
     files = vault.listFiles ? await vault.listFiles().catch(() => []) : [];
+    try { translations = JSON.parse((await vault.read(TR_PATH))?.text || '{}').t || {}; } catch (e) { translations = {}; }
     emit();
   },
 
@@ -204,4 +207,13 @@ export const store = {
     return path;
   },
   async writeFile(path, blob) { await vault.write(path, blob); if (!files.includes(path)) files.push(path); },
+
+  /* ---------- English versions of my writing ---------- */
+  translation(text) { return translations[text] ?? translations[String(text).trim()] ?? null; },
+  translations() { return translations; },
+  async saveTranslations(t) {
+    translations = t;
+    await vault.write(TR_PATH, JSON.stringify({ about: '网页英文模式用的译文：中文原文 → 英文。在网页里点「更新英文版」生成。', t }, null, 1));
+    emit();
+  },
 };

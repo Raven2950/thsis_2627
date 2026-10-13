@@ -10,6 +10,8 @@ import { renderInbox } from './views/inbox.js';
 import { renderGaps } from './views/gaps.js';
 import { renderSettings } from './views/settings.js';
 import { installCapture } from './views/capture.js';
+import { lang, isEn, setLang, applyLang } from './i18n.js';
+import { pendingTexts, translatePending } from './translate.js';
 
 const main = document.getElementById('main');
 const PUBLISHED = '../vault/';          // where the GitHub Action puts the published vault
@@ -28,13 +30,54 @@ function route() {
   if (sel) try { el.setSelectionRange(...sel); } catch (e) { /* not a text field */ }
 }
 
+const langSwitch = () => `<span class="lang-switch" data-no-tr role="group" aria-label="Language">
+  <button data-lang="zh" class="${isEn() ? '' : 'on'}" aria-pressed="${!isEn()}">中</button><button data-lang="en" class="${isEn() ? 'on' : ''}" aria-pressed="${isEn()}">EN</button></span>`;
+
+// How many of my texts still lack an English version (owner only; checked after each render).
+let trBusy = false;
+async function refreshTranslateButton() {
+  const btn = document.getElementById('trBtn');
+  if (!btn || trBusy) return;
+  const n = (await pendingTexts().catch(() => [])).length;
+  btn.hidden = !n;
+  btn.textContent = `更新英文版（${n}）`;
+}
+async function runTranslate() {
+  if (trBusy) return;
+  trBusy = true;
+  const btn = document.getElementById('trBtn');
+  try {
+    const { translated, failed } = await translatePending((done, total) => {
+      if (btn) btn.textContent = isEn() ? `Translating ${done}/${total}…` : `翻译中 ${done}/${total}…`;
+    });
+    toast(isEn() ? `Translated ${translated}${failed.length ? `; ${failed.length} left for next time` : ''}`
+      : `翻译了 ${translated} 段${failed.length ? `；${failed.length} 段没成功，下次再试` : ''}`);
+  } catch (e) { toast(e.message, true); }
+  trBusy = false;
+  refreshTranslateButton();
+}
+
 function render() {
   const v = store.vault;
+  applyLang();
   document.body.classList.toggle('published', !!v?.published);
+  document.body.classList.toggle('lang-en', isEn());
   statusEl.innerHTML = !v ? '' : v.published
     ? `<span class="badge" title="这是发布出来的只读版本">只读 · 发布版</span>${canWrite ? '<button class="ghost" id="ownerBtn" title="作者用：打开自己电脑上的库来编辑">打开我的库</button>' : ''}`
     : `<span class="vault-name" title="库文件夹">📁 ${esc(v.name)}</span>${v.readOnly ? '<span class="badge">只读</span>' : ''}${v.demo ? '<span class="badge ai" title="修改只保存在这个页面里，刷新就没了">演示模式</span>' : ''}
        <button class="ghost" id="reloadBtn" title="重新读取库里的文件">重新载入</button>`;
+  statusEl.insertAdjacentHTML('afterbegin', langSwitch());
+  if (v && !v.readOnly) {
+    statusEl.insertAdjacentHTML('afterbegin', '<button class="ghost" id="trBtn" hidden title="把我写的中文内容翻成英文，存进库里；只翻新的">更新英文版</button>');
+    if (isEn()) statusEl.insertAdjacentHTML('afterbegin', '<span class="hint en-note">英文版只用来看；要编辑请切到「中」</span>');
+    document.getElementById('trBtn').addEventListener('click', runTranslate);
+    refreshTranslateButton();
+  }
+  for (const b of statusEl.querySelectorAll('[data-lang]')) b.addEventListener('click', () => {
+    if (b.dataset.lang === lang()) return;
+    setLang(b.dataset.lang);
+    route();
+  });
   document.getElementById('reloadBtn')?.addEventListener('click', () => store.reload().then(() => toast('已重新载入')));
   document.getElementById('ownerBtn')?.addEventListener('click', () => renderWelcome());
   if (!v) return renderWelcome();

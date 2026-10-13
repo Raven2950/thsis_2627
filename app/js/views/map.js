@@ -6,6 +6,7 @@
 //        _系统/地图整理.json (groups, which arrows the AI drew, pinned / hidden keywords)
 import { forceSimulation, forceLink, forceManyBody, forceX, forceY } from 'd3-force';
 import { store } from '../store.js';
+import { viewOnly, trc, isEn } from '../i18n.js';
 import { KIND } from '../model.js';
 import { asList, toLink } from '../note.js';
 import { esc, renderMarkdown } from '../markdown.js';
@@ -41,7 +42,7 @@ const conceptOf = n => (n?.type === 'file' ? store.get(n.file) : null);
 const nodeOfPath = path => canvas.nodes.find(n => n.type === 'file' && n.file === path);
 const groupOf = path => org.groups.find(g => g.members.includes(path));
 const visibleNodes = () => canvas.nodes.filter(n => n.type !== 'group');
-const ghosts = () => (store.vault?.readOnly ? [] : store.inbox().filter(e => e.kind === 'keyword'));
+const ghosts = () => (viewOnly() ? [] : store.inbox().filter(e => e.kind === 'keyword'));
 
 /* ---------- persistence ---------- */
 function forDisk() {
@@ -281,7 +282,7 @@ function nodeHtml(n) {
   }
   const editing = editingId === n.id;
   const body = editing ? `<textarea class="sticky-edit">${esc(editDraft ?? n.text ?? '')}</textarea>`
-    : `<div class="sticky-text markdown">${n.text ? renderMarkdown(n.text) : '<p class="muted">双击写点什么</p>'}</div>`;
+    : `<div class="sticky-text markdown">${n.text ? renderMarkdown(trc(n.text)) : '<p class="muted">双击写点什么</p>'}</div>`;
   return `<div class="mnode sticky${sel}${pin}${editing ? ' editing' : ''}" data-id="${n.id}" style="${style}width:${n.width || 220}px;height:${n.height || 140}px;${c ? '' : `--c:${PRESETS[STICKY_COLOR]};`}">
     ${body}<span class="handle" title="拖到关键词上：便利贴会跟着它走"></span><span class="resize" title="拖动改变大小"></span></div>`;
 }
@@ -422,7 +423,7 @@ function panel() {
   const nodes = visibleNodes().filter(n => selected.has(n.id));
   const edges = canvas.edges.filter(e => selected.has(e.id));
   const kws = nodes.map(conceptOf).filter(Boolean);
-  const ro = store.vault.readOnly;
+  const ro = viewOnly();
   const kwCount = visibleNodes().filter(conceptOf).length;
   const ungrouped = visibleNodes().filter(n => conceptOf(n) && !groupOf(n.file)).length;
   let html = '';
@@ -555,7 +556,7 @@ function bindPanel(el, { nodes, edges, kws }) {
 /* ---------- actions ---------- */
 // Delete removes stickies and arrows; keywords are hidden instead (their notes and tags stay).
 function removeSelected() {
-  if (!selected.size || store.vault.readOnly) return;
+  if (!selected.size || viewOnly()) return;
   snapshot();
   for (const n of visibleNodes().filter(x => selected.has(x.id) && conceptOf(x))) org.hidden.push(n.file);
   canvas.nodes = canvas.nodes.filter(n => !selected.has(n.id));
@@ -608,7 +609,7 @@ function bindStage() {
     if (editingId && !t.closest(`[data-id="${editingId}"]`)) finishEditing();
     const nodeEl = t.closest('.mnode[data-id]'), edgeEl = t.closest('[data-edge]');
     const [wx, wy] = toWorld(ev.clientX, ev.clientY);
-    const ro = store.vault.readOnly;
+    const ro = viewOnly();
 
     if (nodeEl && t.classList.contains('handle') && !ro) {
       gesture = { kind: 'connect', from: nodeEl.dataset.id };
@@ -640,7 +641,7 @@ function bindStage() {
     const [wx, wy] = toWorld(ev.clientX, ev.clientY);
     if (gesture.kind === 'pan') {
       view.x = gesture.x + ev.clientX - gesture.sx; view.y = gesture.y + ev.clientY - gesture.sy; applyView();
-    } else if (gesture.kind === 'move' && !store.vault.readOnly) {
+    } else if (gesture.kind === 'move' && !viewOnly()) {
       const dx = wx - gesture.sx, dy = wy - gesture.sy;
       if (!gesture.moved && Math.hypot(dx, dy) * view.k < 3) return;
       gesture.moved = true;
@@ -700,7 +701,7 @@ function bindStage() {
   vp.addEventListener('pointercancel', end);
 
   vp.addEventListener('dblclick', ev => {
-    if (store.vault.readOnly) return;
+    if (viewOnly()) return;
     const nodeEl = ev.target.closest('.mnode[data-id]'), edgeEl = ev.target.closest('[data-edge]');
     if (nodeEl) {
       const n = nodeById(nodeEl.dataset.id);
@@ -756,7 +757,7 @@ export async function renderMap(main) {
   root = main;
   main.classList.add('wide');
   if (first) {
-    const ro = store.vault.readOnly;
+    const ro = viewOnly();
     main.innerHTML = `<section class="map-view">
       <div class="graph-bar">
         ${ro ? '<span class="badge">只读</span>' : `<button class="primary" id="mOrganize">AI 整理</button>

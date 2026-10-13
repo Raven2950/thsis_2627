@@ -1,5 +1,6 @@
 // Inventory view: everything I have, filterable by type / status / role / importance.
 import { store } from '../store.js';
+import { viewOnly, trc, isEn } from '../i18n.js';
 import { KIND, FOLDER, unconfirmed, isEmpty, today } from '../model.js';
 import { esc } from '../markdown.js';
 import { asList } from '../note.js';
@@ -58,7 +59,7 @@ export function renderList(main) {
     <section class="list-view">
       <div class="list-head">
         <h1>材料 <span class="count">${items.length}</span></h1>
-        ${store.vault.readOnly ? '' : `<span class="hint">把 PDF、图片或链接拖进窗口就能收录</span>
+        ${viewOnly() ? '' : `<span class="hint">把 PDF、图片或链接拖进窗口就能收录</span>
           <button id="fromFile">从文件收录…</button><button class="primary" id="newItem">＋ 新材料</button>`}
         ${noWhy ? `<p class="nudge">有 ${noWhy} 份材料还没写「为什么存它」。</p>` : ''}
       </div>

@@ -22,6 +22,13 @@ python3 -m http.server 5173
 - 要更新网站，在 Finder 里双击 `发布.command`。它会提交改动并推送，GitHub Action（`.github/workflows/pages.yml`，构建脚本在 `scripts/build-site.sh`）大约一分钟后重新发布。
 - 不会上传、也不会发布的内容：`vault/附件/`、所有 PDF、`vault/私密/`。仓库是公开的，其余内容在 GitHub 上都能被看到。
 
+## 中英双语
+
+- 右上角「中 / EN」切换。访客默认看到英文；你在自己的库里默认是中文。网址后面加 `?lang=en` 或 `?lang=zh` 可以强制指定语言。
+- 界面文字的翻译写在 `app/js/i18n.js` 的对照表里，不经过 AI。
+- 你写的内容只做中译英：点「更新英文版（N）」，只翻译还没有英文的段落，几段合成一次请求，结果存进 `vault/_系统/译文.json`，跟着网站一起发布。访客看英文时直接读这份译文，不会调用 AI。
+- 英文模式只用来看；要编辑请切回「中」。
+
 ## 笔记约定
 
 每篇笔记用 `kind` 属性区分类型：`材料`、`概念`、`研究问题`、`方向`。文件放在哪个文件夹不影响识别。
@@ -66,6 +73,8 @@ app/js/
   verify.js  Open Library / Crossref 核对
   tasks.js   补全、建议概念、建议关联、回忆、推荐、AI 缺口分析
   inbox.js   keep / cancel，以及 keep 之前的预览
+  i18n.js    中英切换：界面对照表，加上英文模式下的 DOM 替换
+  translate.js 把我写的中文内容翻成英文，只翻新的
   gaps.js    缺口计数（纯前端）
   pdftext.js 在浏览器里读 PDF 的文字和元数据
   views/     capture（拖入收录）, list, detail, map（关键词白板）, inbox, gaps, recommend, options, settings

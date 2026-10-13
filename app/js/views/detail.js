@@ -1,12 +1,14 @@
 // One note, fully editable. For a 材料 note: what it is, why I saved it, where each field came from.
 // Other notes (研究问题, 概念, 方向) get a plain page plus everything that links to them.
 import { store, ConflictError } from '../store.js';
+import { viewOnly, trc, isEn } from '../i18n.js';
 import { KIND, FIELD_LABEL, originOf, isEmpty, unconfirmed, today } from '../model.js';
 import { esc, noteHref, renderMarkdown } from '../markdown.js';
 import { asList, linkTarget, toLink } from '../note.js';
 import { toast, selectHtml, bindSelect, ask } from '../ui.js';
 import { enrich, suggestConcepts, suggestLinks, recall, related } from '../tasks.js';
 import { openRecommend } from './recommend.js';
+import { parseLinks } from '../links.js';
 import { vaultUrl, hydrate } from '../media.js';
 
 const ORIGIN_LABEL = { me: '我', source: '原文', ai: 'AI' };
@@ -56,7 +58,7 @@ function backlinkSection(note) {
       <span class="muted">${esc(n.data.kind || '')}</span></li>`).join('')}</ul></section>`;
 }
 
-const obsidianLink = note => (store.vault.published ? '' : `${obsidianLink(note)}`);
+const obsidianLink = note => (store.vault.published ? '' : `<a class="obsidian" href="${obsidianUrl(note)}">在 Obsidian 中打开 ↗</a>`);
 const obsidianUrl = note => `obsidian://open?vault=${encodeURIComponent(store.vault.name)}&file=${encodeURIComponent(note.path.replace(/\.md$/, ''))}`;
 
 /* ---------- link picker: concepts / questions / parent ---------- */
@@ -102,7 +104,7 @@ function bodySection(note, ro) {
       <textarea id="bodyText" spellcheck="false">${esc(draft.text)}</textarea></section>`;
   return `<section class="body markdown">
       ${ro ? '' : '<div class="body-bar"><span></span><button id="bodyEdit">编辑正文</button></div>'}
-      ${renderMarkdown(withoutRelations(note.body)) || '<p class="muted">（正文是空的）</p>'}</section>`;
+      ${renderMarkdown(withoutRelations(trc(note.body))) || '<p class="muted">（正文是空的）</p>'}</section>`;
 }
 
 function bindBody(main, note) {
@@ -138,7 +140,7 @@ function bindBody(main, note) {
 
 /* ---------- shared wiring ---------- */
 function bindCommon(main, note) {
-  const ro = store.vault.readOnly;
+  const ro = viewOnly();
   if (ro) return;
   for (const el of main.querySelectorAll('[data-text]'))
     el.addEventListener('change', () => run(setField(note.path, el.dataset.text, el.value.trim())));
@@ -240,9 +242,12 @@ function bindAi(main, note) {
 }
 
 /* ---------- 关联 ---------- */
+// In English the reasons come from the translated body (links are kept intact by translate.js).
+const shownLinks = n => (isEn() ? parseLinks(trc(n.body)).map(l => ({ ...l, from: n, to: store.resolve(l.target) })) : store.linksOf(n));
+
 function relationsSection(note, ro) {
-  const out = store.linksOf(note);
-  const incoming = store.allLinks().filter(l => l.to === note);
+  const out = shownLinks(note);
+  const incoming = store.all().flatMap(shownLinks).filter(l => l.to === note);
   const auto = [...related(note)].filter(([, why]) => why.startsWith('共享概念'));
   const title = n => esc(n?.data.title || n?.name || '');
   const pool = store.items().filter(n => n !== note);
@@ -286,7 +291,7 @@ function bindRelations(main, note) {
 
 /* ---------- 材料 ---------- */
 function renderItem(main, note) {
-  const d = note.data, ro = store.vault.readOnly;
+  const d = note.data, ro = viewOnly();
   const pending = unconfirmed(d);
   const roles = asList(d.roles);
   const parent = store.resolve(d.parent);
@@ -372,7 +377,7 @@ function renderItem(main, note) {
 
 /* ---------- 研究问题 / 概念 / 方向 / 其他 ---------- */
 function renderOther(main, note) {
-  const d = note.data, ro = store.vault.readOnly;
+  const d = note.data, ro = viewOnly();
   const lead = d.kind === KIND.question ? 'question' : d.kind === KIND.concept ? 'definition' : null;
   const shownKeys = new Set(['kind', lead, 'status', 'created']);
   const props = Object.entries(d).filter(([k, v]) => !shownKeys.has(k) && !k.startsWith('_') && !isEmpty(v));

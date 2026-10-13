@@ -389,3 +389,10 @@ dialog.capture #capStatus { min-height: 1.4em; color: var(--ai); }
 body.published [data-nav="inbox"], body.published [data-nav="options"], body.published [data-nav="settings"] { display: none; }
 .vault-img { max-width: 100%; border-radius: 6px; display: block; margin: 8px 0; }
 .sticky-text .vault-img { margin: 4px 0; }
+
+/* language */
+.lang-switch { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.lang-switch button { border: 0; border-radius: 0; padding: 3px 10px; font-size: 13px; background: transparent; color: var(--muted); }
+.lang-switch button.on { background: var(--ink); color: var(--bg); }
+.en-note { font-size: 12px; }
+@media (max-width: 700px) { .en-note { display: none; } }
