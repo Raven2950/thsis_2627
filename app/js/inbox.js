@@ -73,7 +73,7 @@ export async function keep(entry, extra = {}) {
       type: f.type || null, why: extra.why, status: store.vocab('status')[0] || null, importance: null,
       roles: [], voice: null, concepts: [], questions: [], parent: null, summary: f.summary || null,
       from_ai: aiFields, from_source: fromSource, confirmed: [], created: today(), read: null,
-    }, `\n> [!ai] AI 推荐理由（${entry.model || 'AI'}）\n> ${p.reason || ''}\n\n## 我得到了什么\n\n\n## 待解决的问题\n\n- \n`);
+    }, `\n${p.guide ? `${p.guide.trim()}\n\n` : ''}> [!ai] AI 推荐理由（${entry.model || 'AI'}）\n> ${p.reason || ''}\n\n## 我得到了什么\n\n\n## 待解决的问题\n\n- \n`);
     await addConceptLinks(note.path, asList(p.concepts).map(linkTarget).filter(Boolean));
     await store.removeInbox(entry.id);
     return note;

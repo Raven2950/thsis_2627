@@ -396,3 +396,6 @@ body.published [data-nav="inbox"], body.published [data-nav="options"], body.pub
 .lang-switch button.on { background: var(--ink); color: var(--bg); }
 .en-note { font-size: 12px; }
 @media (max-width: 700px) { .en-note { display: none; } }
+
+.card details.guide { margin: 8px 0; }
+.card details.guide summary { cursor: pointer; color: var(--accent); font-weight: 600; }

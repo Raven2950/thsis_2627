@@ -5,6 +5,7 @@ import { esc, noteHref } from '../markdown.js';
 import { VERIFY_LABEL } from '../verify.js';
 import { INBOX_KIND_LABEL, keep, cancel, preview } from '../inbox.js';
 import { ask, toast } from '../ui.js';
+import { renderMarkdown } from '../markdown.js';
 
 const titleOf = path => { const n = store.get(path); return n ? (n.data.title || n.name) : path; };
 const itemLink = path => `<a href="#/item/${encodeURIComponent(path)}">${esc(titleOf(path))}</a>`;
@@ -56,7 +57,8 @@ function card(e) {
     ${p.reason ? `<p class="reason"><b>为什么推荐：</b>${esc(p.reason)}</p>` : ''}
     ${pv.concepts?.length ? `<div class="pv"><b>收入后会连到：</b><ul>${pv.concepts.map(c => `<li>${c.exists ? '✓' : '＋'} ${esc(c.name)}
       ${c.exists ? `<span class="muted">→ ${c.items.length ? c.items.map(n => esc(n.data.title || n.name)).join('、') : '还没有材料'}</span>` : '<span class="muted">（新概念）</span>'}</li>`).join('')}</ul></div>` : ''}
-    <details><summary>request json</summary><pre>${esc(JSON.stringify(e.request, null, 2))}</pre></details>
+    ${p.guide ? `<details class="guide"><summary>导读（读之前看）</summary><div class="markdown">${renderMarkdown(p.guide)}</div></details>` : ''}
+    ${e.request ? `<details><summary>request json</summary><pre>${esc(JSON.stringify(e.request, null, 2))}</pre></details>` : ''}
     ${actions}</div>`;
 }
 
