@@ -68,8 +68,48 @@
     "20708acea85c2451": "充分的培训和社群支持帮助用户更好地定制技术",
     "a90c8e7c20846d8f": "读屏技术有效工作前提是数字服务本身具有可及性"
   },
-  "pinned": [],
+  "pinned": [
+    "db38f78cb06f5d2e",
+    "ec73733b9d5eebe8",
+    "e2d133eea4bfa271",
+    "5164d890607122a7",
+    "02b63011ab8be414",
+    "a8df68af2d7f371a",
+    "2ee2c41ccb2af6fe",
+    "6997077dc378b0b7",
+    "aab8a782638927d0",
+    "d1485241412dc618",
+    "010519a56cd01736",
+    "9febf16d0f35b059",
+    "85a976435517de81",
+    "45bb8fd6c64c2626",
+    "02c55fe3a8dafe47",
+    "f6c6013e0ed71a60",
+    "997e0eca50bf67cd",
+    "bfd4cfac7daa80ec"
+  ],
   "hidden": [],
+  "bubbles": [
+    {
+      "id": "169e3733",
+      "name": "alt text and others",
+      "note": "",
+      "members": [
+        "2ee2c41ccb2af6fe",
+        "e2d133eea4bfa271",
+        "ec73733b9d5eebe8"
+      ],
+      "color": "#00ff33"
+    }
+  ],
+  "edgeStyle": {
+    "43679c9b256604bd": {
+      "line": "dotted"
+    },
+    "eda65a893521ef06": {
+      "line": "dotted"
+    }
+  },
   "organizedAt": "2026-10-13T01:29:15.184Z",
   "model": "anthropic/claude-4.5-haiku"
 }

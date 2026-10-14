@@ -1,61 +1,71 @@
 {
 	"nodes": [
 		{
+			"id": "bub-169e3733",
+			"type": "group",
+			"label": "alt text and others",
+			"color": "#00ff33",
+			"x": 952,
+			"y": 284,
+			"width": 818,
+			"height": 535
+		},
+		{
 			"id": "grp-0",
 			"type": "group",
 			"label": "核心需求",
 			"color": "5",
-			"x": -382,
-			"y": 321,
-			"width": 307,
-			"height": 365
+			"x": 96,
+			"y": 180,
+			"width": 696,
+			"height": 386
 		},
 		{
 			"id": "grp-1",
 			"type": "group",
 			"label": "技术现状",
 			"color": "6",
-			"x": 217,
-			"y": 484,
-			"width": 371,
-			"height": 237
+			"x": 731,
+			"y": 622,
+			"width": 536,
+			"height": 289
 		},
 		{
 			"id": "grp-2",
 			"type": "group",
 			"label": "产品与服务",
 			"color": "2",
-			"x": -37,
-			"y": 323,
-			"width": 317,
-			"height": 227
+			"x": 793,
+			"y": 115,
+			"width": 957,
+			"height": 371
 		},
 		{
 			"id": "grp-3",
 			"type": "group",
 			"label": "获取与支持",
 			"color": "4",
-			"x": 85,
-			"y": 69,
-			"width": 300,
-			"height": 167
+			"x": 462,
+			"y": -59,
+			"width": 372,
+			"height": 174
 		},
 		{
 			"id": "grp-4",
 			"type": "group",
 			"label": "社会价值",
 			"color": "1",
-			"x": -201,
-			"y": 98,
-			"width": 190,
-			"height": 117
+			"x": 827,
+			"y": 77,
+			"width": 250,
+			"height": 136
 		},
 		{
 			"id": "f703f3d7d05f1995",
 			"type": "file",
 			"file": "概念/沟通与AAC.md",
-			"x": -314,
-			"y": 371,
+			"x": 598,
+			"y": 442,
 			"width": 160,
 			"height": 60,
 			"color": "5"
@@ -64,28 +74,18 @@
 			"id": "6997077dc378b0b7",
 			"type": "file",
 			"file": "概念/用户已有技术生态.md",
-			"x": 247,
-			"y": 654,
+			"x": 761,
+			"y": 832,
 			"width": 160,
 			"height": 60,
 			"color": "6"
 		},
 		{
-			"id": "746b8d3b12e51fee",
-			"type": "text",
-			"text": "111\n",
-			"x": -306,
-			"y": 425,
-			"width": 220,
-			"height": 140,
-			"color": "3"
-		},
-		{
 			"id": "2ee2c41ccb2af6fe",
 			"type": "file",
 			"file": "概念/视障与读屏技术.md",
-			"x": 385,
-			"y": 599,
+			"x": 1002,
+			"y": 713,
 			"width": 160,
 			"height": 44,
 			"color": "6"
@@ -94,8 +94,8 @@
 			"id": "e2d133eea4bfa271",
 			"type": "file",
 			"file": "概念/数字服务可及性.md",
-			"x": 17,
-			"y": 479,
+			"x": 1490,
+			"y": 354,
 			"width": 160,
 			"height": 44,
 			"color": "2"
@@ -104,8 +104,8 @@
 			"id": "45bb8fd6c64c2626",
 			"type": "file",
 			"file": "概念/产品形态选择.md",
-			"x": 106,
-			"y": 427,
+			"x": 1123,
+			"y": 165,
 			"width": 160,
 			"height": 44,
 			"color": "2"
@@ -114,8 +114,8 @@
 			"id": "d1485241412dc618",
 			"type": "file",
 			"file": "概念/个性化与定制.md",
-			"x": -7,
-			"y": 373,
+			"x": 823,
+			"y": 400,
 			"width": 160,
 			"height": 44,
 			"color": "2"
@@ -124,8 +124,8 @@
 			"id": "a8df68af2d7f371a",
 			"type": "file",
 			"file": "概念/身份与赋权.md",
-			"x": -171,
-			"y": 148,
+			"x": 857,
+			"y": 127,
 			"width": 160,
 			"height": 44,
 			"color": "1"
@@ -134,8 +134,8 @@
 			"id": "aab8a782638927d0",
 			"type": "file",
 			"file": "概念/现有工具的局限.md",
-			"x": 296,
-			"y": 534,
+			"x": 775,
+			"y": 672,
 			"width": 160,
 			"height": 44,
 			"color": "6"
@@ -144,8 +144,8 @@
 			"id": "af7588d047ff1cfd",
 			"type": "file",
 			"file": "概念/独立与依赖的张力.md",
-			"x": -352,
-			"y": 622,
+			"x": 476,
+			"y": 495,
 			"width": 160,
 			"height": 44,
 			"color": "5"
@@ -154,8 +154,8 @@
 			"id": "5164d890607122a7",
 			"type": "file",
 			"file": "概念/日常活动可达性.md",
-			"x": -264,
-			"y": 576,
+			"x": 126,
+			"y": 230,
 			"width": 160,
 			"height": 44,
 			"color": "5"
@@ -164,8 +164,8 @@
 			"id": "3220038dcc318252",
 			"type": "file",
 			"file": "概念/成本与获取障碍.md",
-			"x": 210,
-			"y": 172,
+			"x": 659,
+			"y": 51,
 			"width": 160,
 			"height": 44,
 			"color": "4"
@@ -174,10 +174,112 @@
 			"id": "02b63011ab8be414",
 			"type": "file",
 			"file": "概念/培训、支持与社群.md",
-			"x": 115,
-			"y": 119,
+			"x": 492,
+			"y": -9,
 			"width": 160,
 			"height": 44,
+			"color": "4"
+		},
+		{
+			"id": "9febf16d0f35b059",
+			"type": "file",
+			"file": "概念/可塑软件与用户自定义.md",
+			"x": 742,
+			"y": 527,
+			"width": 160,
+			"height": 44
+		},
+		{
+			"id": "6ac80763d9990941",
+			"type": "file",
+			"file": "概念/参与式设计与共创.md",
+			"x": 888,
+			"y": 253,
+			"width": 160,
+			"height": 44
+		},
+		{
+			"id": "de14d44ed256f8f3",
+			"type": "file",
+			"file": "概念/残障权利与社会模型.md",
+			"x": 739,
+			"y": 312,
+			"width": 160,
+			"height": 44
+		},
+		{
+			"id": "811e3b7de62d8ef1",
+			"type": "file",
+			"file": "概念/AI 的透明与用户控制.md",
+			"x": 950,
+			"y": 601,
+			"width": 160,
+			"height": 44
+		},
+		{
+			"id": "010519a56cd01736",
+			"type": "file",
+			"file": "概念/无障碍标准与指南.md",
+			"x": 1024,
+			"y": 543,
+			"width": 160,
+			"height": 44
+		},
+		{
+			"id": "ec73733b9d5eebe8",
+			"type": "file",
+			"file": "概念/描述作为创作.md",
+			"x": 1314,
+			"y": 582,
+			"width": 160,
+			"height": 44
+		},
+		{
+			"id": "85a976435517de81",
+			"type": "text",
+			"text": "Maybe also look at ethnographic or family‑history‑style field‑research studies and documentaries for approaches around audio description. For instance, many orally‑passed‑down stories and histories from villages function as a form of audio description — they can still create a strong sense of visual imagery even without actual visuals.\n\nFor this kind of content, both sighted and visually‑impaired audiences rely entirely on verbal description to gather information and conjure mental images. Compared with alt‑text written by sighted creators for visually‑impaired users, could this approach reduce the patronizing, “simulated‑disability” outsider perspective?\n\nDo differences in people’s imagination and mental visual imagery when consuming audio description correlate with whether a person has visual impairment? Or are these differences more tied to individual modes of thinking?",
+			"x": 1539,
+			"y": 565,
+			"width": 508,
+			"height": 334,
+			"color": "3"
+		},
+		{
+			"id": "02c55fe3a8dafe47",
+			"type": "file",
+			"file": "材料/Alt-Text as Poetry.md",
+			"x": 999,
+			"y": 906,
+			"width": 240,
+			"height": 90
+		},
+		{
+			"id": "f6c6013e0ed71a60",
+			"type": "file",
+			"file": "材料/Alt text Selfies.md",
+			"x": 1252,
+			"y": 845,
+			"width": 240,
+			"height": 90
+		},
+		{
+			"id": "997e0eca50bf67cd",
+			"type": "text",
+			"text": "REALLY INTERESTING! 1st time knowing this type of concepts and 1st time make me feel that people who can't see might can also post their selfies in this social media age and also makes me connect with apperance anxiety——if people posts alt text selfies instead of real selfies can the vibe and the true feelings transform better?",
+			"x": 1524,
+			"y": 953,
+			"width": 319,
+			"height": 213,
+			"color": "4"
+		},
+		{
+			"id": "bfd4cfac7daa80ec",
+			"type": "text",
+			"text": "make a technical requirements(alt text) a kind of creation. Alt text might give me a feeling that the one who write it (or maybe no one, just AI) completely treat it as a normal task and have no idea how people who really needs alt text want to know through alt text.It is more like sighted people adopting a patronizing stance: they believe they have exhaustively described every detail of an image, and assume that visually‑impaired audiences ought to be satisfied. Yet they overlook the power of negative space and imagination.",
+			"x": 1055,
+			"y": 1088,
+			"width": 337,
+			"height": 279,
 			"color": "4"
 		}
 	],
@@ -185,55 +287,97 @@
 		{
 			"id": "37d2a11685c931a3",
 			"fromNode": "f703f3d7d05f1995",
-			"toNode": "6997077dc378b0b7"
+			"toNode": "6997077dc378b0b7",
+			"fromSide": "bottom",
+			"toSide": "top"
 		},
 		{
 			"id": "a05ca34a8ff77c31",
 			"fromNode": "aab8a782638927d0",
 			"toNode": "5164d890607122a7",
-			"label": "造成困难"
+			"label": "造成困难",
+			"fromSide": "top",
+			"toSide": "bottom"
 		},
 		{
 			"id": "d9abe0b01760605d",
 			"fromNode": "45bb8fd6c64c2626",
 			"toNode": "d1485241412dc618",
-			"label": "影响方式"
+			"label": "影响方式",
+			"fromSide": "bottom",
+			"toSide": "top"
 		},
 		{
 			"id": "0b8ac5c035d53bc3",
 			"fromNode": "d1485241412dc618",
 			"toNode": "af7588d047ff1cfd",
-			"label": "支持独立"
+			"label": "支持独立",
+			"fromSide": "left",
+			"toSide": "right"
 		},
 		{
 			"id": "7146b6590e511f57",
 			"fromNode": "3220038dcc318252",
 			"toNode": "6997077dc378b0b7",
-			"label": "制约现状"
+			"label": "制约现状",
+			"fromSide": "bottom",
+			"toSide": "top"
 		},
 		{
 			"id": "37a6d0cf3ffc52d2",
 			"fromNode": "e2d133eea4bfa271",
 			"toNode": "aab8a782638927d0",
-			"label": "涉及方"
+			"label": "涉及方",
+			"fromSide": "bottom",
+			"toSide": "top"
 		},
 		{
 			"id": "e61177e66e5d89ab",
 			"fromNode": "a8df68af2d7f371a",
 			"toNode": "45bb8fd6c64c2626",
-			"label": "影响感受"
+			"label": "影响感受",
+			"fromSide": "bottom",
+			"toSide": "top"
 		},
 		{
 			"id": "20708acea85c2451",
 			"fromNode": "02b63011ab8be414",
 			"toNode": "d1485241412dc618",
-			"label": "促进实现"
+			"label": "促进实现",
+			"fromSide": "bottom",
+			"toSide": "top"
 		},
 		{
 			"id": "a90c8e7c20846d8f",
 			"fromNode": "2ee2c41ccb2af6fe",
 			"toNode": "e2d133eea4bfa271",
-			"label": "依赖前提"
+			"label": "依赖前提",
+			"fromSide": "top",
+			"toSide": "bottom"
+		},
+		{
+			"id": "43679c9b256604bd",
+			"fromNode": "2ee2c41ccb2af6fe",
+			"toNode": "02c55fe3a8dafe47",
+			"toEnd": "none"
+		},
+		{
+			"id": "eda65a893521ef06",
+			"fromNode": "2ee2c41ccb2af6fe",
+			"toNode": "f6c6013e0ed71a60",
+			"toEnd": "none"
+		},
+		{
+			"id": "3fbbc28c0ef0293d",
+			"fromNode": "997e0eca50bf67cd",
+			"toNode": "f6c6013e0ed71a60",
+			"toEnd": "none"
+		},
+		{
+			"id": "301ff2d1143ded7e",
+			"fromNode": "bfd4cfac7daa80ec",
+			"toNode": "02c55fe3a8dafe47",
+			"toEnd": "none"
 		}
 	]
 }
