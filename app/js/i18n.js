@@ -148,6 +148,26 @@ const UI = {
   '离核心问题 近 ↔ 远': 'Close to ↔ far from the core question', '只要这些类型（不选 = 不限）': 'Only these types (none = any)', '围绕：': 'Around:',
   '（没选东西，会根据整个研究方向推荐）': '(Nothing selected: based on the whole research direction)',
 
+  // reading plan, stars and likes
+  '计划': 'Plan', '阅读计划': 'Reading plan', '计划读': 'Plan to read', '读完觉得很好，想继续发展': 'Read it, loved it, want to build on it',
+  '接下来要读': 'Up next', '阅读计划 →': 'Reading plan →', '只看 ⭐': 'Only ⭐', '只看 ♥': 'Only ♥', '排序': 'Sort',
+  '最新收录': 'Newest', '⭐ 优先': '⭐ first', '♥ 优先': '♥ first', '按标题': 'By title', '计划哪天读': 'Plan to read on', '读完': 'Done',
+  '标成读过': 'Mark as read', '今天和之前': 'Today and overdue', '这一周': 'This week', '以后': 'Later', '还没排日期': 'Not scheduled',
+  '♥ 喜欢的': '♥ Liked', '最近读完': 'Recently read', '读完觉得好的，点 ♡。': 'When something is great after reading, tap ♡.',
+  '还没有 ⭐ 的材料。在「列表」或材料页点 ☆，就会出现在这里。': 'Nothing starred yet. Tap ☆ in the list or on a material to plan it.',
+  '⭐ 计划读的材料按日期排在这里；给它填个日期就进日程，点「读完」就从计划里移走。♥ 是读完觉得很好、想继续发展的。':
+    '⭐ starred materials, by the day planned; add a date to schedule one, “Done” takes it off. ♥ marks what I read and want to build on.',
+  // map additions
+  '主题气泡': 'Theme bubble', '我的主题': 'My themes', '＋ 新建主题气泡': '+ New theme bubble', '新建主题气泡': 'New theme bubble', '主题名': 'Theme',
+  '这个主题是什么、为什么值得发展': 'What this theme is and why it is worth developing', '删除气泡': 'Delete bubble', '气泡改名': 'Rename bubble',
+  '比如：描述里的想象空间': 'e.g. room for imagination in description', '便利贴': 'Sticky note', '编辑文字': 'Edit text', '也可以双击便利贴编辑。': 'Or double-click the note.',
+  '打开材料页': 'Open material', '＋ 连一张便利贴': '+ Attach a sticky note', '⭐ 计划读': '⭐ Plan to read', '☆ 计划读': '☆ Plan to read', '♥ 喜欢': '♥ Liked', '♡ 喜欢': '♡ Like',
+  '看了描述觉得有用，计划读': 'Looks useful: plan to read', '读完觉得写得很好，想继续发展': 'Read it, loved it, want to build on it',
+  '上图': 'Add to map', '在图上': 'on map', '把这份材料从关键词引到地图上': 'Lead this material out of the keyword onto the map',
+  '从地图上移除': 'Remove from map', '实线': 'Solid', '虚线': 'Dashed', '点线': 'Dotted', '细': 'Thin', '粗': 'Thick',
+  '双击打开这份材料': 'Double-click to open', '拖到关键词或便利贴上，画一条线': 'Drag onto a keyword or note to draw a line',
+  '选中关键词，在材料列表里点「上图」，把一份材料从关键词引到地图上': 'Select a keyword and use “Add to map” on one of its materials to lead it onto the map',
+  'shift 多选几个节点，点「新建主题气泡」，圈出你想发展的方向': 'Shift-select several nodes and use “New theme bubble” to circle a direction to develop',
   // translation control
   '更新英文版': 'Update English',
 };
@@ -180,6 +200,9 @@ const RULES = [
   [/^想要能在论文里充当「(.+)」的材料$/, t => `Material that can serve as “${tr(t)}” in the thesis`],
   [/^想要声音来源是「(.+)」的材料$/, t => `Material whose voice is “${tr(t)}”`],
   [/^更新英文版（(\d+)）$/, n => `Update English (${n})`],
+  [/^计划 (\S+)$/, d => `Planned ${d}`],
+  [/^◎ (.+)$/, t => `◎ ${tr(t)}`],
+  [/^(\d+) 个节点。选中一个节点后可以在面板里把它加进或移出气泡。$/, n => `${n} nodes. Select a node to add it to or remove it from the bubble.`],
   [/^(建议关键词|补全信息|建议概念|建议关联|推荐材料) · (.*)$/, (k, rest) => `${tr(k)} · ${rest}`],
   [/^(原文|我|AI) ✓$/, t => `${tr(t)} ✓`],
   // Lists the page joins itself: "OpenAAC · 组织/资源库", "概念A、概念B".

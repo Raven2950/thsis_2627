@@ -6,8 +6,9 @@ import { esc } from '../markdown.js';
 import { asList } from '../note.js';
 import { ask, toast } from '../ui.js';
 import { pickAndCapture } from './capture.js';
+import { marksHtml, bindMarks, queue } from '../marks.js';
 
-const filter = { q: '', type: '', status: '', role: '', importance: '', noWhy: false };
+const filter = { q: '', type: '', status: '', role: '', importance: '', noWhy: false, star: false, like: false, sort: 'new' };
 
 const options = (all, used, value, label) => {
   const vals = [...new Set([...all, ...used.filter(Boolean)])];
@@ -22,6 +23,8 @@ function matches(n) {
   if (filter.importance && d.importance !== filter.importance) return false;
   if (filter.role && !asList(d.roles).includes(filter.role)) return false;
   if (filter.noWhy && !isEmpty(d.why)) return false;
+  if (filter.star && !d.star) return false;
+  if (filter.like && !d.like) return false;
   if (filter.q) {
     const hay = [n.name, d.title, d.creator, d.why, d.summary, n.body].join(' ').toLowerCase();
     if (!hay.includes(filter.q.toLowerCase())) return false;
@@ -32,6 +35,7 @@ function matches(n) {
 function row(n, depth = 0) {
   const d = n.data, pending = unconfirmed(d).length;
   return `<tr data-path="${esc(n.path)}" tabindex="0" class="${depth ? 'child' : ''}">
+    <td class="mark-cell">${marksHtml(n)}</td>
     <td class="title-cell"><a href="#/item/${encodeURIComponent(n.path)}">${esc(d.title || n.name)}</a>
       ${d.creator ? `<div class="sub">${esc(d.creator)}${d.year ? ` · ${esc(d.year)}` : ''}</div>` : ''}</td>
     <td>${esc(d.type || '')}</td>
@@ -47,9 +51,17 @@ export function renderList(main) {
   const shown = new Set(items.filter(matches));
   const topLevel = items.filter(n => !store.resolve(n.data.parent));
   const byDate = (a, b) => String(b.data.created || '').localeCompare(String(a.data.created || '')) || a.name.localeCompare(b.name);
+  const flag = k => n => (n.data[k] ? 0 : 1);
+  const SORTS = {
+    new: byDate,
+    star: (a, b) => flag('star')(a) - flag('star')(b) || String(a.data.plan || '9999').localeCompare(String(b.data.plan || '9999')) || byDate(a, b),
+    like: (a, b) => flag('like')(a) - flag('like')(b) || flag('star')(a) - flag('star')(b) || byDate(a, b),
+    title: (a, b) => String(a.data.title || a.name).localeCompare(String(b.data.title || b.name)),
+  };
+  const next = queue().slice(0, 5);
 
   const rows = [];
-  for (const n of topLevel.sort(byDate)) {
+  for (const n of topLevel.sort(SORTS[filter.sort] || byDate)) {
     const kids = store.children(n).filter(k => shown.has(k));
     if (shown.has(n) || kids.length) rows.push(row(n), ...kids.map(k => row(k, 1)));
   }
@@ -63,6 +75,8 @@ export function renderList(main) {
           <button id="fromFile">从文件收录…</button><button class="primary" id="newItem">＋ 新材料</button>`}
         ${noWhy ? `<p class="nudge">有 ${noWhy} 份材料还没写「为什么存它」。</p>` : ''}
       </div>
+      ${next.length ? `<div class="up-next"><b>接下来要读</b>${next.map(n => `<a href="#/item/${encodeURIComponent(n.path)}">⭐ ${esc(trc(n.data.title || n.name))}${n.data.plan ? ` <span class="muted">${esc(n.data.plan)}</span>` : ''}</a>`).join('')}
+        <a href="#/plan" class="more">阅读计划 →</a></div>` : ''}
       <div class="filters">
         <input type="search" id="fq" placeholder="搜索标题、作者、为什么、正文…" value="${esc(filter.q)}">
         <select id="ftype">${options(store.vocab('type'), items.map(n => n.data.type), filter.type, '全部类型')}</select>
@@ -70,12 +84,15 @@ export function renderList(main) {
         <select id="frole">${options(store.vocab('roles'), items.flatMap(n => asList(n.data.roles)), filter.role, '全部角色')}</select>
         <select id="fimp">${options(store.vocab('importance'), items.map(n => n.data.importance), filter.importance, '全部重要性')}</select>
         <label class="check"><input type="checkbox" id="fnowhy"${filter.noWhy ? ' checked' : ''}> 只看没写「为什么」的</label>
+        <label class="check"><input type="checkbox" id="fstar"${filter.star ? ' checked' : ''}> 只看 ⭐</label>
+        <label class="check"><input type="checkbox" id="flike"${filter.like ? ' checked' : ''}> 只看 ♥</label>
+        <select id="fsort" title="排序">${Object.entries({ new: '最新收录', star: '⭐ 优先', like: '♥ 优先', title: '按标题' }).map(([k, v]) => `<option value="${k}"${filter.sort === k ? ' selected' : ''}>${v}</option>`).join('')}</select>
       </div>
       ${items.length === 0
         ? `<p class="empty">这个文件夹里还没有 <code>kind: 材料</code> 的笔记。</p>`
         : `<table class="items">
-            <thead><tr><th>标题</th><th>类型</th><th>状态</th><th>重要性</th><th>为什么存它</th><th></th></tr></thead>
-            <tbody>${rows.join('') || '<tr><td colspan="6" class="empty">没有符合筛选的材料</td></tr>'}</tbody>
+            <thead><tr><th class="mark-cell"></th><th>标题</th><th>类型</th><th>状态</th><th>重要性</th><th>为什么存它</th><th></th></tr></thead>
+            <tbody>${rows.join('') || '<tr><td colspan="7" class="empty">没有符合筛选的材料</td></tr>'}</tbody>
           </table>`}
     </section>`;
 
@@ -87,13 +104,15 @@ export function renderList(main) {
   });
   bind('#fq', 'q'); bind('#ftype', 'type'); bind('#fstatus', 'status'); bind('#frole', 'role');
   bind('#fimp', 'importance'); bind('#fnowhy', 'noWhy', 'checked');
+  bind('#fstar', 'star', 'checked'); bind('#flike', 'like', 'checked'); bind('#fsort', 'sort');
+  bindMarks(main);
 
   main.querySelector('#newItem')?.addEventListener('click', newItem);
   main.querySelector('#fromFile')?.addEventListener('click', pickAndCapture);
 
   for (const tr of main.querySelectorAll('tbody tr[data-path]')) {
     const go = () => (location.hash = `#/item/${encodeURIComponent(tr.dataset.path)}`);
-    tr.addEventListener('click', e => { if (!e.target.closest('a')) go(); });
+    tr.addEventListener('click', e => { if (!e.target.closest('a, button')) go(); });
     tr.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
   }
 }

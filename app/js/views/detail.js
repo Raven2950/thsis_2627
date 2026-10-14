@@ -9,6 +9,7 @@ import { toast, selectHtml, bindSelect, ask } from '../ui.js';
 import { enrich, suggestConcepts, suggestLinks, recall, related } from '../tasks.js';
 import { openRecommend } from './recommend.js';
 import { parseLinks } from '../links.js';
+import { marksHtml, bindMarks, setPlan } from '../marks.js';
 import { vaultUrl, hydrate } from '../media.js';
 
 const ORIGIN_LABEL = { me: '我', source: '原文', ai: 'AI' };
@@ -313,6 +314,8 @@ function renderItem(main, note) {
       <header>
         <h1>${esc(d.title || note.name)}</h1>
         <p class="sub">${[d.creator, d.year, d.type].filter(Boolean).map(esc).join(' · ')}</p>
+        <div class="detail-marks">${marksHtml(note)}${ro ? (d.plan ? `<span class="muted">计划 ${esc(d.plan)}</span>` : '')
+          : `<label class="check">计划哪天读 <input type="date" id="f-plan" value="${esc(d.plan || '')}"></label>`}</div>
         ${obsidianLink(note)}
       </header>
 
@@ -359,6 +362,8 @@ function renderItem(main, note) {
 
   bindCommon(main, note);
   bindAttachments(main, note);
+  bindMarks(main);
+  main.querySelector('#f-plan')?.addEventListener('change', e => setPlan(note.path, e.target.value));
   if (ro) return;
   bindAi(main, note);
   bindRelations(main, note);

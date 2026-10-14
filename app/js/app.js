@@ -9,6 +9,7 @@ import { renderMap, leaveMap } from './views/map.js';
 import { renderInbox } from './views/inbox.js';
 import { renderGaps } from './views/gaps.js';
 import { renderSettings } from './views/settings.js';
+import { renderPlan } from './views/plan.js';
 import { installCapture } from './views/capture.js';
 import { lang, isEn, setLang, applyLang } from './i18n.js';
 import { pendingTexts, translatePending } from './translate.js';
@@ -92,6 +93,7 @@ function render() {
   leaveMap(main);
   if (view === 'inbox') return renderInbox(main);
   if (view === 'gaps') return renderGaps(main);
+  if (view === 'plan') return renderPlan(main);
   if (view === 'settings') return renderSettings(main);
   if (view === 'item') return renderDetail(main, store.get(param));
   if (view === 'open') return renderDetail(main, store.resolve(param));
