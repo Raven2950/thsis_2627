@@ -399,3 +399,19 @@ body.published [data-nav="inbox"], body.published [data-nav="options"], body.pub
 
 .card details.guide { margin: 8px 0; }
 .card details.guide summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+
+/* map: material cards, theme bubbles, line styles */
+.mnode.mat { --c: var(--line); background: var(--panel); border: 1.5px solid color-mix(in srgb, var(--c) 70%, var(--line)); border-radius: 10px;
+  padding: 8px 12px 10px; font-size: 13px; line-height: 1.4; box-shadow: 0 1px 3px rgb(0 0 0 / .07); cursor: default; }
+.mat-head { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.mat-title { font-weight: 650; font-size: 14px; color: var(--ink); }
+.mat-why { color: var(--muted); margin-top: 4px; font-size: 12px; }
+.map-edges .bubble { fill-opacity: .045; stroke-opacity: .55; stroke-width: 2; stroke-dasharray: 14 8; }
+.map-edges .bubble.sel { stroke-width: 3.5; stroke-opacity: .9; }
+.map-edges .bubble-label { font-size: 17px; font-weight: 700; text-anchor: middle; cursor: pointer; paint-order: stroke; stroke: var(--bg); stroke-width: 6px; }
+.map-edges .bubble-label:hover { text-decoration: underline; }
+.groups .dot.ring { background: transparent; border: 2px dashed var(--c); }
+.seg { display: inline-flex; gap: 4px; margin: 6px 8px 0 0; }
+.mini.on, button.mini.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.kw-items .on-map { font-size: 11px; margin-right: 4px; }
+.kw-items li > span { display: inline-flex; align-items: center; gap: 4px; }

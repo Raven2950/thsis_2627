@@ -21,13 +21,16 @@ const PRESETS = { 1: '#e5484d', 2: '#e9973f', 3: '#e3c13b', 4: '#46a758', 5: '#3
 const GROUP_PALETTE = ['5', '6', '2', '4', '1', '#d9617c', '#7a8b99', '3'];
 const colorOf = c => (c ? PRESETS[c] || c : null);
 const STICKY_COLOR = '3';
-const EMPTY_ORG = () => ({ groups: [], aiEdges: [], reasons: {}, pinned: [], hidden: [] });
+const EMPTY_ORG = () => ({ groups: [], aiEdges: [], reasons: {}, pinned: [], hidden: [], bubbles: [], edgeStyle: {} });
+// Line styles I can give an arrow (stored in 地图整理.json; JSON Canvas has no field for them).
+const LINE_DASH = { solid: '', dashed: '8 6', dotted: '2 5' };
 
 let canvas = null, savedText = '';
 let org = EMPTY_ORG(), savedOrgText = '';
 let view = { x: 80, y: 80, k: 1 };
 let fitted = false, showShared = true;
 let selected = new Set();
+let selectedBubble = null;           // a theme bubble picked by its label
 let editingId = null, editDraft = null;
 let busy = '';                       // '' | 'summarize' | 'organize' | 'acceptAll'
 const sizes = new Map();             // node id -> measured { w, h }
@@ -38,7 +41,9 @@ const simById = new Map();           // id -> simulation node { x, y (centre), w
 
 const uid = () => Array.from(crypto.getRandomValues(new Uint8Array(8)), b => b.toString(16).padStart(2, '0')).join('');
 const nodeById = id => canvas.nodes.find(n => n.id === id);
-const conceptOf = n => (n?.type === 'file' ? store.get(n.file) : null);
+const noteOf = n => (n?.type === 'file' ? store.get(n.file) : null);
+const conceptOf = n => { const x = noteOf(n); return x?.data.kind === KIND.concept ? x : null; };
+const itemOf = n => { const x = noteOf(n); return x?.data.kind === KIND.item ? x : null; };
 const nodeOfPath = path => canvas.nodes.find(n => n.type === 'file' && n.file === path);
 const groupOf = path => org.groups.find(g => g.members.includes(path));
 const visibleNodes = () => canvas.nodes.filter(n => n.type !== 'group');
@@ -54,7 +59,14 @@ function forDisk() {
     return { id: `grp-${i}`, type: 'group', label: g.name, color: g.color,
       x: Math.round(x), y: Math.round(y), width: Math.round(Math.max(...rs.map(r => r.x + r.w)) + 30 - x), height: Math.round(Math.max(...rs.map(r => r.y + r.h)) + 30 - y) };
   }).filter(Boolean);
-  return { nodes: [...groups, ...canvas.nodes.filter(n => !(n.type === 'group' && String(n.id).startsWith('grp-')))], edges: canvas.edges };
+  const bubbles = (org.bubbles || []).map(b => {
+    const rs = b.members.map(nodeById).filter(Boolean).map(rectOf);
+    if (!rs.length) return null;
+    const x = Math.min(...rs.map(r => r.x)) - 50, y = Math.min(...rs.map(r => r.y)) - 70;
+    return { id: `bub-${b.id}`, type: 'group', label: b.name, color: b.color,
+      x: Math.round(x), y: Math.round(y), width: Math.round(Math.max(...rs.map(r => r.x + r.w)) + 50 - x), height: Math.round(Math.max(...rs.map(r => r.y + r.h)) + 50 - y) };
+  }).filter(Boolean);
+  return { nodes: [...bubbles, ...groups, ...canvas.nodes.filter(n => !(n.type === 'group' && /^(grp|bub)-/.test(String(n.id))))], edges: canvas.edges };
 }
 function scheduleSave() {
   clearTimeout(saveTimer);
@@ -82,7 +94,7 @@ async function syncFromDisk() {
   const [disk, o] = [await store.readMap(), await store.readMapOrg()];
   const text = JSON.stringify(disk, null, '\t');
   if (canvas && (text === savedText || editingId)) return;
-  canvas = { nodes: disk.nodes.filter(n => !(n.type === 'group' && String(n.id).startsWith('grp-'))), edges: disk.edges };
+  canvas = { nodes: disk.nodes.filter(n => !(n.type === 'group' && /^(grp|bub)-/.test(String(n.id)))), edges: disk.edges };
   savedText = text;
   org = { ...EMPTY_ORG(), ...(o || {}) };
   savedOrgText = JSON.stringify(org, null, 2);
@@ -196,12 +208,27 @@ function groupPull(strength = 0.12) {
   return force;
 }
 
+// Members of one of my theme bubbles stay near each other (gently: bubbles may overlap groups).
+function bubblePull(strength = 0.05) {
+  let nodes;
+  const force = alpha => {
+    for (const b of org.bubbles || []) {
+      const ms = nodes.filter(n => b.members.includes(n.id));
+      if (ms.length < 2) continue;
+      const [cx, cy] = centroid(ms.map(n => [n.x, n.y]));
+      for (const n of ms) { n.vx += (cx - n.x) * strength * alpha; n.vy += (cy - n.y) * strength * alpha; }
+    }
+  };
+  force.initialize = ns => (nodes = ns);
+  return force;
+}
+
 function simGraph() {
   const nodes = [], links = [];
   const itemsOfId = new Map();
   for (const n of visibleNodes()) {
     const c = conceptOf(n), s = sizeOf(n.id, n), prev = simById.get(n.id);
-    const linked = n.type === 'text' && canvas.edges.some(e => e.fromNode === n.id || e.toNode === n.id);
+    const linked = (n.type === 'text' || itemOf(n)) && canvas.edges.some(e => e.fromNode === n.id || e.toNode === n.id);
     const free = (c || linked) && !org.pinned.includes(n.id);
     const sn = { id: n.id, w: s.w, h: s.h, x: n.x + s.w / 2, y: n.y + s.h / 2, vx: prev?.vx || 0, vy: prev?.vy || 0, path: c?.path || null };
     if (!free) { sn.fx = sn.x; sn.fy = sn.y; }
@@ -249,7 +276,7 @@ function rebuild(alpha) {
   const { nodes, links } = simGraph();
   const groupOfId = new Map(nodes.filter(n => n.path).map(n => [n.id, groupOf(n.path)]));
   const sameGroup = l => { const a = groupOfId.get(l.source), b = groupOfId.get(l.target); return !a || !b || a === b; };
-  const key = nodes.map(n => `${n.id}${n.fx == null ? '' : '*'}`).join() + links.map(l => `${l.source}-${l.target}-${l.n}`).join() + JSON.stringify(org.groups.map(g => g.members));
+  const key = nodes.map(n => `${n.id}${n.fx == null ? '' : '*'}`).join() + links.map(l => `${l.source}-${l.target}-${l.n}`).join() + JSON.stringify(org.groups.map(g => g.members)) + JSON.stringify((org.bubbles || []).map(b => b.members));
   if (sim && key === simKey && alpha == null) return;
   for (const n of nodes) simById.set(n.id, n);
   simKey = key;
@@ -262,6 +289,7 @@ function rebuild(alpha) {
     .force('charge', forceManyBody().strength(-380).distanceMax(700))
     .force('collide', rectCollide())
     .force('group', groupPull())
+    .force('bubble', bubblePull())
     .force('x', forceX(cx).strength(0.025)).force('y', forceY(cy).strength(0.025))
     .alpha(alpha ?? 0.35).alphaDecay(0.035).velocityDecay(0.45)
     .on('tick', onTick)
@@ -273,6 +301,15 @@ function nodeHtml(n) {
   const sel = selected.has(n.id) ? ' sel' : '', pin = org.pinned.includes(n.id) ? ' pinned' : '';
   const c = colorOf(n.color);
   const style = `left:${n.x}px;top:${n.y}px;${c ? `--c:${c};` : ''}`;
+  const item = itemOf(n);
+  if (item) {
+    const d = item.data, why = trc(String(d.why || ''));
+    return `<div class="mnode mat${sel}${pin}" data-id="${n.id}" style="${style}width:${n.width || 240}px" title="双击打开这份材料">
+      <div class="mat-head"><span class="mat-type">${esc(d.type || '材料')}</span><span class="mat-marks">${d.star ? '⭐' : ''}${d.like ? '♥' : ''}</span></div>
+      <div class="mat-title">${esc(trc(d.title || item.name))}</div>
+      ${why ? `<div class="mat-why">${esc(why.length > 150 ? `${why.slice(0, 150)}…` : why)}</div>` : ''}
+      <span class="handle" title="拖到关键词或便利贴上，画一条线"></span></div>`;
+  }
   if (n.type === 'file') {
     const concept = conceptOf(n);
     if (!concept) return `<div class="mnode kw missing${sel}" data-id="${n.id}" style="${style}"><span class="label">${esc(n.file.split('/').pop().replace(/\.md$/, ''))}</span><span class="cnt">?</span></div>`;
@@ -332,6 +369,14 @@ function drawEdges() {
     markers.set(id, `<marker id="${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:${c || 'var(--ink)'}"/></marker>`);
     return `url(#${id})`;
   };
+  for (const b of org.bubbles || []) {
+    const rs = b.members.map(nodeById).filter(Boolean).map(rectOf);
+    if (!rs.length) continue;
+    const c = colorOf(b.color) || 'var(--muted)';
+    parts.push(`<path class="bubble${selectedBubble === b.id ? ' sel' : ''}" d="${hullPath(rs, 40)}" style="fill:${c};stroke:${c}"/>`);
+    const cx = rs.reduce((a, r) => a + r.x + r.w / 2, 0) / rs.length, top = Math.min(...rs.map(r => r.y)) - 52;
+    parts.push(`<text class="bubble-label" data-bubble="${b.id}" x="${cx}" y="${top}" style="fill:${c}">◎ ${esc(b.name)}</text>`);
+  }
   for (const g of org.groups) {
     const rs = g.members.map(nodeOfPath).filter(Boolean).map(rectOf);
     if (!rs.length) continue;
@@ -353,9 +398,11 @@ function drawEdges() {
     const a = nodeById(e.fromNode), b = nodeById(e.toNode);
     if (!a || !b) continue;
     const g = curve(rectOf(a), rectOf(b)), c = colorOf(e.color), ai = org.aiEdges.includes(e.id);
+    const st = org.edgeStyle?.[e.id];
+    const lineStyle = [c ? `stroke:${c}` : '', st?.line ? `stroke-dasharray:${LINE_DASH[st.line] || 'none'}` : '', st?.width ? `stroke-width:${st.width}` : ''].filter(Boolean).join(';');
     const ends = `${e.toEnd !== 'none' ? `marker-end="${marker(c)}"` : ''} ${e.fromEnd === 'arrow' ? `marker-start="${marker(c)}"` : ''}`;
     parts.push(`<g class="edge${ai ? ' ai' : ''}${selected.has(e.id) ? ' sel' : ''}" data-edge="${e.id}">
-      <path class="hit" d="${g.d}"/><path class="line" d="${g.d}" ${ends} style="${c ? `stroke:${c}` : ''}"/>
+      <path class="hit" d="${g.d}"/><path class="line" d="${g.d}" ${ends} style="${lineStyle}"/>
       ${e.label ? `<text x="${g.mid[0]}" y="${g.mid[1]}" class="elabel" style="${c ? `fill:${c}` : ''}">${esc(e.label)}</text>` : ''}
       ${ai && org.reasons?.[e.id] ? `<title>${esc(org.reasons[e.id])}</title>` : ''}</g>`);
   }
@@ -427,6 +474,18 @@ function panel() {
   const kwCount = visibleNodes().filter(conceptOf).length;
   const ungrouped = visibleNodes().filter(n => conceptOf(n) && !groupOf(n.file)).length;
   let html = '';
+  const bubble = (org.bubbles || []).find(b => b.id === selectedBubble);
+  const mats = nodes.map(itemOf).filter(Boolean);
+
+  if (bubble) {
+    html = `<p class="kind">主题气泡</p><h2>◎ ${esc(bubble.name)}</h2>
+      <textarea id="bubNote" rows="3" placeholder="这个主题是什么、为什么值得发展"${ro ? ' disabled' : ''}>${esc(bubble.note || '')}</textarea>
+      <p class="hint">${bubble.members.length} 个节点。选中一个节点后可以在面板里把它加进或移出气泡。</p>
+      ${ro ? '' : `<div class="actions left"><label class="mini-color" title="换颜色" style="--c:${colorOf(bubble.color)}"><input type="color" id="bubColor" value="${colorOf(bubble.color)}"></label>
+        <button class="mini" id="bubRename">改名</button><button class="mini" id="bubDelete">删除气泡</button></div>`}`;
+    el.innerHTML = html;
+    return bindBubblePanel(el, bubble);
+  }
 
   if (!nodes.length && !edges.length) {
     const g = ghosts().length;
@@ -442,6 +501,9 @@ function panel() {
           <span class="dot" style="--c:${colorOf(gr.color)}"></span><button class="linkish" data-gsel="${i}" title="${esc(gr.note || '')}">${esc(gr.name)}</button>
           <span class="muted">${gr.members.length}</span>
           ${ro ? '' : `<span class="ops"><label class="mini-color" title="换颜色" style="--c:${colorOf(gr.color)}"><input type="color" data-gcolor="${i}" value="${colorOf(gr.color)}"></label><button class="mini" data-grename="${i}">改名</button></span>`}</li>`).join('')}</ul>` : ''}
+      ${(org.bubbles || []).length ? `<h2>我的主题</h2><ul class="groups">${org.bubbles.map(b => `<li>
+          <span class="dot ring" style="--c:${colorOf(b.color)}"></span><button class="linkish" data-bsel="${b.id}" title="${esc(b.note || '')}">${esc(b.name)}</button>
+          <span class="muted">${b.members.length}</span></li>`).join('')}</ul>` : ''}
       ${org.hidden.length ? `<h2>隐藏的关键词</h2><div class="links">${org.hidden.map(p => store.get(p)).filter(Boolean).map(c => `<button class="mini" data-unhide="${esc(c.path)}">显示 ${esc(c.name)}</button>`).join('')}</div>` : ''}
       <details class="tips-box"><summary>操作说明</summary><ul class="tips">
         <li>位置由工具自动排：共享材料越多的关键词靠得越近，同组的聚在一起</li>
@@ -449,7 +511,9 @@ function panel() {
         <li>双击空白处 = 便利贴；把便利贴上的小圆点拖到关键词上，它就会跟着那个关键词走</li>
         <li>拖关键词上的小圆点到另一个关键词 = 自己画箭头（AI 整理时不会被覆盖）</li>
         <li>拖空白处移动画布，⌘/Ctrl + 滚轮缩放，Delete 删除选中，⌘Z 撤销</li>
-        <li>点线 = 共享材料；红虚线 = 还没有材料（缺口）</li></ul></details>`;
+        <li>点线 = 共享材料；红虚线 = 还没有材料（缺口）</li>
+        <li>选中关键词，在材料列表里点「上图」，把一份材料从关键词引到地图上</li>
+        <li>shift 多选几个节点，点「新建主题气泡」，圈出你想发展的方向</li></ul></details>`;
   } else if (kws.length === 1 && nodes.length === 1) {
     const c = kws[0], n = nodes[0], items = store.itemsOf(c), g = groupOf(c.path);
     const pool = store.items().filter(x => !items.includes(x));
@@ -458,10 +522,19 @@ function panel() {
       ${ro ? '' : `<label class="row-label">分组 <select id="kwGroup"><option value="">（不分组）</option>${org.groups.map((gr, i) => `<option value="${i}"${gr === g ? ' selected' : ''}>${esc(gr.name)}</option>`).join('')}<option value="__new">＋ 新分组…</option></select></label>`}
       <h2>材料 <span class="count">${items.length}</span></h2>
       <ul class="kw-items">${items.map(x => `<li><a href="#/item/${encodeURIComponent(x.path)}">${esc(x.data.title || x.name)}</a>
-        ${ro ? '' : `<button class="x" data-untag="${esc(x.path)}" title="去掉这个关键词">×</button>`}</li>`).join('') || '<li class="muted">还没有材料（缺口）</li>'}</ul>
+        ${ro ? '' : `<span>${nodeOfPath(x.path) ? '<span class="muted on-map">在图上</span>' : `<button class="mini" data-place="${esc(x.path)}" title="把这份材料从关键词引到地图上">上图</button>`}<button class="x" data-untag="${esc(x.path)}" title="去掉这个关键词">×</button></span>`}</li>`).join('') || '<li class="muted">还没有材料（缺口）</li>'}</ul>
       ${ro ? '' : `<input id="kwAdd" list="dl-kwadd" placeholder="把一份材料标到这个关键词…"><datalist id="dl-kwadd">${pool.map(x => `<option value="${esc(x.name)}">`).join('')}</datalist>`}
       <div class="actions"><a href="#/open/${encodeURIComponent(c.name)}">打开概念页</a><button id="kwRec">为它推荐材料</button></div>
       ${ro ? '' : `<div class="actions">${org.pinned.includes(n.id) ? '<button id="kwUnpin">取消固定</button>' : ''}<button id="kwHide">在地图上隐藏</button></div>`}`;
+  } else if (mats.length === 1 && nodes.length === 1) {
+    const it = mats[0], d = it.data;
+    html = `<p class="kind">材料</p><h2>${esc(d.title || it.name)}</h2>
+      ${d.why ? `<p class="hint">${esc(d.why)}</p>` : ''}
+      ${ro ? '' : `<div class="actions left"><button class="mini${d.star ? ' on' : ''}" id="matStar" title="看了描述觉得有用，计划读">${d.star ? '⭐ 计划读' : '☆ 计划读'}</button>
+        <button class="mini${d.like ? ' on' : ''}" id="matLike" title="读完觉得写得很好，想继续发展">${d.like ? '♥ 喜欢' : '♡ 喜欢'}</button></div>`}
+      <div class="actions"><a href="#/item/${encodeURIComponent(it.path)}">打开材料页</a>${ro ? '' : '<button id="matSticky">＋ 连一张便利贴</button>'}</div>`;
+  } else if (nodes.length === 1 && nodes[0].type === 'text') {
+    html = `<p class="kind">便利贴</p>${ro ? '' : '<div class="actions left"><button id="stickyEdit">编辑文字</button></div><p class="hint">也可以双击便利贴编辑。</p>'}`;
   } else if (kws.length >= 2) {
     const both = store.items().filter(it => kws.every(c => store.itemsOf(c).includes(it)));
     html = `<h2>已选 ${kws.length} 个关键词</h2><p>${kws.map(c => esc(c.name)).join(' · ')}</p>
@@ -475,13 +548,24 @@ function panel() {
       <input id="edgeLabel" placeholder="标签，比如：导致 / 张力 / 前提" value="${esc(e.label || '')}"${ro ? ' disabled' : ''}>
       ${ro ? '' : `<label class="check"><input type="checkbox" id="edgeBoth"${e.fromEnd === 'arrow' ? ' checked' : ''}> 双向</label>
       <label class="check"><input type="checkbox" id="edgeNone"${e.toEnd === 'none' ? ' checked' : ''}> 没有箭头（只是线）</label>
+      <div class="seg" role="group" aria-label="线型">${Object.entries({ solid: '实线', dashed: '虚线', dotted: '点线' }).map(([k, label]) =>
+        `<button class="mini${(org.edgeStyle?.[e.id]?.line || (ai ? 'dashed' : 'solid')) === k ? ' on' : ''}" data-line="${k}">${label}</button>`).join('')}</div>
+      <div class="seg" role="group" aria-label="粗细">${[1, 2, 3].map(w => `<button class="mini${(org.edgeStyle?.[e.id]?.width || 1.6) === w ? ' on' : ''}" data-width="${w}">${['细', '中', '粗'][w - 1]}</button>`).join('')}</div>
       ${ai ? '<div class="actions"><button id="edgeKeep">保留（以后 AI 整理不会删掉它）</button></div>' : ''}`}`;
   } else {
     html = `<h2>已选 ${nodes.length + edges.length} 个</h2>`;
   }
+  if (nodes.length && !ro) {
+    if (nodes.length >= 2) html += '<div class="actions left"><button id="newBubble">＋ 新建主题气泡</button></div>';
+    else if ((org.bubbles || []).length) {
+      const n0 = nodes[0];
+      html += `<label class="row-label">主题气泡 <select id="bubJoin"><option value="">—</option>${org.bubbles.map(b =>
+        `<option value="${b.id}"${b.members.includes(n0.id) ? ' selected' : ''}>${b.members.includes(n0.id) ? '✓ ' : ''}${esc(b.name)}</option>`).join('')}</select></label>`;
+    }
+  }
   if ((nodes.length || edges.length) && !ro) {
     html += swatches();
-    if (edges.length || nodes.length > kws.length) html += '<div class="actions"><button id="selDelete">删除</button></div>';
+    if (edges.length || nodes.length > kws.length) html += `<div class="actions"><button id="selDelete">${mats.length && !edges.length ? '从地图上移除' : '删除'}</button></div>`;
   }
   el.innerHTML = html;
   bindPanel(el, { nodes, edges, kws });
@@ -546,11 +630,68 @@ function bindPanel(el, { nodes, edges, kws }) {
     canvas.edges = canvas.edges.filter(e => e.fromNode !== n.id && e.toNode !== n.id);
     selected.clear(); scheduleSave(); rebuild(0.3);
   });
+  for (const b of el.querySelectorAll('[data-bsel]')) b.onclick = () => { selectedBubble = b.dataset.bsel; selected.clear(); draw(); };
+  for (const b of el.querySelectorAll('[data-place]')) b.onclick = () => placeItem(b.dataset.place, n);
+  on('#stickyEdit', 'click', () => openNode(n));
+  const it = nodes.map(itemOf).filter(Boolean)[0];
+  const flag = key => store.update(it.path, d => { d[key] = d[key] ? null : true; }).then(() => draw()).catch(err => toast(err.message, true));
+  on('#matStar', 'click', () => flag('star'));
+  on('#matLike', 'click', () => flag('like'));
+  on('#matSticky', 'click', () => {
+    snapshot();
+    const r = rectOf(n), s = { id: uid(), type: 'text', text: '', x: Math.round(r.x + r.w + 40), y: Math.round(r.y), width: 240, height: 160, color: STICKY_COLOR };
+    canvas.nodes.push(s);
+    canvas.edges.push({ id: uid(), fromNode: s.id, toNode: n.id, toEnd: 'none' });
+    selected = new Set([s.id]); editingId = s.id;
+    scheduleSave(); rebuild(0.3);
+  });
+  on('#newBubble', 'click', async () => {
+    const res = await ask({ title: '新建主题气泡', fields: [{ name: 'v', label: '主题名', required: true, placeholder: '比如：描述里的想象空间' }] });
+    if (!res?.v) return;
+    snapshot();
+    org.bubbles = [...(org.bubbles || []), { id: uid().slice(0, 8), name: res.v, note: '', members: nodes.map(x => x.id), color: GROUP_PALETTE[(org.bubbles || []).length % GROUP_PALETTE.length] }];
+    selectedBubble = org.bubbles.at(-1).id; selected.clear();
+    scheduleSave(); rebuild(0.3);
+  });
+  on('#bubJoin', 'change', e => {
+    snapshot();
+    const b = org.bubbles.find(x => x.id === e.target.value);
+    if (b) b.members = b.members.includes(n.id) ? b.members.filter(id => id !== n.id) : [...b.members, n.id];
+    org.bubbles = org.bubbles.filter(x => x.members.length);
+    scheduleSave(); rebuild(0.3);
+  });
+  for (const b of el.querySelectorAll('[data-line]')) b.onclick = () => { snapshot(); org.edgeStyle = { ...org.edgeStyle, [edges[0].id]: { ...org.edgeStyle?.[edges[0].id], line: b.dataset.line } }; scheduleSave(); draw(); };
+  for (const b of el.querySelectorAll('[data-width]')) b.onclick = () => { snapshot(); org.edgeStyle = { ...org.edgeStyle, [edges[0].id]: { ...org.edgeStyle?.[edges[0].id], width: Number(b.dataset.width) } }; scheduleSave(); draw(); };
   const e0 = edges[0];
   on('#edgeLabel', 'change', e => { snapshot(); e0.label = e.target.value.trim() || undefined; scheduleSave(); draw(); });
   on('#edgeBoth', 'change', e => { snapshot(); if (e.target.checked) e0.fromEnd = 'arrow'; else delete e0.fromEnd; scheduleSave(); draw(); });
   on('#edgeNone', 'change', e => { snapshot(); if (e.target.checked) e0.toEnd = 'none'; else delete e0.toEnd; scheduleSave(); draw(); });
   on('#edgeKeep', 'click', () => { org.aiEdges = org.aiEdges.filter(id => id !== e0.id); scheduleSave(); draw(); toast('这条关系现在是你的了'); });
+}
+
+function bindBubblePanel(el, b) {
+  const on = (sel, ev, fn) => el.querySelector(sel)?.addEventListener(ev, fn);
+  on('#bubNote', 'change', e => { snapshot(); b.note = e.target.value.trim(); scheduleSave(); });
+  on('#bubColor', 'change', e => { snapshot(); b.color = e.target.value; scheduleSave(); draw(); });
+  on('#bubRename', 'click', async () => {
+    const res = await ask({ title: '气泡改名', fields: [{ name: 'v', label: '主题名', required: true, value: b.name }] });
+    if (res?.v) { snapshot(); b.name = res.v; scheduleSave(); draw(); }
+  });
+  on('#bubDelete', 'click', () => { snapshot(); org.bubbles = org.bubbles.filter(x => x !== b); selectedBubble = null; scheduleSave(); rebuild(0.2); });
+}
+
+// Lead a material out of a keyword: a card next to it, joined by a dotted line, that follows the keyword.
+function placeItem(path, from) {
+  if (nodeOfPath(path)) return;
+  snapshot();
+  const r = rectOf(from);
+  const n = { id: uid(), type: 'file', file: path, x: Math.round(r.x + r.w / 2 - 120), y: Math.round(r.y + r.h + 70), width: 240, height: 90 };
+  canvas.nodes.push(n);
+  const e = { id: uid(), fromNode: from.id, toNode: n.id, toEnd: 'none' };
+  canvas.edges.push(e);
+  org.edgeStyle = { ...org.edgeStyle, [e.id]: { line: 'dotted' } };
+  selected = new Set([n.id]);
+  scheduleSave(); rebuild(0.4);
 }
 
 /* ---------- actions ---------- */
@@ -563,6 +704,8 @@ function removeSelected() {
   const alive = new Set(canvas.nodes.map(n => n.id));
   canvas.edges = canvas.edges.filter(e => !selected.has(e.id) && alive.has(e.fromNode) && alive.has(e.toNode));
   org.aiEdges = org.aiEdges.filter(id => canvas.edges.some(e => e.id === id));
+  for (const b of org.bubbles || []) b.members = b.members.filter(id => alive.has(id));
+  org.bubbles = (org.bubbles || []).filter(b => b.members.length);
   selected.clear();
   scheduleSave(); rebuild(0.2);
 }
@@ -589,6 +732,19 @@ async function newKeyword() {
   } catch (e) { toast(e.message, true); }
 }
 
+function openNode(n) {
+  if (!n) return;
+  if (n.type === 'text') {
+    if (viewOnly()) return;
+    editingId = n.id; selected = new Set([n.id]); draw();
+    setTimeout(() => { const ta = root?.querySelector('.sticky-edit'); if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } }, 0);
+    return;
+  }
+  const c = conceptOf(n), it = itemOf(n);
+  if (c) location.hash = `#/open/${encodeURIComponent(c.name)}`;
+  else if (it) location.hash = `#/item/${encodeURIComponent(it.path)}`;
+}
+
 function finishEditing() {
   if (!editingId) return;
   const n = nodeById(editingId), text = root?.querySelector('.sticky-edit')?.value ?? editDraft;
@@ -601,6 +757,9 @@ function finishEditing() {
 function bindStage() {
   const vp = root.querySelector('#mapVp');
   let gesture = null;
+  // Double clicks are detected by hand: the first press re-renders the node, so the browser's own
+  // dblclick lands on the canvas (and pointer events carry no click count).
+  let lastDown = { id: null, t: 0 }, suppressDblUntil = 0;
 
   vp.addEventListener('pointerdown', ev => {
     if (ev.button !== 0) return;
@@ -610,6 +769,8 @@ function bindStage() {
     const nodeEl = t.closest('.mnode[data-id]'), edgeEl = t.closest('[data-edge]');
     const [wx, wy] = toWorld(ev.clientX, ev.clientY);
     const ro = viewOnly();
+    const bub = t.closest('[data-bubble]');
+    if (bub) { selectedBubble = bub.dataset.bubble; selected.clear(); draw(); return; }
 
     if (nodeEl && t.classList.contains('handle') && !ro) {
       gesture = { kind: 'connect', from: nodeEl.dataset.id };
@@ -619,18 +780,26 @@ function bindStage() {
       gesture = { kind: 'resize', n, sx: wx, sy: wy, w: n.width || 220, h: n.height || 140 };
     } else if (nodeEl) {
       const id = nodeEl.dataset.id;
+      const now = Date.now();
+      if (!ev.shiftKey && lastDown.id === id && now - lastDown.t < 450) {
+        lastDown = { id: null, t: 0 }; suppressDblUntil = now + 700;
+        ev.preventDefault();                       // keep the browser from moving focus off the new editor
+        return openNode(nodeById(id));
+      }
+      lastDown = { id, t: now };
+      const before = [...selected].join();
       if (ev.shiftKey) selected.has(id) ? selected.delete(id) : selected.add(id);
       else if (!selected.has(id)) selected = new Set([id]);
       const moving = visibleNodes().filter(n => selected.has(n.id));
       gesture = { kind: 'move', sx: wx, sy: wy, start: moving.map(n => [n, n.x, n.y]), moved: false, before: JSON.stringify({ canvas, org }) };
-      draw();
+      if (selectedBubble || before !== [...selected].join()) { selectedBubble = null; draw(); }
     } else if (edgeEl) {
       const id = edgeEl.dataset.edge;
       if (ev.shiftKey) selected.has(id) ? selected.delete(id) : selected.add(id); else selected = new Set([id]);
       draw();
       return;
     } else if (!t.closest('.ghost')) {
-      if (!ev.shiftKey && selected.size) { selected.clear(); draw(); }
+      if (!ev.shiftKey && (selected.size || selectedBubble)) { selected.clear(); selectedBubble = null; draw(); }
       gesture = { kind: 'pan', sx: ev.clientX, sy: ev.clientY, x: view.x, y: view.y };
     }
     if (gesture) vp.setPointerCapture(ev.pointerId);
@@ -701,13 +870,10 @@ function bindStage() {
   vp.addEventListener('pointercancel', end);
 
   vp.addEventListener('dblclick', ev => {
-    if (viewOnly()) return;
-    const nodeEl = ev.target.closest('.mnode[data-id]'), edgeEl = ev.target.closest('[data-edge]');
-    if (nodeEl) {
-      const n = nodeById(nodeEl.dataset.id);
-      if (n.type === 'text') { editingId = n.id; draw(); }
-      else if (conceptOf(n)) location.hash = `#/open/${encodeURIComponent(conceptOf(n).name)}`;
-    } else if (edgeEl) {
+    // Double clicks on nodes are handled on pointerdown (the first click may have re-rendered them).
+    if (viewOnly() || Date.now() < suppressDblUntil || ev.target.closest('#mapNodes, [data-bubble]')) return;
+    const edgeEl = ev.target.closest('[data-edge]');
+    if (edgeEl) {
       selected = new Set([edgeEl.dataset.edge]); draw();
       root.querySelector('#edgeLabel')?.focus();
     } else if (!ev.target.closest('.ghost')) {
