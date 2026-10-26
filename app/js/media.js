@@ -19,3 +19,13 @@ export function hydrate(root) {
     });
   }
 }
+
+// Re-encode a photo in the browser: at most `max` px on the long side, as JPEG. Drawing to a canvas
+// drops all metadata, so phone photos lose their GPS location before they ever reach the vault.
+export async function shrinkImage(file, max = 1600) {
+  const bmp = await createImageBitmap(file, { imageOrientation: 'from-image' });
+  const k = Math.min(1, max / Math.max(bmp.width, bmp.height));
+  const c = Object.assign(document.createElement('canvas'), { width: Math.round(bmp.width * k), height: Math.round(bmp.height * k) });
+  c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+  return new Promise(res => c.toBlob(res, 'image/jpeg', 0.82));
+}

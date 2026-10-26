@@ -10,6 +10,9 @@ import { renderInbox } from './views/inbox.js';
 import { renderGaps } from './views/gaps.js';
 import { renderSettings } from './views/settings.js';
 import { renderPlan } from './views/plan.js';
+import { renderIdeas } from './views/ideas.js';
+import { renderBrainstorm } from './views/brainstorm.js';
+import { renderFocus, leaveFocus } from './views/focus.js';
 import { installCapture } from './views/capture.js';
 import { lang, isEn, setLang, applyLang } from './i18n.js';
 import { pendingTexts, translatePending } from './translate.js';
@@ -83,7 +86,8 @@ function render() {
   document.getElementById('ownerBtn')?.addEventListener('click', () => renderWelcome());
   if (!v) return renderWelcome();
 
-  const [, view, arg] = location.hash.match(/^#\/([^/]*)\/?(.*)$/) || [];
+  const [, rawView, rawArg] = location.hash.match(/^#\/([^/?]*)\/?([^?]*)/) || [];
+  const view = rawView, arg = rawArg;
   for (const a of document.querySelectorAll('[data-nav]')) a.classList.toggle('active', a.dataset.nav === view);
   const param = arg ? decodeURIComponent(arg) : '';
   const inboxCount = store.inbox().length;
@@ -93,7 +97,11 @@ function render() {
   leaveMap(main);
   if (view === 'inbox') return renderInbox(main);
   if (view === 'gaps') return renderGaps(main);
+  if (view === 'focus') return renderFocus(main, store.get(param));
+  leaveFocus(main);
   if (view === 'plan') return renderPlan(main);
+  if (view === 'ideas') return renderIdeas(main);
+  if (view === 'brainstorm') return renderBrainstorm(main);
   if (view === 'settings') return renderSettings(main);
   if (view === 'item') return renderDetail(main, store.get(param));
   if (view === 'open') return renderDetail(main, store.resolve(param));

@@ -2,10 +2,11 @@
 // The option lists live in the vault (_系统/词表.md) and can be edited there or on the 选项 page;
 // these are only the defaults. An unknown value in a note is kept and shown as-is.
 
-export const KIND = { item: '材料', concept: '概念', question: '研究问题', direction: '方向', vocab: '词表' };
+export const KIND = { item: '材料', concept: '概念', question: '研究问题', direction: '方向', vocab: '词表', idea: '想法', brainstorm: '头脑风暴' };
 
 // Where new notes of each kind are created.
-export const FOLDER = { 材料: '材料', 概念: '概念', 研究问题: '研究问题' };
+export const FOLDER = { 材料: '材料', 概念: '概念', 研究问题: '研究问题', 想法: '想法', 头脑风暴: '头脑风暴' };
+export const IDEA_STAGES = ['种子', '发展中', '放下了'];
 
 export const DEFAULT_VOCAB = {
   type: ['报告', '论文', '书', '文章', '组织/资源库', '产品/App', '产品合集', '展览', '艺术作品',

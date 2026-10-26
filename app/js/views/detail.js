@@ -10,6 +10,7 @@ import { enrich, suggestConcepts, suggestLinks, recall, related } from '../tasks
 import { openRecommend } from './recommend.js';
 import { parseLinks } from '../links.js';
 import { marksHtml, bindMarks, setPlan } from '../marks.js';
+import { IDEA_STAGES } from '../model.js';
 import { vaultUrl, hydrate } from '../media.js';
 
 const ORIGIN_LABEL = { me: '我', source: '原文', ai: 'AI' };
@@ -314,6 +315,8 @@ function renderItem(main, note) {
       <header>
         <h1>${esc(d.title || note.name)}</h1>
         <p class="sub">${[d.creator, d.year, d.type].filter(Boolean).map(esc).join(' · ')}</p>
+        ${ro ? '' : `<a class="button primary focus-btn" href="#/focus/${encodeURIComponent(note.path)}">开始专注读</a>`}
+        ${d.resume && !ro ? `<p class="resume">上次停在：${esc(d.resume)}</p>` : ''}
         <div class="detail-marks">${marksHtml(note)}${ro ? (d.plan ? `<span class="muted">计划 ${esc(d.plan)}</span>` : '')
           : `<label class="check">计划哪天读 <input type="date" id="f-plan" value="${esc(d.plan || '')}"></label>`}</div>
         ${obsidianLink(note)}
@@ -383,8 +386,9 @@ function renderItem(main, note) {
 /* ---------- 研究问题 / 概念 / 方向 / 其他 ---------- */
 function renderOther(main, note) {
   const d = note.data, ro = viewOnly();
-  const lead = d.kind === KIND.question ? 'question' : d.kind === KIND.concept ? 'definition' : null;
-  const shownKeys = new Set(['kind', lead, 'status', 'created']);
+  const lead = d.kind === KIND.question ? 'question' : d.kind === KIND.concept ? 'definition' : d.kind === KIND.idea ? 'idea' : null;
+  const isIdea = d.kind === KIND.idea;
+  const shownKeys = new Set(['kind', lead, 'status', 'created', ...(isIdea ? ['stage', 'for_whom', 'next'] : [])]);
   const props = Object.entries(d).filter(([k, v]) => !shownKeys.has(k) && !k.startsWith('_') && !isEmpty(v));
   const fmt = v => asList(v).map(x => /^\s*\[\[/.test(x)
     ? `<a href="${noteHref(linkTarget(x))}">${esc(linkTarget(x))}</a>` : esc(x)).join('<span class="sep">·</span>');
@@ -399,9 +403,12 @@ function renderOther(main, note) {
         ${obsidianLink(note)}
       </header>
       ${lead ? `<section class="why-box${isEmpty(d[lead]) ? ' empty' : ''}">
-        <label for="f-${lead}">${lead === 'question' ? '问题' : '我的一句话定义'}</label>
+        <label for="f-${lead}">${lead === 'question' ? '问题' : lead === 'idea' ? '一句话的想法' : '我的一句话定义'}</label>
         <textarea id="f-${lead}" data-text="${lead}" rows="2"${ro ? ' disabled' : ''}>${esc(d[lead] ?? '')}</textarea></section>` : ''}
       <section class="mine">
+        ${isIdea ? `<div class="field"><dt>阶段</dt><dd><select id="f-stage" data-stage-select${ro ? ' disabled' : ''}>${IDEA_STAGES.map(st => `<option${st === (d.stage || IDEA_STAGES[0]) ? ' selected' : ''}>${st}</option>`).join('')}</select></dd></div>
+          <div class="field wide"><dt>为谁、解决什么问题</dt><dd><textarea id="f-for_whom" data-text="for_whom" rows="2"${ro ? ' disabled' : ''}>${esc(d.for_whom ?? '')}</textarea></dd></div>
+          <div class="field wide"><dt>下一步</dt><dd><textarea id="f-next" data-text="next" rows="2" placeholder="比如：画故事板 / 找两个人聊聊"${ro ? ' disabled' : ''}>${esc(d.next ?? '')}</textarea></dd></div>` : ''}
         ${d.kind === KIND.concept ? `<div class="field"><dt>状态</dt><dd>${selectHtml('id="f-status" data-vocab="concept_status" data-key="status"', store.vocab('concept_status'), d.status, ro)}</dd></div>` : ''}
         ${props.map(([k, v]) => `<div class="field"><dt>${esc(FIELD_LABEL[k] || k)}</dt><dd>${fmt(v)}</dd></div>`).join('')}
       </section>
@@ -412,6 +419,7 @@ function renderOther(main, note) {
     </article>`;
   bindCommon(main, note);
   bindAttachments(main, note);
+  main.querySelector('[data-stage-select]')?.addEventListener('change', e => run(setField(note.path, 'stage', e.target.value)));
 }
 
 export function renderDetail(main, note) {

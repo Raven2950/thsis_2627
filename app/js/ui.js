@@ -59,3 +59,17 @@ export function bindSelect(el, label, onPick) {
     onPick(res.v, true);
   });
 }
+
+// A short, clear chime for timers (no audio files needed).
+export function chime(times = 2) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    for (let i = 0; i < times; i++) {
+      const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + i * 0.35;
+      o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.25, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+      o.start(t); o.stop(t + 0.32);
+    }
+  } catch (e) { /* no audio */ }
+}
+export const mmss = s => `${String(Math.floor(Math.max(0, s) / 60)).padStart(2, '0')}:${String(Math.max(0, Math.round(s)) % 60).padStart(2, '0')}`;

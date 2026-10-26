@@ -216,4 +216,11 @@ export const store = {
     await vault.write(TR_PATH, JSON.stringify({ about: '网页英文模式用的译文：中文原文 → 英文。在网页里点「更新英文版」生成。', t }, null, 1));
     emit();
   },
+
+  /* ---------- small JSON files under _系统/ ---------- */
+  async readJson(path, fallback) {
+    try { const t = (await vault.read(path))?.text; if (t) return JSON.parse(t); } catch (e) { /* missing */ }
+    return fallback;
+  },
+  async writeJson(path, value) { await vault.write(path, JSON.stringify(value, null, 1)); },
 };

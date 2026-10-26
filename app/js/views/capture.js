@@ -162,11 +162,13 @@ export function installCapture() {
   const carries = e => [...(e.dataTransfer?.types || [])].some(t => t === 'Files' || t === 'text/uri-list');
   const show = on => overlay.classList.toggle('show', on);
 
-  window.addEventListener('dragenter', e => { if (!carries(e) || !store.vault || store.vault.readOnly) return; depth++; show(true); });
+  const own = e => e.target?.closest?.('[data-own-drop]');
+  window.addEventListener('dragenter', e => { if (!carries(e) || own(e) || !store.vault || store.vault.readOnly) return; depth++; show(true); });
+  window.addEventListener('drop', () => { depth = 0; show(false); }, true);
   window.addEventListener('dragleave', () => { if (depth && --depth === 0) show(false); });
   window.addEventListener('dragover', e => { if (carries(e) && store.vault && !store.vault.readOnly) e.preventDefault(); });
   window.addEventListener('drop', e => {
-    if (!carries(e)) return;
+    if (!carries(e) || own(e)) return;
     e.preventDefault(); depth = 0; show(false);
     if (e.dataTransfer.files.length) return captureFiles(e.dataTransfer.files);
     const url = (e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain')).split('\n').find(isUrl);

@@ -44,6 +44,7 @@ const nodeById = id => canvas.nodes.find(n => n.id === id);
 const noteOf = n => (n?.type === 'file' ? store.get(n.file) : null);
 const conceptOf = n => { const x = noteOf(n); return x?.data.kind === KIND.concept ? x : null; };
 const itemOf = n => { const x = noteOf(n); return x?.data.kind === KIND.item ? x : null; };
+const ideaOf = n => { const x = noteOf(n); return x?.data.kind === KIND.idea ? x : null; };
 const nodeOfPath = path => canvas.nodes.find(n => n.type === 'file' && n.file === path);
 const groupOf = path => org.groups.find(g => g.members.includes(path));
 const visibleNodes = () => canvas.nodes.filter(n => n.type !== 'group');
@@ -228,7 +229,7 @@ function simGraph() {
   const itemsOfId = new Map();
   for (const n of visibleNodes()) {
     const c = conceptOf(n), s = sizeOf(n.id, n), prev = simById.get(n.id);
-    const linked = (n.type === 'text' || itemOf(n)) && canvas.edges.some(e => e.fromNode === n.id || e.toNode === n.id);
+    const linked = (n.type === 'text' || itemOf(n) || ideaOf(n)) && canvas.edges.some(e => e.fromNode === n.id || e.toNode === n.id);
     const free = (c || linked) && !org.pinned.includes(n.id);
     const sn = { id: n.id, w: s.w, h: s.h, x: n.x + s.w / 2, y: n.y + s.h / 2, vx: prev?.vx || 0, vy: prev?.vy || 0, path: c?.path || null };
     if (!free) { sn.fx = sn.x; sn.fy = sn.y; }
@@ -309,6 +310,13 @@ function nodeHtml(n) {
       <div class="mat-title">${esc(trc(d.title || item.name))}</div>
       ${why ? `<div class="mat-why">${esc(why.length > 150 ? `${why.slice(0, 150)}…` : why)}</div>` : ''}
       <span class="handle" title="拖到关键词或便利贴上，画一条线"></span></div>`;
+  }
+  const idea = ideaOf(n);
+  if (idea) {
+    return `<div class="mnode idea${sel}${pin}" data-id="${n.id}" style="${style}width:${n.width || 260}px" title="双击打开这张想法卡">
+      <div class="mat-head"><span class="mat-type">💡 想法 · ${esc(idea.data.stage || '种子')}</span></div>
+      <div class="mat-title">${esc(trc(idea.data.idea || idea.name))}</div>
+      <span class="handle" title="拖到关键词、材料或便利贴上，画一条线"></span></div>`;
   }
   if (n.type === 'file') {
     const concept = conceptOf(n);
@@ -740,8 +748,9 @@ function openNode(n) {
     setTimeout(() => { const ta = root?.querySelector('.sticky-edit'); if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } }, 0);
     return;
   }
-  const c = conceptOf(n), it = itemOf(n);
-  if (c) location.hash = `#/open/${encodeURIComponent(c.name)}`;
+  const c = conceptOf(n), it = itemOf(n), idea = ideaOf(n);
+  if (idea) location.hash = `#/open/${encodeURIComponent(idea.name)}`;
+  else if (c) location.hash = `#/open/${encodeURIComponent(c.name)}`;
   else if (it) location.hash = `#/item/${encodeURIComponent(it.path)}`;
 }
 

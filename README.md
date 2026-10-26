@@ -22,6 +22,12 @@ python3 -m http.server 5173
 - 要更新网站，在 Finder 里双击 `发布.command`。它会提交改动并推送，GitHub Action（`.github/workflows/pages.yml`，构建脚本在 `scripts/build-site.sh`）大约一分钟后重新发布。
 - 不会上传、也不会发布的内容：`vault/附件/`、所有 PDF、`vault/私密/`。仓库是公开的，其余内容在 GitHub 上都能被看到。
 
+## 从读材料到得到想法
+
+- **专注阅读**：材料页的「开始专注读」，或者计划页的「开始读」。一次只看一份材料，计时默认 10 分钟，到点会明确停下来，问你是继续、休息还是结束。右边有小步骤清单（第一步从导读的“建议怎么读”里来）和随手记；随手记存进「我得到了什么」，自动带上出处。点「我想玩了」会记下读到哪，存在材料的 `resume` 属性里，下次打开时提醒你。阅读记录存在 `vault/_系统/专注记录.json`，计划页会显示“这 7 天读了多少”。
+- **想法卡**：`kind: 想法` 的笔记，放在 `vault/想法/`，属性有 `idea`（一句话）、`stage`（种子 / 发展中 / 放下了）、`for_whom`、`next`、`sources`、`from`。「想法」页按阶段排列，顶部有“灵感碰撞”：随机摆出两份平时不会放在一起的材料。想法卡可以放到关键词地图上。
+- **头脑风暴**：「想法」页的「开始头脑风暴」。选一个起点，按轮次走：先求多 → 换个角度 → 强行连接（从仓库里翻一张材料）→ 快速画 8 格 → 选出 1–2 个。时长有默认值，每一轮都能调整或关掉，设置记在浏览器里。每轮到点会明确提醒。结束后拍下本子上传（在浏览器里压缩，并去掉拍摄地点），圈出的想法变成想法卡。整次记录存在 `vault/头脑风暴/`，照片在 `vault/头脑风暴/图片/`。
+
 ## 中英双语
 
 - 右上角「中 / EN」切换。访客默认看到英文；你在自己的库里默认是中文。网址后面加 `?lang=en` 或 `?lang=zh` 可以强制指定语言。
@@ -77,6 +83,8 @@ app/js/
   translate.js 把我写的中文内容翻成英文，只翻新的
   gaps.js    缺口计数（纯前端）
   pdftext.js 在浏览器里读 PDF 的文字和元数据
-  views/     capture（拖入收录）, list, detail, map（关键词白板）, inbox, gaps, recommend, options, settings
+  marks.js   ⭐ / ♥ / 计划日期
+  ideas.js   想法卡、灵感碰撞、把想法放上地图
+  views/     capture（拖入收录）, list, detail, map（关键词白板）, plan, focus（专注阅读）, ideas, brainstorm, inbox, gaps, recommend, options, settings
 sw.js        离线缓存（PWA）
 ```
