@@ -6,6 +6,7 @@ import { esc, renderMarkdown } from '../markdown.js';
 import { toast, ask, chime, mmss } from '../ui.js';
 import { vaultUrl } from '../media.js';
 import { linkTarget } from '../note.js';
+import { isEn, trc } from '../i18n.js';
 
 export const LOG_PATH = '_系统/专注记录.json';
 const DEFAULT_MIN = 10;
@@ -29,7 +30,10 @@ export async function weekStats() {
 
 /* ---------- steps: from the reading guide's "how to read", then two small fixed ones ---------- */
 function defaultSteps(note) {
-  const how = note.body.match(/\*\*建议怎么读\*\*[：:]\s*([^\n]+)/)?.[1]?.replace(/（约[^）]*）/g, '').trim();
+  // In English, take the line from the translated guide (its label is worded freely, e.g. "How to read it").
+  const how = isEn()
+    ? trc(note.body).match(/\*\*[^*\n]*(?:read|approach)[^*\n]*\*\*\s*[：:]\s*([^\n]+)/i)?.[1]?.replace(/\s*\((?:about|approximately|approx\.?|~)[^)]*\)/gi, '').trim()
+    : note.body.match(/\*\*建议怎么读\*\*[：:]\s*([^\n]+)/)?.[1]?.replace(/（约[^）]*）/g, '').trim();
   return [
     how ? `先读：${how}` : '先读开头或摘要，弄清它在讲什么',
     '找一句让你有反应的话，复制到右边',

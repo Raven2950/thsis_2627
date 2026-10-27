@@ -1,6 +1,7 @@
 // Guided brainstorm. I think on paper; the page keeps the rhythm: what to do this round, for how long,
 // a nudge (a new angle, a random card from my repository), and a clear stop at the end of each round.
 // Afterwards: photos of the notebook, a few notes, and the ideas I circled become idea cards.
+import { confirmTr } from '../i18n.js';
 import { store } from '../store.js';
 import { KIND, FOLDER, today } from '../model.js';
 import { esc } from '../markdown.js';
@@ -231,6 +232,6 @@ export function renderBrainstorm(main) {
     on('#bsNotes', 'input', e => { bs.notes = e.target.value; });
     for (const i of main.querySelectorAll('[data-idea]')) i.addEventListener('input', () => { bs.ideas[i.dataset.idea] = i.value; });
     on('#bsSave', 'click', async e => { e.target.disabled = true; try { await save(); } catch (err) { toast(err.message, true); e.target.disabled = false; } });
-    on('#bsDiscard', 'click', () => { if (confirm('这次的内容不存了？')) { bs = null; location.hash = '#/ideas'; } });
+    on('#bsDiscard', 'click', () => { if (confirmTr('这次的内容不存了？')) { bs = null; location.hash = '#/ideas'; } });
   }
 }

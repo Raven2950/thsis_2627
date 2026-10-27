@@ -21,6 +21,25 @@ const listeners = new Set();
 const baseName = path => path.split('/').at(-1).replace(/\.md$/, '');
 const emit = () => listeners.forEach(fn => fn());
 
+// In English the page shows my writing translated, and edit boxes start with the English text.
+// Saving a value I left as it was must not put the English over the Chinese: a new value that is
+// just the old value's translation is put back to the old value.
+const trOf = s => translations[s] ?? translations[String(s).trim()];
+const sameAsTranslation = (old, now) => typeof old === 'string' && typeof now === 'string' && CJK.test(old)
+  && trOf(old) != null && String(trOf(old)).trim() === now.trim();
+function keepOriginals(old, now) {
+  if (sameAsTranslation(old, now)) return old;
+  if (!old || !now || typeof old !== 'object' || typeof now !== 'object') return now;
+  if (Array.isArray(now)) {
+    if (!Array.isArray(old)) return now;
+    const byId = new Map(old.filter(o => o && o.id != null).map(o => [o.id, o]));
+    return now.map((v, i) => keepOriginals(v && v.id != null ? byId.get(v.id) : old[i], v));
+  }
+  for (const k of Object.keys(now)) now[k] = keepOriginals(old[k], now[k]);
+  return now;
+}
+const CJK = /[㐀-鿿]/;
+
 function index(path, text, mtime) {
   const { data, body } = parseNote(text);
   notes.set(path, { path, name: baseName(path), data, body, mtime });
@@ -67,8 +86,11 @@ export const store = {
     const { data, body } = parseNote(text);
     if (data._yamlError) throw new Error(`YAML 无法解析：${data._yamlError}`);
     if (expectBody != null && body !== expectBody) throw new ConflictError('这篇笔记在别处被改过了');
+    const before = structuredClone(data);
     const res = mutate(data, body) || {};
-    const out = serializeNote(res.data || data, res.body ?? body);
+    let newBody = res.body ?? body;
+    if (newBody !== body && sameAsTranslation(body, newBody)) newBody = body;
+    const out = serializeNote(keepOriginals(before, res.data || data), newBody);
     await vault.write(path, out);
     index(path, out, Date.now());
     emit();
@@ -178,12 +200,12 @@ export const store = {
     } catch (e) { /* missing or unreadable: start empty */ }
     return { nodes: [], edges: [] };
   },
-  async writeMap(canvas) { await vault.write(MAP_PATH, JSON.stringify(canvas, null, '\t')); },
+  async writeMap(canvas) { await vault.write(MAP_PATH, JSON.stringify(keepOriginals(await this.readMap(), canvas), null, '\t')); },
   async readMapOrg() {
     try { const t = (await vault.read(ORG_PATH))?.text; if (t) return JSON.parse(t); } catch (e) { /* none yet */ }
     return null;
   },
-  async writeMapOrg(org) { await vault.write(ORG_PATH, JSON.stringify(org, null, 2)); },
+  async writeMapOrg(org) { await vault.write(ORG_PATH, JSON.stringify(keepOriginals(await this.readMapOrg(), org), null, 2)); },
   // Materials tagged with this concept.
   itemsOf(concept) { return this.items().filter(n => asList(n.data.concepts).some(v => this.resolve(v) === concept)); },
 

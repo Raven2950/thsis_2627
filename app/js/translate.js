@@ -26,6 +26,11 @@ export async function collect() {
   for (const g of org?.groups || []) { add(g.name); add(g.note); }
   for (const r of Object.values(org?.reasons || {})) add(r);
   for (const field of Object.keys(DEFAULT_VOCAB)) for (const v of store.vocab(field)) if (!BUILTIN.has(v)) add(v);
+  // Ideas, "where I stopped", map bubbles and AI suggestions waiting in the inbox: visitors can use these pages too.
+  for (const n of store.all()) for (const f of ['idea', 'for_whom', 'next', 'resume']) add(n.data[f]);
+  for (const b of org?.bubbles || []) { add(b.name); add(b.note); }
+  const walk = v => (typeof v === 'string' ? add(v) : v && typeof v === 'object' && Object.values(v).forEach(walk));
+  for (const e of store.inbox()) { add(e.model); walk(e.payload); }
   return out;
 }
 

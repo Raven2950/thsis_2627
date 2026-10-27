@@ -1,7 +1,7 @@
 // One note, fully editable. For a 材料 note: what it is, why I saved it, where each field came from.
 // Other notes (研究问题, 概念, 方向) get a plain page plus everything that links to them.
 import { store, ConflictError } from '../store.js';
-import { viewOnly, trc, isEn } from '../i18n.js';
+import { viewOnly, trc, isEn, confirmTr } from '../i18n.js';
 import { KIND, FIELD_LABEL, originOf, isEmpty, unconfirmed, today } from '../model.js';
 import { esc, noteHref, renderMarkdown } from '../markdown.js';
 import { asList, linkTarget, toLink } from '../note.js';
@@ -101,9 +101,9 @@ const withoutRelations = body => body.replace(/^## 关联\s*$[\s\S]*?(?=^##\s|(?
 function bodySection(note, ro) {
   const draft = drafts.get(note.path);
   if (draft) return `<section class="body editing">
-      <div class="body-bar"><span class="hint">Markdown，和 Obsidian 里写法一样。⌘/Ctrl + S 保存</span>
+      <div class="body-bar"><span class="hint">Markdown，和 Obsidian 里写法一样。⌘/Ctrl + S 保存${isEn() && !store.vault.demo ? '<br>正文按原来写的语言编辑，保存不会把译文写进笔记' : ''}</span>
         <span><button id="bodyCancel">取消</button> <button class="primary" id="bodySave">保存正文</button></span></div>
-      <textarea id="bodyText" spellcheck="false">${esc(draft.text)}</textarea></section>`;
+      <textarea id="bodyText" spellcheck="false" data-no-tr>${esc(draft.text)}</textarea></section>`;
   return `<section class="body markdown">
       ${ro ? '' : '<div class="body-bar"><span></span><button id="bodyEdit">编辑正文</button></div>'}
       ${renderMarkdown(withoutRelations(trc(note.body))) || '<p class="muted">（正文是空的）</p>'}</section>`;
@@ -111,7 +111,8 @@ function bodySection(note, ro) {
 
 function bindBody(main, note) {
   main.querySelector('#bodyEdit')?.addEventListener('click', () => {
-    drafts.set(note.path, { text: note.body, base: note.body });
+    // Visitors trying it in English edit the English text; in my own vault I edit what is really in the note.
+    drafts.set(note.path, { text: isEn() && store.vault.demo ? trc(note.body) : note.body, base: note.body });
     renderDetail(main, note);
     main.querySelector('#bodyText')?.focus();
   });
@@ -129,7 +130,7 @@ function bindBody(main, note) {
       renderDetail(main, store.get(note.path));
     } catch (e) {
       if (!(e instanceof ConflictError)) return toast(e.message, true);
-      const ok = confirm('这篇笔记的正文在 Obsidian 里被改过了。\n\n确定：用网页里的版本覆盖\n取消：放弃网页里的修改，载入最新版本');
+      const ok = confirmTr('这篇笔记的正文在 Obsidian 里被改过了。\n\n确定：用网页里的版本覆盖\n取消：放弃网页里的修改，载入最新版本');
       if (ok) return save(true);
       drafts.delete(note.path);
       await store.reload();

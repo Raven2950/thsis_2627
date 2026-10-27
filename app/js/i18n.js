@@ -1,7 +1,7 @@
 // Chinese / English. The page is written in Chinese; in English mode every Chinese text node and
 // attribute is swapped as it appears: interface text from UI below (or RULES for text with numbers in
-// it), my own writing from the vault's translations (_系统/译文.json, see translate.js). English mode
-// is for reading; editing happens in Chinese.
+// it), my own writing from the vault's translations (_系统/译文.json, see translate.js). Both
+// languages can edit: store.js keeps the Chinese original when an untouched English value is saved.
 import { store } from './store.js';
 
 const KEY = 'thesis-web-lang';
@@ -11,10 +11,12 @@ export function lang() {
   const q = new URLSearchParams(location.search).get('lang');
   if (q === 'en' || q === 'zh') return q;
   try { const s = localStorage.getItem(KEY); if (s === 'en' || s === 'zh') return s; } catch (e) { /* private mode */ }
-  return store.vault?.published ? 'en' : 'zh';      // visitors read English, I work in Chinese
+  return store.vault?.published || store.vault?.demo ? 'en' : 'zh';      // visitors read English, I work in Chinese
 }
 export const isEn = () => lang() === 'en';
-export const viewOnly = () => !store.vault || store.vault.readOnly || isEn();
+export const viewOnly = () => !store.vault || store.vault.readOnly;
+// Native confirm() boxes never pass through the DOM, so translate their text here.
+export const confirmTr = msg => confirm(tr(msg));
 export function setLang(l) { try { localStorage.setItem(KEY, l); } catch (e) { /* private mode */ } }
 
 // My writing in English, when a translation exists (bodies and sticky notes are looked up whole).
@@ -32,6 +34,15 @@ const UI = {
   '只看发布版': 'View the published version', '选择库文件夹…': 'Choose vault folder…', '以只读方式打开文件夹…': 'Open a folder read-only…',
   '当前浏览器不支持写入本地文件夹。要编辑，请用 Chrome 打开。': 'This browser cannot write to local folders. Use Chrome to edit.',
   '已重新载入': 'Reloaded', '英文版只用来看；要编辑请切到「中」': 'English is for reading; switch to 中 to edit',
+  '把我写的中文内容翻成英文，存进库里；只翻新的': 'Translate my Chinese writing into English and save it in the vault (only what is new)',
+  '正文按原来写的语言编辑，保存不会把译文写进笔记': 'Notes are edited in the language they were written in, so saving never writes the translation into the note',
+  '试一试': 'Try it', '在这个页面里试用：可以随便改，刷新就恢复原样': 'Try it in this page: change anything; a reload puts it back',
+  '已核对': 'Verified', '查不到': 'Not found', '无法自动核对': 'Cannot be checked automatically', '核对服务没响应': 'Checking service did not respond',
+  'Claude（找资料并核对）': 'Claude (found and checked)', '说明': 'About',
+  '，在 Obsidian 里改也可以。 改名会同时更新所有用到旧名字的笔记；删除只是从菜单里移除，已经用了它的笔记保持不变。':
+    '; you can edit them in Obsidian too. Renaming updates every note that uses the old name; removing only takes it off the menu, and notes that use it stay as they are.',
+  '不登录也能用，但次数很少。用 nyu.edu 登录后每天 500 次。 token 在': 'Works without signing in, but with very few requests. Sign in with nyu.edu for 500 a day. Get the token at the bottom of the',
+  '代理页面': 'proxy page', '底部获取，最快 1 小时过期。': '; it can expire in as little as an hour.',
 
   // fields and vocabulary
   '标题': 'Title', '作者/机构': 'Author / org', '年份': 'Year', '链接': 'Link', '类型': 'Type', '为什么存它': 'Why I saved it',
@@ -230,7 +241,7 @@ const RULES = [
   [/^收件箱里有 (\d+) 条关于它的建议 →$/, n => `${n} suggestion(s) in the inbox →`],
   [/^(.+) →$/, t => `${tr(t)} →`],
   [/^← (.+)$/, t => `← ${tr(t)}`],
-  [/^共享概念：(.+)$/, t => `Shared concepts: ${t.split('、').map(tr).join(', ')}`],
+  [/^共享概念：(.+)$/, t => `Shared concepts: ${splitList(t)}`],
   [/^共享材料：(.+)$/, t => `Shared materials: ${t.split('、').map(tr).join(', ')}`],
   [/^(.+)（反向）：(.*)$/, (t, r) => `${tr(t)} (reverse): ${tr(r)}`],
   [/^还没有材料挂到这个(.+)下。$/, k => `No materials are attached to this ${tr(k).toLowerCase()} yet.`],
@@ -266,16 +277,34 @@ const RULES = [
   [/^(\d+) 个节点。选中一个节点后可以在面板里把它加进或移出气泡。$/, n => `${n} nodes. Select a node to add it to or remove it from the bubble.`],
   [/^(建议关键词|补全信息|建议概念|建议关联|推荐材料) · (.*)$/, (k, rest) => `${tr(k)} · ${rest}`],
   [/^(原文|我|AI) ✓$/, t => `${tr(t)} ✓`],
+  [/^✓ (.+)$/, t => `✓ ${tr(t)}`],
   // Lists the page joins itself: "OpenAAC · 组织/资源库", "概念A、概念B".
   [/^(.+? · .+)$/, t => t.split(' · ').map(tr).join(' · ')],
-  [/^([^、]+、.+)$/, t => t.split('、').map(tr).join(', ')],
+  [/^([^、]+、.+)$/, t => splitList(t)],
+  // Tooltips listing several titles, one per line.
+  [/^([^\n]+\n[\s\S]+)$/, t => t.split('\n').map(tr).join('\n')],
 ];
+
+// "概念A、概念B" — but a single name may contain 、 itself (培训、支持与社群).
+function splitList(t) {
+  const own = store.translation(t);
+  if (own) return own;
+  const parts = t.split('、'), out = [];
+  for (let i = 0; i < parts.length; i++) {
+    let j = parts.length;
+    for (; j > i + 1; j--) if (store.translation(parts.slice(i, j).join('、'))) break;
+    out.push(tr(parts.slice(i, j).join('、'))); i = j - 1;
+  }
+  return out.join(', ');
+}
 
 export function tr(text) {
   if (typeof text !== 'string' || !CJK.test(text)) return text;
   const own = store.translation(text);
   if (own) return own;
   if (UI[text]) return UI[text];
+  const flat = text.replace(/\s+/g, ' ');
+  if (UI[flat]) return UI[flat];
   for (const [re, fn] of RULES) { const m = text.match(re); if (m) return fn(...m.slice(1)); }
   return text;
 }
@@ -294,12 +323,18 @@ function translateNode(node) {
   if (node.nodeType === Node.TEXT_NODE) {
     if (node.parentElement?.closest('[data-no-tr], input[type="search"], script, style')) return;
     const out = swap(node.data);
-    if (out != null) { changed.add([node, null, node.data]); node.data = out; }
+    if (out == null) return;
+    // An <option> without a value takes its value from its text: pin the Chinese value first,
+    // so choosing "To read" still saves 想读.
+    const opt = node.parentElement;
+    if (opt?.tagName === 'OPTION' && !opt.hasAttribute('value')) opt.setAttribute('value', opt.textContent);
+    changed.add([node, null, node.data]); node.data = out;
     return;
   }
   if (node.nodeType !== Node.ELEMENT_NODE || node.closest('[data-no-tr]')) return;
   const els = [node, ...node.querySelectorAll('*')];
   for (const el of els) {
+    if (el !== node && el.closest('[data-no-tr]')) continue;
     for (const a of ATTRS) {
       if (!el.hasAttribute(a) || (a === 'value' && !(el.tagName === 'INPUT' && el.type !== 'search' && el.type !== 'color'))) continue;
       const out = swap(el.getAttribute(a));

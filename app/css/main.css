@@ -41,6 +41,7 @@ button {
 button:hover:not(:disabled) { border-color: var(--accent); }
 button.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 button.ghost { background: transparent; }
+a.btn-link { border: 1px solid var(--accent); border-radius: 6px; padding: 5px 12px; text-decoration: none; background: var(--accent); color: var(--bg); }
 button.mini { padding: 1px 8px; font-size: 12px; margin-left: 6px; }
 button:disabled, select:disabled, textarea:disabled { opacity: .6; cursor: not-allowed; }
 select, input[type="search"], textarea {

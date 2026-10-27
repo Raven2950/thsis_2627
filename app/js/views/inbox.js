@@ -1,4 +1,5 @@
 // Everything the AI proposed, waiting for keep / cancel.
+import { confirmTr } from '../i18n.js';
 import { store } from '../store.js';
 import { FIELD_LABEL } from '../model.js';
 import { esc, noteHref } from '../markdown.js';
@@ -78,7 +79,7 @@ export function renderInbox(main) {
   for (const b of main.querySelectorAll('[data-cancel]')) b.addEventListener('click', () => cancel(find(b.dataset.cancel)).catch(e => toast(e.message, true)));
   for (const b of main.querySelectorAll('[data-clear]')) b.addEventListener('click', () => {
     const ids = store.inbox().filter(e => e.kind === b.dataset.clear).map(e => e.id);
-    if (confirm(`放弃这 ${ids.length} 条建议？`)) store.removeInbox(ids);
+    if (confirmTr(`放弃这 ${ids.length} 条建议？`)) store.removeInbox(ids);
   });
   for (const b of main.querySelectorAll('[data-keep]')) b.addEventListener('click', async () => {
     const e = find(b.dataset.keep);

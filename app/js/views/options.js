@@ -3,6 +3,7 @@ import { store } from '../store.js';
 import { DEFAULT_VOCAB, FIELD_LABEL } from '../model.js';
 import { esc } from '../markdown.js';
 import { ask, toast } from '../ui.js';
+import { tr, confirmTr } from '../i18n.js';
 
 export function renderOptions(main) {
   const ro = store.vault.readOnly;
@@ -39,11 +40,11 @@ export function renderOptions(main) {
         const n = store.usage(field, v);
         const res = await ask({ title: `改名：${v}`, fields: [{ name: 'v', label: '新名称', required: true, value: v }],
           note: n ? `有 ${n} 篇笔记用到它，会一起改掉。` : '' });
-        if (res?.v && res.v !== v) toast(`已改名，更新了 ${await store.renameVocab(field, v, res.v)} 篇笔记`);
+        if (res?.v && res.v !== v && res.v !== tr(v)) toast(`已改名，更新了 ${await store.renameVocab(field, v, res.v)} 篇笔记`);
       }
       if (b.dataset.op === 'remove') {
         const n = store.usage(field, v);
-        if (confirm(`从菜单里删除「${v}」？${n ? `\n还有 ${n} 篇笔记在用它，它们不会被改动。` : ''}`)) await store.removeVocab(field, v);
+        if (confirmTr(`从菜单里删除「${v}」？${n ? `\n还有 ${n} 篇笔记在用它，它们不会被改动。` : ''}`)) await store.removeVocab(field, v);
       }
     } catch (e) { toast(e.message, true); }
   });

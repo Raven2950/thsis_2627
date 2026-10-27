@@ -1,5 +1,6 @@
 // The one place that talks to a language model. Swap providers in 设置; nothing else changes.
 // Settings (incl. tokens / keys) live in this browser's localStorage only, never in the vault.
+import { isEn } from './i18n.js';
 
 const KEY = 'thesis-web-ai';
 const PROXY = 'https://itp-ima-replicate-proxy.web.app/api/create_n_get';
@@ -75,6 +76,8 @@ async function viaGemini({ system, prompt, temperature, maxTokens, json }, s) {
 
 export async function complete({ system, prompt, temperature = 0.4, maxTokens = 2048, json = false }) {
   const s = getSettings();
+  // In English mode what AI writes for me (summaries, reasons, names) should be English too.
+  if (isEn()) system = `${system || ''}\n\nThe user is working in English: write every free-text value you produce (summaries, reasons, names, guides, questions) in English. Values that must be picked from a given list stay exactly as listed, in their original language.`;
   const opts = { system, prompt, temperature, maxTokens, json };
   return s.provider === 'gemini' ? viaGemini(opts, s) : viaProxy(opts, s);
 }
