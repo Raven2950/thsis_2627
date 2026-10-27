@@ -40,12 +40,17 @@ export async function pendingTexts() {
 }
 
 const links = s => (s.match(/!?\[\[[^\]]+\]\]/g) || []).sort().join('\n');
+// Models like to translate the note names inside [[links]]; hand them numbered stand-ins instead
+// and put the real links back afterwards.
+const LINK = /!?\[\[[^\]]+\]\]/g;
+const mask = s => { const found = []; return { text: s.replace(LINK, m => `⟦${found.push(m)}⟧`), found }; };
+const unmask = (s, found) => s.replace(/⟦(\d+)⟧/g, (m, i) => found[i - 1] ?? m);
 
 const SYSTEM = `You translate a design-research student's thesis notes from Chinese into natural, concise academic English.
 Reply with only JSON.`;
 const RULES = `Rules:
 - Keep Markdown structure exactly (headings, lists, quotes, line breaks).
-- Copy every [[...]] and ![[...]] unchanged, character for character. Never translate inside double brackets.
+- Copy every ⟦n⟧ marker unchanged and keep it in place: each stands for a link.
 - Keep the heading "## 关联" exactly as it is. In lines like "- 类型 → [[目标]]：理由", translate 类型 and 理由, keep the arrow and the link.
 - Keep callout markers like "> [!ai]" and translate the text after them.
 - Keep English text, names, titles of works, URLs and numbers as they are.
@@ -73,7 +78,8 @@ export async function translatePending(onProgress = () => {}) {
   for (let i = 0; i < groups.length; i++) {
     onProgress(i, groups.length);
     const group = groups[i];
-    const input = Object.fromEntries(group.map((t, j) => [String(j + 1), t]));
+    const masked = group.map(mask);
+    const input = Object.fromEntries(masked.map((m, j) => [String(j + 1), m.text]));
     const chars = group.reduce((a, t) => a + t.length, 0);
     try {
       const { data } = await completeJSON({
@@ -82,7 +88,8 @@ export async function translatePending(onProgress = () => {}) {
         temperature: 0.2, maxTokens: Math.min(16000, Math.round(chars * 3) + 800),
       });
       group.forEach((src, j) => {
-        const en = data?.[String(j + 1)];
+        const raw = data?.[String(j + 1)];
+        const en = typeof raw === 'string' ? unmask(raw, masked[j].found) : raw;
         // A translation that lost or changed a link would break navigation: leave that one for next time.
         if (typeof en === 'string' && en.trim() && links(en) === links(src)) { result[src] = en; translated++; }
         else failed.push(src);

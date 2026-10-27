@@ -129,7 +129,7 @@ const UI = {
   'AI 的产出都先放在这里，keep 之后才会写进笔记。橙色虚线 = AI 说的；蓝色 = 从 Open Library / Crossref 查到的。':
     'Everything AI produces waits here; only what you keep is written to your notes. Orange dashed = said by AI; blue = found in Open Library / Crossref.',
   '建议关键词': 'Suggested keywords', '推荐材料': 'Recommended materials', '全部 cancel': 'Cancel all', '字段': 'Field', '现在': 'Now', '建议': 'Suggested',
-  '收入后会连到：': 'Keeping it connects to:', '为什么推荐：': 'Why recommended:', '已有 ✓': 'exists ✓', '新概念': 'new concept', '（新概念）': '(new concept)',
+  '收入后会连到：': 'Keeping it connects to:', '为什么推荐：': 'Why recommended: ', '已有 ✓': 'exists ✓', '新概念': 'new concept', '（新概念）': '(new concept)',
   '还没有材料': 'no materials yet', '已写进笔记': 'Written to the note', '至少勾一个字段，或者点 cancel': 'Tick at least one field, or cancel',
   '为什么存它（用你自己的话）': 'Why I saved it (in your own words)', '导读（读之前看）': 'Reading guide (read first)',
   '空的。可以在材料详情页让 AI 补全信息、建议概念或关联，或者在「地图」上让 AI 总结关键词、选关键词点「推荐」。':

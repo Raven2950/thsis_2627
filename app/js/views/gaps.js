@@ -1,6 +1,7 @@
 // Where the repository is thin. Counts are plain front-end arithmetic; the AI pass is optional.
 import { computeGaps, level, LEVEL_LABEL } from '../gaps.js';
 import { aiGaps } from '../tasks.js';
+import { isEn } from '../i18n.js';
 import { esc, noteHref } from '../markdown.js';
 import { openRecommend } from './recommend.js';
 import { toast } from '../ui.js';
@@ -45,7 +46,7 @@ export function renderGaps(main) {
 
       <h2>整理状况</h2>
       <ul class="bars house">${g.housekeeping.map(h => `<li><span class="name">${esc(h.name)}</span>
-        <span class="list">${h.items.map(n => `<a href="#/item/${encodeURIComponent(n.path)}">${esc(n.data.title || n.name)}</a>`).join('、') || '<span class="muted">没有</span>'}</span>
+        <span class="list">${h.items.map(n => `<a href="#/item/${encodeURIComponent(n.path)}">${esc(n.data.title || n.name)}</a>`).join(isEn() ? ', ' : '、') || '<span class="muted">没有</span>'}</span>
         <span class="n">${h.items.length}/${g.total}</span></li>`).join('')}</ul>
 
       <h2>结构之外的缺口 <span class="badge ai">AI</span></h2>

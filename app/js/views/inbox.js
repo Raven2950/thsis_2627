@@ -1,5 +1,6 @@
 // Everything the AI proposed, waiting for keep / cancel.
-import { confirmTr } from '../i18n.js';
+import { confirmTr, isEn } from '../i18n.js';
+const SEP = () => (isEn() ? ', ' : '、');
 import { store } from '../store.js';
 import { FIELD_LABEL } from '../model.js';
 import { esc, noteHref } from '../markdown.js';
@@ -36,14 +37,14 @@ function card(e) {
   if (e.kind === 'keyword') return `<div class="card candidate" data-id="${e.id}">${meta}
     <h3>关键词「${esc(p.name)}」 <span class="badge ${p.items.length ? 'ai' : ''}">${p.items.length ? `${p.items.length} 份材料` : '还没有材料 · 缺口'}</span></h3>
     <p>${esc(p.definition)}</p>
-    ${p.items.length ? `<p class="hint">会标到：${p.items.map(itemLink).join('、')}</p>` : ''}
+    ${p.items.length ? `<p class="hint">会标到：${p.items.map(itemLink).join(SEP())}</p>` : ''}
     ${p.reason ? `<p class="hint">${esc(p.reason)}</p>` : ''}
     ${actions}</div>`;
 
   if (e.kind === 'concept') return `<div class="card candidate" data-id="${e.id}">${meta}
     <h3>${itemLink(e.target)} ＋ 概念「${esc(p.name)}」 ${pv.exists ? '<span class="badge confirmed">已有 ✓</span>' : '<span class="badge ai">新概念</span>'}</h3>
     <p>${esc(p.reason)}</p>
-    ${pv.exists ? `<p class="hint">这个概念下已有 ${pv.items.length} 份材料${pv.items.length ? `：${pv.items.map(n => esc(n.data.title || n.name)).join('、')}` : ''}</p>` : ''}
+    ${pv.exists ? `<p class="hint">这个概念下已有 ${pv.items.length} 份材料${pv.items.length ? `：${pv.items.map(n => esc(n.data.title || n.name)).join(SEP())}` : ''}</p>` : ''}
     ${actions}</div>`;
 
   if (e.kind === 'link') return `<div class="card candidate" data-id="${e.id}">${meta}
@@ -57,7 +58,7 @@ function card(e) {
     ${p.summary ? `<p>${esc(p.summary)}</p>` : ''}
     ${p.reason ? `<p class="reason"><b>为什么推荐：</b>${esc(p.reason)}</p>` : ''}
     ${pv.concepts?.length ? `<div class="pv"><b>收入后会连到：</b><ul>${pv.concepts.map(c => `<li>${c.exists ? '✓' : '＋'} ${esc(c.name)}
-      ${c.exists ? `<span class="muted">→ ${c.items.length ? c.items.map(n => esc(n.data.title || n.name)).join('、') : '还没有材料'}</span>` : '<span class="muted">（新概念）</span>'}</li>`).join('')}</ul></div>` : ''}
+      ${c.exists ? `<span class="muted">→ ${c.items.length ? c.items.map(n => esc(n.data.title || n.name)).join(SEP()) : '还没有材料'}</span>` : '<span class="muted">（新概念）</span>'}</li>`).join('')}</ul></div>` : ''}
     ${p.guide ? `<details class="guide"><summary>导读（读之前看）</summary><div class="markdown">${renderMarkdown(p.guide)}</div></details>` : ''}
     ${e.request ? `<details><summary>request json</summary><pre>${esc(JSON.stringify(e.request, null, 2))}</pre></details>` : ''}
     ${actions}</div>`;
