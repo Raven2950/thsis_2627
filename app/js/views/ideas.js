@@ -1,6 +1,7 @@
 // Ideas: a board of idea cards by stage, and a "collision" that puts two unrelated materials side by side.
 import { store } from '../store.js';
-import { IDEA_STAGES } from '../model.js';
+import { IDEA_STAGES, KIND } from '../model.js';
+import { hydrate } from '../media.js';
 import { viewOnly, trc } from '../i18n.js';
 import { esc, noteHref } from '../markdown.js';
 import { asList, linkTarget } from '../note.js';
@@ -15,12 +16,27 @@ function card(n) {
     <a class="idea-text" href="#/open/${encodeURIComponent(n.name)}">${esc(trc(d.idea || n.name))}</a>
     ${d.for_whom ? `<p class="idea-meta"><b>为谁：</b>${esc(trc(d.for_whom))}</p>` : ''}
     ${d.next ? `<p class="idea-meta"><b>下一步：</b>${esc(trc(d.next))}</p>` : ''}
+    ${d.from && store.resolve(d.from) ? `<p class="idea-src"><a href="${noteHref(linkTarget(d.from))}">🧠 来自头脑风暴</a></p>` : ''}
     ${asList(d.sources).length ? `<p class="idea-src">${asList(d.sources).map(s => `<a href="${noteHref(linkTarget(s))}">${esc(trc(store.resolve(s)?.data.title || linkTarget(s)))}</a>`).join('<span class="sep">·</span>')}</p>` : ''}
     ${ro ? '' : `<div class="idea-ops">
       ${i > 0 ? `<button class="mini" data-stage="${IDEA_STAGES[i - 1]}" title="往回挪">←</button>` : ''}
       ${i < IDEA_STAGES.length - 1 ? `<button class="mini" data-stage="${IDEA_STAGES[i + 1]}" title="往前推">→</button>` : ''}
       <button class="mini" data-map>放到地图</button><a class="mini-link" href="#/brainstorm?seed=${encodeURIComponent(n.name)}">以它开始头脑风暴</a></div>`}
   </div>`;
+}
+
+// Past brainstorms, newest first, with the notebook photos so I can find them again.
+function sessionsHtml() {
+  const list = store.byKind(KIND.brainstorm).sort((a, b) => String(b.data.date || '').localeCompare(String(a.data.date || '')));
+  if (!list.length) return '';
+  return `<h2 class="bs-records-h">头脑风暴记录 <span class="count">${list.length}</span></h2>
+    <div class="bs-records">${list.map(n => {
+      const photos = [...n.body.matchAll(/!\[\[([^\]|]+\.(?:jpe?g|png|webp|heic))(?:\|[^\]]*)?\]\]/gi)].map(m => m[1]);
+      return `<a class="bs-record" href="#/open/${encodeURIComponent(n.name)}">
+        <span class="muted">${esc(String(n.data.date || ''))} · ${asList(n.data.ideas).length} 个想法 · ${photos.length} 张照片</span>
+        <b>${esc(trc(String(n.data.seed || n.name)))}</b>
+        ${photos.length ? `<span class="bs-record-photos">${photos.slice(0, 4).map(p => `<img class="vault-img" data-vault-src="${esc(p)}" alt="">`).join('')}</span>` : ''}</a>`;
+    }).join('')}</div>`;
 }
 
 export function renderIdeas(main) {
@@ -42,7 +58,9 @@ export function renderIdeas(main) {
       const list = all.filter(n => (n.data.stage || IDEA_STAGES[0]) === st);
       return `<div class="idea-col"><h2>${st} <span class="count">${list.length}</span></h2>${list.map(card).join('') || `<p class="empty">${st === IDEA_STAGES[0] ? '还没有想法。碰撞一下，或者开始一次头脑风暴。' : '—'}</p>`}</div>`;
     }).join('')}</div>
+    ${sessionsHtml()}
   </section>`;
+  hydrate(main);
 
   main.querySelector('#colNext')?.addEventListener('click', () => { pair = collisionPair(); renderIdeas(main); });
   main.querySelector('#colSave')?.addEventListener('click', async () => {

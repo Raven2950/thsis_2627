@@ -36,7 +36,7 @@ const UI = {
   '已重新载入': 'Reloaded', '英文版只用来看；要编辑请切到「中」': 'English is for reading; switch to 中 to edit',
   '把我写的中文内容翻成英文，存进库里；只翻新的': 'Translate my Chinese writing into English and save it in the vault (only what is new)',
   '正文按原来写的语言编辑，保存不会把译文写进笔记': 'Notes are edited in the language they were written in, so saving never writes the translation into the note',
-  '试一试': 'Try it', '在这个页面里试用：可以随便改，刷新就恢复原样': 'Try it in this page: change anything; a reload puts it back',
+  '试一试': 'Try it', '🧠 来自头脑风暴': '🧠 From a brainstorm', '头脑风暴记录': 'Brainstorm records', '在这个页面里试用：可以随便改，刷新就恢复原样': 'Try it in this page: change anything; a reload puts it back',
   '已核对': 'Verified', '查不到': 'Not found', '无法自动核对': 'Cannot be checked automatically', '核对服务没响应': 'Checking service did not respond',
   'Claude（找资料并核对）': 'Claude (found and checked)', '说明': 'About',
   '，在 Obsidian 里改也可以。 改名会同时更新所有用到旧名字的笔记；删除只是从菜单里移除，已经用了它的笔记保持不变。':
@@ -270,6 +270,7 @@ const RULES = [
   [/^「(.+)」时间到$/, t => `Time’s up for “${tr(t)}”`],
   [/^下一轮：(.+)$/, t => `Next: ${tr(t)}`],
   [/^开始（共 (\d+) 分钟）$/, n => `Start (${n} min total)`],
+  [/^(.+) · (\d+) 个想法 · (\d+) 张照片$/, (d, i, p) => `${d} · ${i} idea${i === '1' ? '' : 's'} · ${p} photo${p === '1' ? '' : 's'}`],
   [/^想法 (\d)：一句话$/, n => `Idea ${n}: one sentence`],
   [/^💡 想法 · (.+)$/, t => `💡 Idea · ${tr(t)}`],
   [/^关于「(.+)」，我能做什么？$/, t => `What could I make around “${tr(t)}”?`],
