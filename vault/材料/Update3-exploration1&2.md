@@ -5,12 +5,12 @@ creator:
 year:
 url:
 type: My Reflection
-why:
+why: update 3 for thesis class
 status: 读过
 importance: 核心
 roles: []
 voice:
-concepts: []
+concepts: ['[[描述作为创作]]']
 questions: []
 parent:
 summary:

@@ -6,7 +6,7 @@ year:
 url: https://www.apple.com/accessibility/
 type: 产品/App
 why: Apple provides examples of how software, voice input, image recognition, captions, screen reading, and alternative input can support different accessibility needs.
-status: 想读
+status: 读过
 importance:
 roles: []
 voice:
@@ -18,8 +18,11 @@ from_ai: [creator, type, concepts, questions]
 from_source: [title, url]
 confirmed: []
 created: 2026-10-14
-read:
+read: 2026-10-27
 source: Notion · Update 1
+star: true
+plan: 2026-10-28
+resume:
 ---
 
 > [!ai] 导读（AI 写的，读之前看；细节以原文为准）
