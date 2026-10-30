@@ -244,5 +244,7 @@ export const store = {
     try { const t = (await vault.read(path))?.text; if (t) return JSON.parse(t); } catch (e) { /* missing */ }
     return fallback;
   },
-  async writeJson(path, value) { await vault.write(path, JSON.stringify(value, null, 1)); },
+  async writeJson(path, value) { await vault.write(path, JSON.stringify(value, null, 1)); if (!files.includes(path)) files.push(path); },
+  // Every file under a folder (images, canvases…), not just notes.
+  filesIn(prefix) { return files.filter(p => p.startsWith(prefix)); },
 };

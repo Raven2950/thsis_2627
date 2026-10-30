@@ -29,3 +29,15 @@ export async function shrinkImage(file, max = 1600) {
   c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
   return new Promise(res => c.toBlob(res, 'image/jpeg', 0.82));
 }
+
+// For moodboards: keep transparency (PNG/WebP/GIF become WebP, photos JPEG) and report the size,
+// so an image card can start with the right shape. Re-encoding drops metadata here too.
+export async function encodeImage(file, max) {
+  const bmp = await createImageBitmap(file, { imageOrientation: 'from-image' });
+  const k = Math.min(1, max / Math.max(bmp.width, bmp.height));
+  const c = Object.assign(document.createElement('canvas'), { width: Math.round(bmp.width * k), height: Math.round(bmp.height * k) });
+  c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+  const alpha = /png|webp|gif/.test(file.type);
+  const blob = await new Promise(res => c.toBlob(res, alpha ? 'image/webp' : 'image/jpeg', 0.85));
+  return { blob, ext: blob.type === 'image/webp' ? 'webp' : blob.type === 'image/png' ? 'png' : 'jpg', width: bmp.width, height: bmp.height };
+}

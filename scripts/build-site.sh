@@ -10,8 +10,17 @@ rm -rf _site/vault/.obsidian _site/vault/.trash _site/vault/附件 _site/vault/�
 find _site/vault -name '*.pdf' -delete
 find _site/vault -name '.*' -type f -delete
 python3 - <<'PY'
-import json, os
+import json, os, shutil
 root = '_site/vault'
+# Moodboard images stay private unless that board is marked public (_系统/灵感板.json).
+try: boards = json.load(open(os.path.join(root, '_系统/灵感板.json'))).get('boards', {})
+except (OSError, ValueError): boards = {}
+imgs = os.path.join(root, '灵感板/图片')
+if os.path.isdir(imgs):
+    for name in os.listdir(imgs):
+        if not boards.get(name, {}).get('public'):
+            shutil.rmtree(os.path.join(imgs, name), ignore_errors=True)
+            print(f'moodboard images kept private: {name}')
 files = sorted(os.path.relpath(os.path.join(d, f), root)
                for d, _, fs in os.walk(root) for f in fs if f != 'manifest.json')
 json.dump({'files': files}, open(os.path.join(root, 'manifest.json'), 'w'), ensure_ascii=False, indent=0)

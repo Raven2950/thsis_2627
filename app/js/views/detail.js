@@ -2,6 +2,7 @@
 // Other notes (研究问题, 概念, 方向) get a plain page plus everything that links to them.
 import { store, ConflictError } from '../store.js';
 import { viewOnly, trc, isEn, confirmTr } from '../i18n.js';
+import { fillBoardLinks } from './board.js';
 import { KIND, FIELD_LABEL, originOf, isEmpty, unconfirmed, today } from '../model.js';
 import { esc, noteHref, renderMarkdown } from '../markdown.js';
 import { asList, linkTarget, toLink } from '../note.js';
@@ -415,11 +416,13 @@ function renderOther(main, note) {
       </section>
       ${[KIND.question, KIND.concept].includes(d.kind) && !linkedItems.length
         ? `<p class="nudge">还没有材料挂到这个${esc(d.kind)}下。</p>` : ''}
+      ${d.kind === KIND.concept ? `<section data-boards-for="${esc(note.name)}"></section>` : ''}
       ${bodySection(note, ro)}
       ${backlinkSection(note)}
     </article>`;
   bindCommon(main, note);
   bindAttachments(main, note);
+  fillBoardLinks(main);
   main.querySelector('[data-stage-select]')?.addEventListener('change', e => run(setField(note.path, 'stage', e.target.value)));
 }
 

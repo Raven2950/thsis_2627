@@ -15,6 +15,7 @@ import { openRecommend } from './recommend.js';
 import { keep, cancel } from '../inbox.js';
 import { summarizeKeywords, organizeKeywords } from '../tasks.js';
 import { hydrate } from '../media.js';
+import { fillBoardLinks } from './board.js';
 
 // Obsidian's canvas colour presets "1"–"6"; any "#hex" works too.
 const PRESETS = { 1: '#e5484d', 2: '#e9973f', 3: '#e3c13b', 4: '#46a758', 5: '#3aa6b9', 6: '#8e6cf0' };
@@ -628,6 +629,7 @@ function panel() {
         ${ro ? '' : `<span>${nodeOfPath(x.path) ? '<span class="muted on-map">在图上</span>' : `<button class="mini" data-place="${esc(x.path)}" title="把这份材料从关键词引到地图上">上图</button>`}<button class="x" data-untag="${esc(x.path)}" title="去掉这个关键词">×</button></span>`}</li>`).join('') || '<li class="muted">还没有材料（缺口）</li>'}</ul>
       ${ro ? '' : `<input id="kwAdd" list="dl-kwadd" placeholder="把一份材料标到这个关键词…"><datalist id="dl-kwadd">${pool.map(x => `<option value="${esc(x.name)}">`).join('')}</datalist>`}
       <div class="actions"><a href="#/open/${encodeURIComponent(c.name)}">打开概念页</a><button id="kwRec">为它推荐材料</button></div>
+      <div data-boards-for="${esc(c.name)}"></div>
       ${ro ? '' : `<div class="actions">${org.pinned.includes(n.id) ? '<button id="kwUnpin">取消固定</button>' : ''}<button id="kwHide">在地图上隐藏</button></div>`}`;
   } else if (mats.length === 1 && nodes.length === 1) {
     const it = mats[0], d = it.data;
@@ -671,6 +673,7 @@ function panel() {
     if (edges.length || nodes.length > kws.length) html += `<div class="actions"><button id="selDelete">${mats.length && !edges.length ? '从地图上移除' : '删除'}</button></div>`;
   }
   el.innerHTML = html;
+  fillBoardLinks(el);
   bindPanel(el, { nodes, edges, kws });
 }
 

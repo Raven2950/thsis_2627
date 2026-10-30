@@ -176,7 +176,7 @@ export function installCapture() {
   });
   // ⌘V a file or a link while not typing somewhere.
   document.addEventListener('paste', e => {
-    if (e.target.closest?.('input, textarea, select, [contenteditable], dialog') || !store.vault || store.vault.readOnly) return;
+    if (e.defaultPrevented || e.target.closest?.('input, textarea, select, [contenteditable], dialog') || !store.vault || store.vault.readOnly) return;
     if (e.clipboardData.files.length) { e.preventDefault(); return captureFiles(e.clipboardData.files); }
     const text = e.clipboardData.getData('text/plain').trim();
     if (isUrl(text)) { e.preventDefault(); captureUrl(text); }

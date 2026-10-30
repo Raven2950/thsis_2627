@@ -31,6 +31,12 @@ export async function collect() {
   for (const b of org?.bubbles || []) { add(b.name); add(b.note); }
   const walk = v => (typeof v === 'string' ? add(v) : v && typeof v === 'object' && Object.values(v).forEach(walk));
   for (const e of store.inbox()) { add(e.model); walk(e.payload); }
+  for (const path of store.filesIn('灵感板/').filter(p => p.endsWith('.canvas'))) {
+    add(path.split('/').pop().replace(/\.canvas$/, ''));
+    const c = await store.readJson(path, { nodes: [], edges: [] });
+    for (const n of c.nodes || []) { if (n.type === 'text') add(n.text, true); add(n.label); }
+    for (const e of c.edges || []) add(e.label);
+  }
   return out;
 }
 
