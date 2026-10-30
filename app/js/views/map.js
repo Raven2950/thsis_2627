@@ -167,24 +167,28 @@ function ensureKeywordNodes() {
 
 /* ---------- simulation ---------- */
 // Rectangles push each other apart along the axis where they overlap least.
-function rectCollide(pad = 16) {
+// Returns whether anything still overlaps.
+function pushApart(nodes, k, pad = 16) {
+  let overlapping = false;
+  for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
+    const a = nodes[i], b = nodes[j];
+    const ox = (a.w + b.w) / 2 + pad - Math.abs(a.x - b.x), oy = (a.h + b.h) / 2 + pad - Math.abs(a.y - b.y);
+    if (ox <= 0 || oy <= 0) continue;
+    const am = a.fx == null ? (b.fx == null ? 0.5 : 1) : 0, bm = b.fx == null ? (a.fx == null ? 0.5 : 1) : 0;
+    if (am || bm) overlapping = true;
+    if (ox < oy) { const s = Math.sign(a.x - b.x) || 1; a.x += s * ox * k * am; b.x -= s * ox * k * bm; }
+    else { const s = Math.sign(a.y - b.y) || 1; a.y += s * oy * k * am; b.y -= s * oy * k * bm; }
+  }
+  return overlapping;
+}
+function rectCollide() {
   let nodes;
-  const force = alpha => {
-    for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
-      const a = nodes[i], b = nodes[j];
-      const ox = (a.w + b.w) / 2 + pad - Math.abs(a.x - b.x), oy = (a.h + b.h) / 2 + pad - Math.abs(a.y - b.y);
-      if (ox <= 0 || oy <= 0) continue;
-      const k = 0.5 * Math.min(1, alpha * 6);
-      const am = a.fx == null ? (b.fx == null ? 0.5 : 1) : 0, bm = b.fx == null ? (a.fx == null ? 0.5 : 1) : 0;
-      if (ox < oy) { const s = Math.sign(a.x - b.x) || 1; a.x += s * ox * k * am; b.x -= s * ox * k * bm; }
-      else { const s = Math.sign(a.y - b.y) || 1; a.y += s * oy * k * am; b.y -= s * oy * k * bm; }
-    }
-  };
+  const force = alpha => pushApart(nodes, 0.5 * Math.min(1, alpha * 6));
   force.initialize = ns => (nodes = ns);
   return force;
 }
 // Members of a group drift towards the group's centre, and groups keep their distance from each other.
-function groupPull(strength = 0.12) {
+function groupPull(strength = 0.2) {
   let nodes;
   const force = alpha => {
     const gs = org.groups.map(g => {
@@ -206,6 +210,64 @@ function groupPull(strength = 0.12) {
     }
   };
   force.initialize = ns => (nodes = ns);
+  return force;
+}
+
+// Clusters that must not overlap: each group, each ungrouped keyword, and every other node on its own.
+// Material cards and stickies hanging off a keyword travel with that keyword's cluster.
+function clustersOf(nodes) {
+  const byPath = new Map(nodes.filter(n => n.path).map(n => [n.path, n]));
+  const byId = new Map(nodes.map(n => [n.id, n]));
+  const owner = new Map(), cs = [];
+  const join = (n, i) => { owner.set(n.id, i); cs[i].push(n); };
+  for (const g of org.groups) {
+    const ms = g.members.map(p => byPath.get(p)).filter(Boolean);
+    if (!ms.length) continue;
+    cs.push([]); for (const n of ms) join(n, cs.length - 1);
+  }
+  for (const n of nodes) if (n.path && !owner.has(n.id)) { cs.push([]); join(n, cs.length - 1); }
+  for (let pass = 0; pass < 2; pass++) for (const e of canvas.edges) for (const [a, b] of [[e.fromNode, e.toNode], [e.toNode, e.fromNode]]) {
+    const n = byId.get(a);
+    if (n && !owner.has(a) && owner.has(b)) join(n, owner.get(b));
+  }
+  for (const n of nodes) if (!owner.has(n.id)) { cs.push([]); join(n, cs.length - 1); }
+  return cs;
+}
+// Area a cluster takes on screen: its nodes plus the outline's padding and the group label above.
+function clusterBox(ms) {
+  return { x1: Math.min(...ms.map(n => n.x - n.w / 2)) - 26, y1: Math.min(...ms.map(n => n.y - n.h / 2)) - 44,
+    x2: Math.max(...ms.map(n => n.x + n.w / 2)) + 26, y2: Math.max(...ms.map(n => n.y + n.h / 2)) + 26 };
+}
+// Push overlapping clusters apart, each as one piece, along the axis where they overlap least.
+// Fixed nodes stay put, so a cluster with free nodes gives way to one without. Returns whether anything still overlaps.
+function separateClusters(cs, k, gap = 56) {
+  let overlapping = false;
+  const free = ms => ms.some(n => n.fx == null);
+  const shift = (ms, dx, dy) => { for (const n of ms) if (n.fx == null) { n.x += dx; n.y += dy; } };
+  for (let i = 0; i < cs.length; i++) for (let j = i + 1; j < cs.length; j++) {
+    const a = clusterBox(cs[i]), b = clusterBox(cs[j]);
+    const ox = Math.min(a.x2, b.x2) - Math.max(a.x1, b.x1) + gap, oy = Math.min(a.y2, b.y2) - Math.max(a.y1, b.y1) + gap;
+    if (ox <= 0 || oy <= 0) continue;
+    const fa = free(cs[i]), fb = free(cs[j]);
+    if (!fa && !fb) continue;
+    overlapping = true;
+    const am = fa ? (fb ? 0.5 : 1) : 0, bm = fb ? (fa ? 0.5 : 1) : 0;
+    if (ox < oy) {
+      const s = Math.sign(a.x1 + a.x2 - b.x1 - b.x2) || 1;
+      shift(cs[i], s * ox * k * am, 0); shift(cs[j], -s * ox * k * bm, 0);
+    } else {
+      const s = Math.sign(a.y1 + a.y2 - b.y1 - b.y2) || 1;
+      shift(cs[i], 0, s * oy * k * am); shift(cs[j], 0, -s * oy * k * bm);
+    }
+  }
+  return overlapping;
+}
+function clusterSeparate() {
+  let cs = [], nodes = [];
+  const force = alpha => separateClusters(cs, 0.5 * Math.min(1, alpha * 4));
+  force.initialize = ns => { nodes = ns; cs = clustersOf(ns); };
+  // Untangle fully: clusters apart, and no two cards on top of each other.
+  force.settle = () => { for (let i = 0; i < 400; i++) if (!separateClusters(cs, 0.5) & !pushApart(nodes, 0.5)) break; };
   return force;
 }
 
@@ -283,6 +345,7 @@ function rebuild(alpha) {
   simKey = key;
   sim?.stop();
   const [cx, cy] = boardCenter();
+  const separate = clusterSeparate();
   sim = forceSimulation(nodes)
     .force('link', forceLink(links.map(l => ({ ...l, same: sameGroup(l) }))).id(d => d.id)
       .distance(l => (l.same ? (l.kind === 'edge' ? 180 : Math.max(110, 200 - 30 * l.n)) : 300))
@@ -292,9 +355,11 @@ function rebuild(alpha) {
     .force('group', groupPull())
     .force('bubble', bubblePull())
     .force('x', forceX(cx).strength(0.025)).force('y', forceY(cy).strength(0.025))
+    .force('separate', separate)
     .alpha(alpha ?? 0.35).alphaDecay(0.035).velocityDecay(0.45)
     .on('tick', onTick)
-    .on('end', () => { scheduleSave(); if (!fitted && root) { fit(); fitted = true; } });
+    // The forces fade out before every overlap is gone; finish the job once the layout has settled.
+    .on('end', () => { separate.settle(); onTick(); scheduleSave(); if (!fitted && root) { fit(); fitted = true; } });
 }
 
 /* ---------- rendering ---------- */
@@ -337,16 +402,22 @@ function ghostHtml(e) {
     <span class="label">${esc(e.payload.name)}</span><span class="cnt">${e.payload.items.length}</span>
     <button class="g-keep" title="接受这个关键词">✓</button><button class="g-cancel" title="不要">✕</button></div>`;
 }
-function draw() {
-  if (!root?.querySelector('#mapNodes')) return;
-  root.querySelector('#mapNodes').innerHTML = visibleNodes().map(nodeHtml).join('') + ghosts().map(ghostHtml).join('');
-  hydrate(root.querySelector('#mapNodes'));
+function measure() {
   for (const el of root.querySelectorAll('#mapNodes .mnode')) {
     const id = el.dataset.id || `g:${el.dataset.ghost}`;
     sizes.set(id, { w: el.offsetWidth, h: el.offsetHeight });
     const sn = simById.get(id);
     if (sn) { sn.w = el.offsetWidth; sn.h = el.offsetHeight; }
   }
+}
+function draw() {
+  if (!root?.querySelector('#mapNodes')) return;
+  root.querySelector('#mapNodes').innerHTML = visibleNodes().map(nodeHtml).join('') + ghosts().map(ghostHtml).join('');
+  hydrate(root.querySelector('#mapNodes'));
+  measure();
+  // In English the labels are swapped after this render (i18n's observer runs as a microtask), and
+  // they're usually longer: measure again then, or the layout would make room for the Chinese ones.
+  queueMicrotask(() => { if (root?.querySelector('#mapNodes')) { measure(); drawEdges(); } });
   drawEdges();
   const ta = root.querySelector('.sticky-edit');
   if (ta && document.activeElement !== ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
