@@ -332,10 +332,27 @@ function onTick() {
   drawEdges();
 }
 
+// Floating can be switched off (it's heavy on big maps); the choice is saved with the map.
+const floating = () => org.float !== false;
+
+// With floating off nothing moves on its own: only a re-layout or AI organize arranges the board, in one go.
+function holdStill() {
+  sim?.stop(); sim = null; simKey = '';
+  for (const n of simGraph().nodes) simById.set(n.id, n);
+  for (const sn of simById.values()) if (sn.ghost) {
+    const el = root.querySelector(`[data-ghost="${sn.ghost}"]`);
+    if (el) { el.style.left = `${sn.x - sn.w / 2}px`; el.style.top = `${sn.y - sn.h / 2}px`; }
+  }
+  drawEdges();
+  if (!fitted) { fit(); fitted = true; }
+}
+
 // alpha: how much to stir the layout (1 = from scratch); undefined = only if something changed.
 function rebuild(alpha) {
   if (!root?.querySelector('#mapNodes')) return;
   draw();
+  const once = !floating();
+  if (once && !(alpha >= 0.9)) return holdStill();
   const { nodes, links } = simGraph();
   const groupOfId = new Map(nodes.filter(n => n.path).map(n => [n.id, groupOf(n.path)]));
   const sameGroup = l => { const a = groupOfId.get(l.source), b = groupOfId.get(l.target); return !a || !b || a === b; };
@@ -360,6 +377,13 @@ function rebuild(alpha) {
     .on('tick', onTick)
     // The forces fade out before every overlap is gone; finish the job once the layout has settled.
     .on('end', () => { separate.settle(); onTick(); scheduleSave(); if (!fitted && root) { fit(); fitted = true; } });
+  if (once) {
+    sim.stop();
+    sim.tick(Math.ceil(Math.log(sim.alphaMin() / sim.alpha()) / Math.log(1 - sim.alphaDecay())));
+    separate.settle(); onTick(); scheduleSave();
+    sim = null; simKey = '';
+    if (!fitted && root) { fit(); fitted = true; }
+  }
 }
 
 /* ---------- rendering ---------- */
@@ -1011,6 +1035,7 @@ export async function renderMap(main) {
         <button id="mKw">＋ 关键词</button><button id="mSticky">＋ 便利贴</button>`}
         <button id="mFit">适应窗口</button>${ro ? '' : '<button id="mUndo" title="⌘Z">撤销</button>'}
         <label class="check"><input type="checkbox" id="mShared"${showShared ? ' checked' : ''}> 共享材料连线</label>
+        <label class="check" title="关掉后关键词不再自己移动，停在你放的位置；「重新排布」仍会排一次"><input type="checkbox" id="mFloat"> 关键词漂浮</label>
         <span class="hint">数字 = 关键词下的材料数${ro ? ' · 点关键词看材料' : ' · 拖动关键词会把它固定'}</span>
       </div>
       <div class="graph-wrap">
@@ -1033,10 +1058,16 @@ export async function renderMap(main) {
     on('#mFit', fit);
     on('#mUndo', () => history(undo, redo));
     main.querySelector('#mShared').onchange = e => { showShared = e.target.checked; drawEdges(); };
+    main.querySelector('#mFloat').onchange = e => {
+      if (e.target.checked) delete org.float; else org.float = false;
+      if (!viewOnly()) scheduleSave();
+      rebuild(e.target.checked ? 0.3 : undefined);
+    };
     applyView();
   }
   await syncFromDisk();
   if (root !== main || !main.isConnected) return;
+  main.querySelector('#mFloat').checked = floating();
   const added = ensureKeywordNodes();
   if (first || added) {
     rebuild(added ? 0.7 : 0.3);

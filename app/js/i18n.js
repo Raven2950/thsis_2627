@@ -92,7 +92,8 @@ const UI = {
 
   // map
   'AI 整理': 'AI organize', '重新排布': 'Re-layout', '取消所有固定，重新自动排布': 'Unpin everything and lay out again',
-  '＋ 关键词': '+ Keyword', '＋ 便利贴': '+ Sticky note', '适应窗口': 'Fit', '撤销': 'Undo', '共享材料连线': 'Shared-material lines',
+  '＋ 关键词': '+ Keyword', '＋ 便利贴': '+ Sticky note', '适应窗口': 'Fit', '撤销': 'Undo', '共享材料连线': 'Shared-material lines', '关键词漂浮': 'Floating keywords',
+  '关掉后关键词不再自己移动，停在你放的位置；「重新排布」仍会排一次': 'When off, keywords stop moving and stay where you put them; “Re-layout” still arranges once',
   '关键词地图': 'Keyword map', '全部接受并整理': 'Accept all and organize', '接受中…': 'Accepting…',
   '让 AI 再找些关键词': 'Ask AI for more keywords', '让 AI 总结关键词': 'Ask AI to summarize keywords', 'AI 正在读你的材料…': 'AI is reading your materials…',
   'AI 整理中…': 'AI is organizing…', '分组': 'Groups', '改名': 'Rename', '换颜色': 'Change color', '隐藏的关键词': 'Hidden keywords', '操作说明': 'How it works',
