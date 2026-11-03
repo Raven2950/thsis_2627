@@ -42,6 +42,12 @@ const CJK = /[㐀-鿿]/;
 
 function index(path, text, mtime) {
   const { data, body } = parseNote(text);
+  // Anything written straight into 博客/ in Obsidian is a post, even without properties;
+  // undated ones use the file's last change.
+  if (path.startsWith(`${FOLDER[KIND.post]}/`) && !data.kind) {
+    data.kind = KIND.post;
+    if (!data.date && !data.created && mtime) data.date = new Date(mtime).toISOString().slice(0, 10);
+  }
   notes.set(path, { path, name: baseName(path), data, body, mtime });
 }
 
