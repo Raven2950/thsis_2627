@@ -617,3 +617,14 @@ body.blog-mode .topbar { display: none; }
   .blog-menu { max-height: 220px; overflow: auto; }
 }
 .blog-post .markdown { overflow-wrap: anywhere; }
+
+.blog-tree, .blog-tree ul { list-style: none; margin: 0; padding: 0; }
+.blog-tree { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.blog-tree .folder-title { display: flex; align-items: center; gap: 6px; border: 0; background: none; padding: 2px 0; font: inherit; color: var(--muted); cursor: pointer; text-align: left; }
+.blog-tree .folder-title:hover, .blog-tree .folder.open > .folder-title { color: var(--ink); }
+.blog-tree .chev { flex: none; transform: rotate(-90deg); transition: transform .15s; }
+.blog-tree .folder.open .chev { transform: none; }
+.blog-tree .folder-items { margin: 4px 0 8px 5px; padding-left: 12px; border-left: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; }
+.blog-tree a { color: var(--muted); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+.blog-tree a:hover, .blog-tree li.on > a { color: var(--ink); text-decoration-color: currentColor; }
+.blog-tree li.on > a { font-weight: 500; }

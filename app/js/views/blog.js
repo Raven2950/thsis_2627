@@ -25,14 +25,37 @@ function niceDate(d) {
 const matches = n => (!tag || asList(n.data.tags).map(String).includes(tag))
   && (!query || `${n.data.title} ${n.name} ${trc(n.body)} ${n.body}`.toLowerCase().includes(query.toLowerCase()));
 
+// Folders under 博客/ are the menu's sections (like a course or a project); open ones are remembered.
+const folderOf = n => n.path.split('/').slice(1, -1).join('/');
+const OPEN_KEY = 'thesis-web-blog-open';
+// { folder: true | false } for folders I opened or closed by hand; others open when they hold the post I'm reading.
+const folderState = () => { try { const v = JSON.parse(localStorage.getItem(OPEN_KEY) || '{}'); return v && !Array.isArray(v) ? v : {}; } catch (e) { return {}; } };
+function toggleFolder(f, wasOpen) {
+  const s = folderState(); s[f] = !wasOpen;
+  try { localStorage.setItem(OPEN_KEY, JSON.stringify(s)); } catch (e) { /* private mode */ }
+}
+const CHEVRON = '<svg class="chev" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
 function side(current) {
-  const all = posts(), shown = all.filter(matches);
-  const tags = [...new Set(all.flatMap(n => asList(n.data.tags).map(String)))].sort();
+  const shown = posts().filter(matches);
+  const groups = new Map();
+  for (const n of shown) { const f = folderOf(n); if (!groups.has(f)) groups.set(f, []); groups.get(f).push(n); }
+  const state = folderState(), searching = !!query || !!tag;
+  const item = n => `<li${n === current ? ' class="on"' : ''}><a href="${href(n)}">${esc(titleOf(n))}</a></li>`;
+  const folders = [...groups].filter(([f]) => f);
   return `<aside class="blog-side">
     <a class="blog-title" href="#/blog">raven’s thesis blog</a>
-    <input class="blog-search" id="blogQ" type="search" placeholder="搜索：" value="${esc(query)}" data-no-tr>
-    ${tags.length ? `<p class="blog-tags">${tags.map(t => `<button class="tag${t === tag ? ' on' : ''}" data-tag="${esc(t)}">#${esc(t)}</button>`).join('')}</p>` : ''}
-    <ul class="blog-menu">${shown.map(n => `<li${n === current ? ' class="on"' : ''}><a href="${href(n)}">${esc(titleOf(n))}</a><span>${esc(dateOf(n))}</span></li>`).join('') || '<li class="muted">没有找到</li>'}</ul>
+    <input class="blog-search" id="blogQ" type="search" placeholder="搜索：" value="${esc(query)}">
+    ${tag ? `<p class="blog-tags"><button class="tag on" data-tag="${esc(tag)}">#${esc(tag)} ×</button></p>` : ''}
+    <ul class="blog-tree">
+      ${folders.map(([f, list]) => {
+        const isOpen = searching || (state[f] ?? list.includes(current));
+        return `<li class="folder${isOpen ? ' open' : ''}"><button class="folder-title" data-folder="${esc(f)}" aria-expanded="${isOpen}">${CHEVRON}<span>${esc(trc(f))}</span></button>
+          ${isOpen ? `<ul class="folder-items">${list.map(item).join('')}</ul>` : ''}</li>`;
+      }).join('')}
+      ${(groups.get('') || []).map(item).join('')}
+      ${shown.length ? '' : '<li class="muted">没有找到</li>'}
+    </ul>
     <div class="blog-foot">
       <span class="lang-switch" data-no-tr><button data-blog-lang="zh" class="${isEn() ? '' : 'on'}">中</button><button data-blog-lang="en" class="${isEn() ? 'on' : ''}">EN</button></span>
       <a href="#/map">进入 Thesis Web →</a>
@@ -93,6 +116,7 @@ function bind(main, post) {
     renderBlog(main, post?.name || '');
     const again = main.querySelector('#blogQ'); again.focus(); again.setSelectionRange(pos, pos);
   });
+  for (const b of main.querySelectorAll('[data-folder]')) b.addEventListener('click', () => { toggleFolder(b.dataset.folder, b.getAttribute('aria-expanded') === 'true'); renderBlog(main, post?.name || ''); });
   for (const b of main.querySelectorAll('[data-tag]')) b.addEventListener('click', () => {
     tag = tag === b.dataset.tag ? '' : b.dataset.tag;
     if (post) location.hash = '#/blog'; else renderBlog(main, '');
@@ -103,10 +127,15 @@ function bind(main, post) {
     window.dispatchEvent(new HashChangeEvent('hashchange'));
   });
   main.querySelector('#newPost')?.addEventListener('click', async () => {
-    const res = await ask({ title: '新文章', submit: '开始写', fields: [{ name: 'title', label: '标题', required: true, placeholder: '比如：Update 4 – 故事的方向' }] });
+    const folders = [...new Set(posts().map(folderOf).filter(Boolean))].sort();
+    const res = await ask({ title: '新文章', submit: '开始写', fields: [
+      { name: 'title', label: '标题', required: true, placeholder: '比如：Update 4 – 故事的方向' },
+      { name: 'folder', label: '放在哪个目录', options: folders, value: folders.includes('thesis') ? 'thesis' : '' },
+      { name: 'newFolder', label: '或者新建一个目录', placeholder: '比如：shared-minds' }] });
     if (!res?.title) return;
+    const folder = (res.newFolder || res.folder).replace(/[\\:*?"<>|#^[\]]/g, ' ').replace(/\//g, '-').trim();
     try {
-      const n = await store.create(store.uniquePath(FOLDER[KIND.post], res.title), { kind: KIND.post, title: res.title, date: today(), tags: [], created: today() }, '\n');
+      const n = await store.create(store.uniquePath([FOLDER[KIND.post], folder].filter(Boolean).join('/'), res.title), { kind: KIND.post, title: res.title, date: today(), tags: [], created: today() }, '\n');
       editing = { path: n.path, title: res.title, date: today(), tags: '', body: '', base: n.body };
       location.hash = href(n);
     } catch (e) { toast(e.message, true); }

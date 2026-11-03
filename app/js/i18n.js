@@ -37,6 +37,7 @@ const UI = {
   '把我写的中文内容翻成英文，存进库里；只翻新的': 'Translate my Chinese writing into English and save it in the vault (only what is new)',
   '正文按原来写的语言编辑，保存不会把译文写进笔记': 'Notes are edited in the language they were written in, so saving never writes the translation into the note',
   '试一试': 'Try it',
+  '放在哪个目录': 'Which folder', '或者新建一个目录': 'Or a new folder', '比如：shared-minds': 'e.g. shared-minds',
   '博客': 'Blog',
   '搜索：': 'search:',
   '没有找到': 'Nothing found',
