@@ -89,7 +89,6 @@ export function renderList(main) {
     const kids = store.children(n).filter(k => shown.has(k));
     if (shown.has(n) || kids.length) rows.push(row(n, 0, ++count, cols), ...kids.map(k => row(k, 1, 0, cols)));
   }
-  const noWhy = items.filter(n => isEmpty(n.data.why)).length;
 
   main.innerHTML = `
     <section class="list-view">
@@ -97,7 +96,6 @@ export function renderList(main) {
         <h1>材料 <span class="count">${items.length}</span></h1>
         ${viewOnly() ? '' : `<div class="list-actions"><button id="fromFile">从文件收录…</button><button class="primary" id="newItem">＋ 新材料</button></div>`}
       </div>
-      ${viewOnly() ? '' : `<p class="list-meta"><span>把 PDF、图片或链接拖进窗口就能收录</span>${noWhy ? `<button class="link" id="showNoWhy">有 ${noWhy} 份材料还没写「为什么存它」。</button>` : ''}</p>`}
       ${next.length ? `<div class="up-next"><h2>接下来要读</h2><ol>${next.map(n => `<li><a href="#/item/${encodeURIComponent(n.path)}"><span class="star">◆</span>${esc(trc(n.data.title || n.name))}</a><span class="when">${esc(n.data.plan || '')}</span></li>`).join('')}</ol>
         <a href="#/plan" class="more">阅读计划 →</a></div>` : ''}
       <div class="filters">
@@ -109,11 +107,7 @@ export function renderList(main) {
           <select id="fimp">${options(store.vocab('importance'), items.map(n => n.data.importance), filter.importance, '全部重要性')}</select>
           <select id="frating">${[['', '全部评分'], ['5', '★★★★★'], ['4', '★★★★ 以上'], ['3', '★★★ 以上'], ['none', '还没评分']].map(([v, l]) => `<option value="${v}"${filter.rating === v ? ' selected' : ''}>${l}</option>`).join('')}</select>
           <select id="fsort" title="排序">${Object.entries({ new: '最新收录', star: '◆ 优先', rating: '评分高的在前', title: '按标题' }).map(([k, v]) => `<option value="${k}"${filter.sort === k ? ' selected' : ''}>${v}</option>`).join('')}</select>
-        </div>
-        <div class="filter-toggles">
-          <label class="toggle"><input type="checkbox" id="fstar"${filter.star ? ' checked' : ''}> 只看 ◆</label>
-          <label class="toggle"><input type="checkbox" id="fnowhy"${filter.noWhy ? ' checked' : ''}> 只看没写「为什么」的</label>
-          <span class="hint">${shown.size} / ${items.length}</span>
+          <span class="hint filter-count">${shown.size} / ${items.length}</span>
           <details class="col-picker"${pickerOpen ? ' open' : ''}><summary>显示的列</summary>
             <div class="col-list">${COLUMNS.map(([k, label]) => `<label><input type="checkbox" data-col="${k}"${cols.has(k) ? ' checked' : ''}${k === 'title' ? ' disabled' : ''}> ${label === '#' ? '编号' : label}</label>`).join('')}
               <button class="link" id="colsReset">恢复默认</button></div></details>
@@ -134,8 +128,8 @@ export function renderList(main) {
     if (id === '#fq') { const el = main.querySelector('#fq'); el.focus(); el.setSelectionRange(pos, pos); }
   });
   bind('#fq', 'q'); bind('#ftype', 'type'); bind('#fstatus', 'status'); bind('#frole', 'role');
-  bind('#fimp', 'importance'); bind('#fnowhy', 'noWhy', 'checked');
-  bind('#fstar', 'star', 'checked'); bind('#frating', 'rating'); bind('#fsort', 'sort');
+  bind('#fimp', 'importance');
+  bind('#frating', 'rating'); bind('#fsort', 'sort');
   main.querySelector('.col-picker')?.addEventListener('toggle', e => { pickerOpen = e.target.open; });
   for (const c of main.querySelectorAll('[data-col]')) c.addEventListener('change', () => {
     const set = shownCols(); c.checked ? set.add(c.dataset.col) : set.delete(c.dataset.col);
@@ -144,7 +138,6 @@ export function renderList(main) {
   main.querySelector('#colsReset')?.addEventListener('click', () => { saveCols(new Set(DEFAULT_COLS)); renderList(main); });
   bindMarks(main);
 
-  main.querySelector('#showNoWhy')?.addEventListener('click', () => { filter.noWhy = true; renderList(main); });
   main.querySelector('#newItem')?.addEventListener('click', newItem);
   main.querySelector('#fromFile')?.addEventListener('click', pickAndCapture);
 

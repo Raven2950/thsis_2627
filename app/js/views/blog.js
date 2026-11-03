@@ -8,6 +8,7 @@ import { esc, renderMarkdown } from '../markdown.js';
 import { hydrate } from '../media.js';
 import { toast, ask } from '../ui.js';
 import { viewOnly, trc, isEn, lang, setLang, confirmTr } from '../i18n.js';
+import { themeSwitch, bindTheme } from '../theme.js';
 
 let query = '', tag = '', editing = null;     // editing: { path, title, date, tags, body, base }
 
@@ -58,6 +59,7 @@ function side(current) {
     </ul>
     <div class="blog-foot">
       <span class="lang-switch" data-no-tr><button data-blog-lang="zh" class="${isEn() ? '' : 'on'}">中</button><button data-blog-lang="en" class="${isEn() ? 'on' : ''}">EN</button></span>
+      ${themeSwitch()}
       <a href="#/map">进入 Marginalia →</a>
       ${viewOnly() ? '' : '<button class="mini" id="newPost">＋ 新文章</button>'}
     </div>
@@ -121,6 +123,7 @@ function bind(main, post) {
     tag = tag === b.dataset.tag ? '' : b.dataset.tag;
     if (post) location.hash = '#/blog'; else renderBlog(main, '');
   });
+  bindTheme(main);
   for (const b of main.querySelectorAll('[data-blog-lang]')) b.addEventListener('click', () => {
     if (b.dataset.blogLang === lang()) return;
     setLang(b.dataset.blogLang);

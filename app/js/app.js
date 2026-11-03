@@ -17,6 +17,7 @@ import { installCapture } from './views/capture.js';
 import { lang, isEn, setLang, applyLang } from './i18n.js';
 import { renderBoards, renderBoard, leaveBoard } from './views/board.js';
 import { renderBlog, leaveBlog } from './views/blog.js';
+import { themeSwitch, bindTheme } from './theme.js';
 import { KIND } from './model.js';
 import { pendingTexts, translatePending } from './translate.js';
 
@@ -71,9 +72,10 @@ function render() {
   document.body.classList.toggle('lang-en', isEn());
   statusEl.innerHTML = !v ? '' : v.published
     ? `<span class="badge" title="这是发布出来的只读版本">只读 · 发布版</span><a class="btn-link" href="?demo${location.hash}" title="在这个页面里试用：可以随便改，刷新就恢复原样">试一试</a>${canWrite ? '<button class="ghost" id="ownerBtn" title="作者用：打开自己电脑上的库来编辑">打开我的库</button>' : ''}`
-    : `<span class="vault-name" title="库文件夹">📁 ${esc(v.name)}</span>${v.readOnly ? '<span class="badge">只读</span>' : ''}${v.demo ? '<span class="badge ai" title="修改只保存在这个页面里，刷新就没了">演示模式</span>' : ''}
+    : `<span class="vault-name" title="库文件夹"><i>库</i>${esc(v.name)}</span>${v.readOnly ? '<span class="badge">只读</span>' : ''}${v.demo ? '<span class="badge demo" title="修改只保存在这个页面里，刷新就没了">演示模式</span>' : ''}
        <button class="ghost" id="reloadBtn" title="重新读取库里的文件">重新载入</button>`;
-  statusEl.insertAdjacentHTML('afterbegin', langSwitch());
+  statusEl.insertAdjacentHTML('afterbegin', langSwitch() + themeSwitch());
+  bindTheme(statusEl);
   if (v && !v.readOnly && !v.demo) {
     statusEl.insertAdjacentHTML('afterbegin', '<button class="ghost" id="trBtn" hidden title="把我写的中文内容翻成英文，存进库里；只翻新的">更新英文版</button>');
     document.getElementById('trBtn').addEventListener('click', runTranslate);
