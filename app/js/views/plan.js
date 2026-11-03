@@ -2,7 +2,7 @@
 import { store } from '../store.js';
 import { viewOnly, trc } from '../i18n.js';
 import { esc } from '../markdown.js';
-import { queue, setPlan, markRead, marksHtml, bindMarks, DONE } from '../marks.js';
+import { queue, setPlan, markRead, marksHtml, ratingHtml, bindMarks, DONE, liked as liked_ } from '../marks.js';
 import { today } from '../model.js';
 import { weekStats } from './focus.js';
 
@@ -11,7 +11,7 @@ const addDays = (d, n) => { const x = new Date(`${d}T12:00:00`); x.setDate(x.get
 function row(n) {
   const d = n.data, ro = viewOnly();
   return `<li class="plan-row">
-    ${marksHtml(n)}
+    ${marksHtml(n)}${ratingHtml(n)}
     <a href="#/item/${encodeURIComponent(n.path)}" class="plan-title">${esc(trc(d.title || n.name))}</a>
     <span class="muted plan-type">${esc(d.type || '')}</span>
     ${ro ? (d.plan ? `<span class="plan-date">${esc(d.plan)}</span>` : '')
@@ -32,19 +32,19 @@ export function renderPlan(main) {
     ['以后', q.filter(n => n.data.plan && n.data.plan > week)],
     ['还没排日期', q.filter(n => !n.data.plan)],
   ];
-  const liked = store.items().filter(n => n.data.like);
+  const liked = store.items().filter(n => liked_(n.data)).sort((a, b) => (Number(b.data.rating) || 0) - (Number(a.data.rating) || 0));
   const recent = store.items().filter(n => DONE.slice(0, 2).includes(n.data.status) && n.data.read)
     .sort((a, b) => String(b.data.read).localeCompare(String(a.data.read))).slice(0, 8);
 
   main.innerHTML = `<section class="plan-view">
     <h1>阅读计划</h1>
     <p class="week-stats" id="weekStats"></p>
-    <p class="hint">★ 计划读的材料按日期排在这里；给它填个日期就进日程，点「读完」就从计划里移走。♥ 是读完觉得很好、想继续发展的。</p>
+    <p class="hint">◆ 计划读的材料按日期排在这里；给它填个日期就进日程，点「读完」就从计划里移走。★ 是读完后的评分，4 星以上算“想继续发展的”。</p>
     ${q.length ? groups.filter(([, l]) => l.length).map(([title, list]) => `<h2>${title} <span class="count">${list.length}</span></h2>
       <ul class="plan-list">${list.map(row).join('')}</ul>`).join('')
-      : '<p class="empty">还没有 ★ 的材料。在「列表」或材料页点 ☆，就会出现在这里。</p>'}
-    <h2>♥ 喜欢的 <span class="count">${liked.length}</span></h2>
-    ${liked.length ? `<ul class="plan-list">${liked.map(row).join('')}</ul>` : '<p class="empty">读完觉得好的，点 ♡。</p>'}
+      : '<p class="empty">还没有 ◆ 的材料。在「列表」或材料页点 ◇，就会出现在这里。</p>'}
+    <h2>★ 高分的 <span class="count">${liked.length}</span></h2>
+    ${liked.length ? `<ul class="plan-list">${liked.map(row).join('')}</ul>` : '<p class="empty">读完给它打分，4 星以上的会出现在这里。</p>'}
     ${recent.length ? `<h2>最近读完</h2><ul class="plan-list done">${recent.map(n => `<li class="plan-row"><a href="#/item/${encodeURIComponent(n.path)}" class="plan-title">${esc(trc(n.data.title || n.name))}</a><span class="muted">${esc(n.data.read)}</span></li>`).join('')}</ul>` : ''}
   </section>`;
 

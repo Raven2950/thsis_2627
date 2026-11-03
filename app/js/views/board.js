@@ -155,7 +155,7 @@ function nodeInner(n) {
     if (!note) return `<div class="card-missing">${esc(n.file.split('/').pop())}</div>${tools}`;
     const d = note.data;
     const title = d.kind === KIND.idea ? d.idea : d.title || note.name;
-    return `<div class="mat-head"><span class="mat-type">${esc(d.kind === KIND.item ? d.type || d.kind : d.kind)}</span><span class="mat-marks">${d.star ? '★' : ''}${d.like ? '♥' : ''}</span></div>
+    return `<div class="mat-head"><span class="mat-type">${esc(d.kind === KIND.item ? d.type || d.kind : d.kind)}</span><span class="mat-marks">${d.star ? '◆' : ''}${Number(d.rating) ? ` ${'★'.repeat(Number(d.rating))}` : d.like ? '♥' : ''}</span></div>
       <div class="mat-title">${esc(trc(title || note.name))}</div>${d.why ? `<div class="mat-why">${esc(trc(String(d.why)).slice(0, 140))}</div>` : ''}${tools}`;
   }
   if (B.editingId === n.id) return `<textarea class="sticky-edit">${esc(n.text || '')}</textarea>${tools}`;

@@ -35,7 +35,7 @@ export async function placeOnMap(note) {
 export function collisionPair() {
   const items = store.items();
   if (items.length < 2) return [];
-  const weight = n => 1 + (n.data.like ? 3 : 0) + (n.data.star ? 1 : 0) + (n.data.why ? 1 : 0) + (/## 我得到了什么\s*\n\s*\S/.test(n.body) ? 2 : 0);
+  const weight = n => 1 + (Number(n.data.rating) ? Math.max(0, Number(n.data.rating) - 2) : n.data.like ? 3 : 0) + (n.data.star ? 1 : 0) + (n.data.why ? 1 : 0) + (/## 我得到了什么\s*\n\s*\S/.test(n.body) ? 2 : 0);
   const pick = (pool, avoid) => {
     const c = pool.filter(n => n !== avoid);
     let r = Math.random() * c.reduce((a, n) => a + weight(n), 0);

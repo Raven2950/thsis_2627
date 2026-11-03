@@ -88,7 +88,7 @@ const rerender = () => rootEl && renderBrainstorm(rootEl);
 function setupHtml() {
   const kws = store.byKind(KIND.concept).map(c => c.name);
   const ideaNotes = store.byKind(KIND.idea);
-  const liked = store.items().filter(n => n.data.like || n.data.star);
+  const liked = store.items().filter(n => n.data.rating >= 4 || n.data.like || n.data.star);
   return `<section class="bs-view">
     <h1>头脑风暴</h1>
     <p class="hint">你在本子上写，这一页负责带节奏：每一轮做什么、做多久，到点会明确提醒。</p>
@@ -97,7 +97,7 @@ function setupHtml() {
     <div class="bs-picks">
       ${ideaNotes.length ? `<select id="bsFromIdea"><option value="">从一张想法卡开始…</option>${ideaNotes.map(n => `<option value="${esc(n.name)}">${esc(String(n.data.idea || n.name).slice(0, 50))}</option>`).join('')}</select>` : ''}
       ${kws.length ? `<select id="bsFromKw"><option value="">从一个关键词开始…</option>${kws.map(k => `<option>${esc(k)}</option>`).join('')}</select>` : ''}
-      ${liked.length ? '<button class="mini" id="bsFromLiked">从我 ★/♥ 的材料里随机挑一个</button>' : ''}
+      ${liked.length ? '<button class="mini" id="bsFromLiked">从我 ◆ 或高分的材料里随机挑一个</button>' : ''}
     </div>
     <h2>2. 轮次 <span class="hint">（可以调时长、关掉某一轮；会记住你的设置）</span></h2>
     <table class="bs-rounds"><tbody>${bs.rounds.map((r, i) => `<tr class="${r.on ? '' : 'off'}">
@@ -197,7 +197,7 @@ export function renderBrainstorm(main) {
     on('#bsFromIdea', 'change', e => { const n = store.resolve(e.target.value); if (n) { bs.seed = n.data.idea || n.name; bs.seedLink = n.name; rerender(); } });
     on('#bsFromKw', 'change', e => { if (e.target.value) { bs.seed = `关于「${e.target.value}」，我能做什么？`; bs.seedLink = e.target.value; rerender(); } });
     on('#bsFromLiked', 'click', () => {
-      const pool = store.items().filter(n => n.data.like || n.data.star);
+      const pool = store.items().filter(n => n.data.rating >= 4 || n.data.like || n.data.star);
       const n = pool[Math.floor(Math.random() * pool.length)];
       bs.seed = `从「${n.data.title || n.name}」出发，可以做什么？`; bs.seedLink = n.name; rerender();
     });

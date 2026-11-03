@@ -10,7 +10,7 @@ import { toast, selectHtml, bindSelect, ask } from '../ui.js';
 import { enrich, suggestConcepts, suggestLinks, recall, related } from '../tasks.js';
 import { openRecommend } from './recommend.js';
 import { parseLinks } from '../links.js';
-import { marksHtml, bindMarks, setPlan } from '../marks.js';
+import { marksHtml, ratingHtml, bindMarks, setPlan } from '../marks.js';
 import { IDEA_STAGES } from '../model.js';
 import { vaultUrl, hydrate } from '../media.js';
 
@@ -319,7 +319,7 @@ function renderItem(main, note) {
         <p class="sub">${[d.creator, d.year, d.type].filter(Boolean).map(esc).join(' · ')}</p>
         ${ro ? '' : `<a class="button primary focus-btn" href="#/focus/${encodeURIComponent(note.path)}">开始专注读</a>`}
         ${d.resume && !ro ? `<p class="resume">上次停在：${esc(d.resume)}</p>` : ''}
-        <div class="detail-marks">${marksHtml(note)}${ro ? (d.plan ? `<span class="muted">计划 ${esc(d.plan)}</span>` : '')
+        <div class="detail-marks">${marksHtml(note)}${ratingHtml(note)}${ro ? (d.plan ? `<span class="muted">计划 ${esc(d.plan)}</span>` : '')
           : `<label class="check">计划哪天读 <input type="date" id="f-plan" value="${esc(d.plan || '')}"></label>`}</div>
         ${obsidianLink(note)}
       </header>
