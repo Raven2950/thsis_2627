@@ -1,24 +1,9 @@
 ---
-kind: 材料
-title:
-creator:
-year:
-url:
-type: My Reflection
-why: update 3 for thesis class
-status: 读过
-importance: 核心
-roles: []
-voice:
-concepts: ['[[描述作为创作]]']
-questions: []
-parent:
-summary:
-from_ai: []
-from_source: []
-confirmed: []
-created: {'[object Object]': null}
-read: 2026-10-20
+kind: 博客
+title: "Update 3: Exploration 1 & 2"
+date: 2026-10-20
+tags: [thesis, update]
+created: 2026-10-20
 ---
 
 ### Exploration 1 Reflection: Experiencing VoiceOver and Alt Text

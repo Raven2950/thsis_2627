@@ -19,6 +19,8 @@ from_source: []
 confirmed: []
 created: 2026-10-28
 read:
+plan: 2026-10-29
+star: true
 ---
 
 ## 我得到了什么

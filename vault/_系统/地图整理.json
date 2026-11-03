@@ -102,7 +102,14 @@
     "f4591d148663a85d": "现有的标准化指南往往也有其局限，可能无法涵盖真实多样的用户需求"
   },
   "pinned": [
-    "85a976435517de81"
+    "85a976435517de81",
+    "7fd7a7eff089da0d",
+    "4f45f27f2f69454b",
+    "655206d98c7822da",
+    "d6b689b340e34f37",
+    "f0e4c078387410c7",
+    "e7c400523d6270d6",
+    "5fa321fe476b64d7"
   ],
   "hidden": [
     "概念/blindness.md"
@@ -115,8 +122,7 @@
       "members": [
         "2ee2c41ccb2af6fe",
         "e2d133eea4bfa271",
-        "ec73733b9d5eebe8",
-        "f18461308ef6cf28"
+        "ec73733b9d5eebe8"
       ],
       "color": "#00ff33"
     },
@@ -160,5 +166,6 @@
     }
   },
   "organizedAt": "2026-10-30T05:55:19.622Z",
-  "model": "anthropic/claude-4.5-haiku"
+  "model": "anthropic/claude-4.5-haiku",
+  "float": false
 }
