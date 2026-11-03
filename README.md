@@ -109,3 +109,10 @@ sw.js        离线缓存（PWA）
 - 文章是 `vault/博客/` 里的笔记，属性只有 `kind: 博客`、`title`、`date`、`tags`。在网页里点「＋ 新文章」写，或者在 Obsidian 里用 `_模板/博客模板` 新建。标题里有冒号时要加引号。
 - 左边：搜索和可折叠的目录。`博客/` 下的每个子文件夹是一个目录（比如 `thesis`、`web-tools`），写新文章时选一个目录或新建一个；以后想换目录，在 Obsidian 里把笔记拖到别的文件夹就行。右边：正文（图片照常显示）。点「编辑」在页面里直接改。
 - 以前发出去的链接（比如 `#/item/材料/Update3-exploration1&2.md`）会自动跳到这篇文章的博客页。
+
+## 发布（自动）
+
+- 每 15 分钟自动发布一次：Mac 上的后台任务运行 `scripts/publish.sh`，把 `vault/` 里的改动提交并推送，网站约 1 分钟后更新。想马上发布，双击 `发布.command`。
+- 只发布 `vault/`。不会上传：`附件/`、PDF、`私密/`、属性里写了 `draft: true` 的笔记、没勾“公开”的灵感板图片（这些由 `scripts/private-paths.py` 写进 `.git/info/exclude`）。
+- 日志：`~/Library/Logs/marginalia-publish.log`。关掉自动发布：`bash scripts/install-autopublish.sh --remove`；重新打开：`bash scripts/install-autopublish.sh`。
+
