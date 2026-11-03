@@ -16,6 +16,8 @@ import { renderFocus, leaveFocus } from './views/focus.js';
 import { installCapture } from './views/capture.js';
 import { lang, isEn, setLang, applyLang } from './i18n.js';
 import { renderBoards, renderBoard, leaveBoard } from './views/board.js';
+import { renderBlog, leaveBlog } from './views/blog.js';
+import { KIND } from './model.js';
 import { pendingTexts, translatePending } from './translate.js';
 
 const main = document.getElementById('main');
@@ -93,10 +95,12 @@ function render() {
   const inboxCount = store.inbox().length;
   const badge = document.querySelector('[data-nav="inbox"] .nav-count');
   if (badge) badge.textContent = inboxCount || '';
+  if (view !== 'board') leaveBoard(main);
+  if (view !== 'blog') leaveBlog(main);
   if (view === 'map' || view === 'graph') return renderMap(main);
   leaveMap(main);
   if (view === 'board') return renderBoard(main, param);
-  leaveBoard(main);
+  if (view === 'blog') return renderBlog(main, param);
   if (view === 'inbox') return renderInbox(main);
   if (view === 'gaps') return renderGaps(main);
   if (view === 'focus') return renderFocus(main, store.get(param));
@@ -106,8 +110,12 @@ function render() {
   if (view === 'boards') return renderBoards(main);
   if (view === 'brainstorm') return renderBrainstorm(main);
   if (view === 'settings') return renderSettings(main);
-  if (view === 'item') return renderDetail(main, store.get(param));
-  if (view === 'open') return renderDetail(main, store.resolve(param));
+  // Posts live on the blog page; old links to them (e.g. #/item/材料/Update3….md) still land there.
+  if (view === 'item' || view === 'open') {
+    const note = view === 'item' ? store.get(param) || store.resolve(param.split('/').pop().replace(/\.md$/, '')) : store.resolve(param);
+    if (note?.data.kind === KIND.post) { location.replace(`#/blog/${encodeURIComponent(note.name)}`); return; }
+    return renderDetail(main, note);
+  }
   if (view === 'options') return renderOptions(main);
   return renderList(main);
 }
