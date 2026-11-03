@@ -70,9 +70,10 @@ function render() {
   applyLang();
   document.body.classList.toggle('published', !!v?.published);
   document.body.classList.toggle('lang-en', isEn());
+  // Visitors see a plain site: no labels, just a small way in for me (opening my vault to edit).
   statusEl.innerHTML = !v ? '' : v.published
-    ? `<span class="badge" title="这是发布出来的只读版本">只读 · 发布版</span><a class="btn-link" href="?demo${location.hash}" title="在这个页面里试用：可以随便改，刷新就恢复原样">试一试</a>${canWrite ? '<button class="ghost" id="ownerBtn" title="作者用：打开自己电脑上的库来编辑">打开我的库</button>' : ''}`
-    : `<span class="vault-name" title="库文件夹"><i>库</i>${esc(v.name)}</span>${v.readOnly ? '<span class="badge">只读</span>' : ''}${v.demo ? '<span class="badge demo" title="修改只保存在这个页面里，刷新就没了">演示模式</span>' : ''}
+    ? (canWrite ? '<button class="ghost owner-btn" id="ownerBtn" title="打开我的库来编辑">✎</button>' : '')
+    : `<span class="vault-name" title="库文件夹"><i>库</i>${esc(v.name)}</span>${v.readOnly ? '<span class="badge">只读</span>' : ''}${v.demo ? '<span class="badge demo" title="测试用：修改只保存在这个页面里">测试</span>' : ''}
        <button class="ghost" id="reloadBtn" title="重新读取库里的文件">重新载入</button>`;
   statusEl.insertAdjacentHTML('afterbegin', langSwitch() + themeSwitch());
   bindTheme(statusEl);
@@ -131,7 +132,7 @@ async function renderWelcome(pending) {
       <h1>打开你的 thesis 库</h1>
       <p>选择 Obsidian 里那个库的文件夹。网页直接读写里面的 .md 笔记，不会另存一份数据。</p>
       ${pending ? `<button class="primary" id="regrantBtn">继续使用「${esc(pending.name)}」</button>` : ''}
-      ${published ? '<button id="viewPublished">只看发布版</button>' : ''}
+      ${published ? '<button id="viewPublished">看网站上的版本</button>' : ''}
       ${canWrite
         ? `<button class="${pending ? '' : 'primary'}" id="pickBtn">选择库文件夹…</button>`
         : `<button class="primary" id="snapBtn">以只读方式打开文件夹…</button>
@@ -160,8 +161,11 @@ window.addEventListener('focus', () => {
 });
 
 (async () => {
-  const demo = new URLSearchParams(location.search).get('demo');
-  if (demo != null) { await store.open(demoVault(demo || '../vault/')); return route(); }
+  // ?demo (edits kept in memory) is only for testing on this computer; on the website it is ignored.
+  const params = new URLSearchParams(location.search);
+  const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+  if (params.has('demo') && local) { await store.open(demoVault(params.get('demo') || '../vault/')); return route(); }
+  if (params.has('demo')) { params.delete('demo'); history.replaceState(null, '', `${location.pathname}${params.size ? `?${params}` : ''}${location.hash}`); }
   const restored = await restoreVault().catch(() => null);
   if (restored?.vault) await store.open(restored.vault).catch(e => toast(e.message, true));
   // A visitor (no folder of their own) lands on the published version, starting at the map.

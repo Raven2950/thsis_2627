@@ -36,7 +36,7 @@ const UI = {
   '已重新载入': 'Reloaded', '英文版只用来看；要编辑请切到「中」': 'English is for reading; switch to 中 to edit',
   '把我写的中文内容翻成英文，存进库里；只翻新的': 'Translate my Chinese writing into English and save it in the vault (only what is new)',
   '正文按原来写的语言编辑，保存不会把译文写进笔记': 'Notes are edited in the language they were written in, so saving never writes the translation into the note',
-  '试一试': 'Try it',
+  '试一试': 'Try it', '打开我的库来编辑': 'Open my vault to edit', '看网站上的版本': 'See the website version', '测试': 'Test', '测试用：修改只保存在这个页面里': 'For testing: changes stay in this page only',
   '库': 'vault', '日间模式': 'Light mode', '夜间模式': 'Dark mode', '日间 / 夜间': 'Light / dark',
   '评分': 'Rating',
   '全部评分': 'Any rating',

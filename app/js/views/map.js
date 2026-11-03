@@ -616,7 +616,7 @@ function panel() {
       ${(org.bubbles || []).length ? `<h2>我的主题</h2><ul class="groups">${org.bubbles.map(b => `<li>
           <span class="dot ring" style="--c:${colorOf(b.color)}"></span><button class="linkish" data-bsel="${b.id}" title="${esc(b.note || '')}">${esc(b.name)}</button>
           <span class="muted">${b.members.length}</span></li>`).join('')}</ul>` : ''}
-      ${org.hidden.length ? `<h2>隐藏的关键词</h2><div class="links">${org.hidden.map(p => store.get(p)).filter(Boolean).map(c => `<button class="mini" data-unhide="${esc(c.path)}">显示 ${esc(c.name)}</button>`).join('')}</div>` : ''}
+      ${org.hidden.length && !ro ? `<h2>隐藏的关键词</h2><div class="links">${org.hidden.map(p => store.get(p)).filter(Boolean).map(c => `<button class="mini" data-unhide="${esc(c.path)}">显示 ${esc(c.name)}</button>`).join('')}</div>` : ''}
       <details class="tips-box"><summary>操作说明</summary><ul class="tips">
         <li>位置由工具自动排：共享材料越多的关键词靠得越近，同组的聚在一起</li>
         <li>拖动关键词 = 把它固定在那里；「重新排布」取消所有固定</li>
@@ -1042,7 +1042,7 @@ export async function renderMap(main) {
     const ro = viewOnly();
     main.innerHTML = `<section class="map-view">
       <div class="graph-bar">
-        ${ro ? '<span class="badge">只读</span>' : `<button class="primary" id="mOrganize">AI 整理</button>
+        ${ro ? '' : `<button class="primary" id="mOrganize">AI 整理</button>
         <button id="mRelayout" title="取消所有固定，重新自动排布">重新排布</button>
         <button id="mKw">＋ 关键词</button><button id="mSticky">＋ 便利贴</button>`}
         <button id="mFit">适应窗口</button>${ro ? '' : '<button id="mUndo" title="⌘Z">撤销</button>'}

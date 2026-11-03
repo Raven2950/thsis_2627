@@ -569,7 +569,7 @@ export async function renderBoard(main, name) {
   main.innerHTML = `<section class="map-view board-view" data-own-drop>
     <div class="graph-bar">
       <a href="#/boards">← 灵感板</a><b class="bd-name">${esc(trc(name))}</b>
-      ${ro ? '<span class="badge">只读</span>' : `<button class="primary" id="bdImg">＋ 图片</button><button id="bdSticky">＋ 便利贴</button>
+      ${ro ? '' : `<button class="primary" id="bdImg">＋ 图片</button><button id="bdSticky">＋ 便利贴</button>
         <button id="bdNewFrame">＋ 框</button><button id="bdCard">＋ 材料卡</button><button id="bdUndo" title="⌘Z">撤销</button>`}
       <button id="bdFit">适应窗口</button><span class="muted" id="bdZoom"></span>
       <span class="hint">${ro ? '拖动平移 · ⌘ + 滚轮缩放' : '拖进或粘贴图片 · 双击空白处写便利贴'}</span>
