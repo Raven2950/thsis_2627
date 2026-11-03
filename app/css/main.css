@@ -628,3 +628,140 @@ body.blog-mode .topbar { display: none; }
 .blog-tree a { color: var(--muted); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
 .blog-tree a:hover, .blog-tree li.on > a { color: var(--ink); text-decoration-color: currentColor; }
 .blog-tree li.on > a { font-weight: 500; }
+
+/* ======================================================================
+   Marginalia · 页边 — black & white grid theme.
+   Monospace for the interface, a plain sans for reading, 1px black rules,
+   square corners, one fluorescent highlight. Colour is kept only where it
+   carries meaning (AI orange, source blue, map groups, sticky notes).
+   ====================================================================== */
+:root {
+  --bg: #ffffff; --panel: #ffffff; --ink: #000000; --muted: #6e6e6e; --line: #000000; --hair: #dcdcdc;
+  --accent: #000000; --hi: #d4ff00; --on-hi: #000000;
+  --ai: #ff4d00; --ai-bg: #fff1e8; --source: #0047ff; --source-bg: #eef2ff; --warn-bg: #f6ffd0; --danger: #e00000;
+  --radius: 0;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, "PingFang SC", "Noto Sans SC", monospace;
+  --sans: "IBM Plex Sans", -apple-system, "PingFang SC", "Noto Sans SC", "Helvetica Neue", sans-serif;
+  font-family: var(--mono); font-size: 14px; line-height: 1.55;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #000000; --panel: #000000; --ink: #ffffff; --muted: #9a9a9a; --line: #ffffff; --hair: #333333;
+    --accent: #ffffff; --ai: #ff7a3d; --ai-bg: #2a1408; --source: #6f9bff; --source-bg: #0b1633; --warn-bg: #1c2400; --danger: #ff5a5a;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #000000; --panel: #000000; --ink: #ffffff; --muted: #9a9a9a; --line: #ffffff; --hair: #333333;
+  --accent: #ffffff; --ai: #ff7a3d; --ai-bg: #2a1408; --source: #6f9bff; --source-bg: #0b1633; --warn-bg: #1c2400; --danger: #ff5a5a;
+}
+*, *::before, *::after { border-radius: 0 !important; }
+.handle, .sw, .bnode .handle { border-radius: 50% !important; }
+::selection { background: var(--hi); color: var(--on-hi); }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { background: var(--hi); color: var(--on-hi); }
+
+/* reading text stays in a sans */
+.markdown, .why-box textarea, .body.editing textarea, .sticky-text, .mat-why, .idea-text, td.why, .plan-why,
+.blog-post, .blog-list p, .callout, .card p, .bs-prompt { font-family: var(--sans); }
+
+/* labels: small, uppercase, tracked */
+h2, .kind, .field dt, table.items th, .count, .graph-panel h2, .badge, .mat-type, .p-date, .idea-col h2 {
+  font-family: var(--mono); letter-spacing: .04em;
+}
+h2, .kind, table.items th, .field dt, .graph-panel h2, .idea-col h2 { text-transform: uppercase; font-size: 12px; font-weight: 600; }
+h1 { font-family: var(--mono); font-weight: 600; font-size: 26px; letter-spacing: -.01em; }
+
+/* controls: square, 1px black, invert on hover */
+button, a.button, a.btn-link { border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-family: var(--mono); font-size: 13px; padding: 6px 12px; }
+button:hover:not(:disabled), a.button:hover { background: var(--ink); color: var(--bg); border-color: var(--line); }
+button.primary, a.button.primary, a.btn-link { background: var(--hi); color: var(--on-hi); border-color: var(--ink); font-weight: 600; }
+button.primary:hover:not(:disabled), a.button.primary:hover, a.btn-link:hover { background: var(--ink); color: var(--bg); }
+button.mini { font-size: 11px; padding: 1px 7px; }
+button.x { border: 0; }
+select, input, textarea, input[type="search"] { border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-family: var(--mono); }
+input:focus, textarea:focus, select:focus { outline: 2px solid var(--hi); outline-offset: 0; }
+.chip { border: 1px solid var(--line); font-family: var(--mono); font-size: 12px; }
+.chip.on { background: var(--hi); color: var(--on-hi); border-color: var(--ink); }
+.pill { background: transparent; border: 1px solid var(--line); font-family: var(--mono); font-size: 11px; }
+.status-读过, .status-用过 { background: var(--ink); color: var(--bg); }
+.status-在读 { background: var(--hi); color: var(--on-hi); }
+.nudge { background: var(--warn-bg); border: 1px solid var(--line); }
+.badge { border-color: var(--line); color: var(--ink); }
+.toast { border: 1px solid var(--line); background: var(--ink); color: var(--bg); font-family: var(--mono); }
+.toast.error { background: var(--danger); color: #fff; }
+
+/* top bar: a row of numbered cells */
+.topbar { padding: 0; gap: 0; align-items: stretch; background: var(--bg); border-bottom: 1px solid var(--line); min-height: 52px; }
+.brand { display: flex; align-items: center; gap: 8px; padding: 0 20px; border-right: 1px solid var(--line); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: 14px; color: var(--ink); }
+.brand::after { content: "/"; font-weight: 400; color: var(--muted); }
+.brand-zh { font-weight: 400; letter-spacing: 0; color: var(--muted); font-size: 12px; order: 2; }
+body.lang-en .brand-zh { display: none; }
+.brand:hover { background: var(--bg); color: var(--ink); }
+.topbar nav { gap: 0; }
+.topbar nav a { display: flex; flex-direction: column; justify-content: center; padding: 6px 14px; min-width: 76px; border-right: 1px solid var(--line); color: var(--ink); text-transform: uppercase; font-size: 12px; letter-spacing: .06em; line-height: 1.3; }
+.topbar nav a i { font-style: normal; font-size: 10px; color: var(--muted); letter-spacing: 0; }
+.topbar nav a.active { background: var(--hi); color: var(--on-hi); font-weight: 600; }
+.topbar nav a.active i { color: var(--on-hi); }
+.topbar nav a:hover:not(.active) { background: var(--ink); color: var(--bg); }
+.topbar nav a:hover:not(.active) i { color: var(--bg); }
+.nav-count { margin-left: 4px; font-size: 10px; background: var(--ink); color: var(--bg); padding: 0 4px; }
+.topbar nav a.active .nav-count { background: var(--on-hi); color: var(--hi); }
+.vault-status { padding: 0 16px; border-left: 1px solid var(--line); font-family: var(--mono); font-size: 12px; }
+.lang-switch button { border: 1px solid var(--line); padding: 2px 8px; }
+.lang-switch button.on { background: var(--ink); color: var(--bg); }
+
+/* lists and tables: hard rules, numbered rows */
+table.items { border: 1px solid var(--line); }
+table.items th { color: var(--ink); border-bottom: 1px solid var(--line); background: var(--bg); }
+table.items td { border-bottom: 1px solid var(--hair); }
+table.items tbody { counter-reset: row; }
+table.items tbody tr:not(.child) td:first-child::before { counter-increment: row; content: counter(row, decimal-leading-zero) "  "; color: var(--muted); font-size: 11px; }
+table.items tbody tr:hover, table.items tbody tr:focus { background: var(--hi); }
+table.items tbody tr:hover td, table.items tbody tr:hover a, table.items tbody tr:hover .sub { color: var(--on-hi); }
+.title-cell a { font-weight: 500; }
+
+/* boxes */
+.why-box, .card, .collision, .idea-card, .bs-record, .board-card, .graph-panel, .callout, .rel-add, .up-next, .plan-row { border-color: var(--line); }
+.why-box { border: 1px solid var(--line); }
+.why-box.empty { background: var(--warn-bg); border-color: var(--line); }
+.markdown { border-top: 1px solid var(--line); }
+.callout { border: 1px solid var(--line); border-left-width: 4px; }
+.graph-bar { background: var(--bg); border-bottom: 1px solid var(--line); }
+.graph-panel { background: var(--bg); border-left: 1px solid var(--line); }
+.idea-col h2 { border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.board-card:hover, .bs-record:hover, .pair-card:hover { background: var(--hi); color: var(--on-hi); border-color: var(--line); }
+.board-thumbs { background: var(--hair); }
+
+/* map and boards: the nodes become plain boxes */
+.mnode.kw { border: 1px solid var(--ink); background: var(--bg); color: var(--ink); font-family: var(--mono); }
+.mnode .cnt { background: var(--ink); color: var(--bg); }
+.mnode.kw.empty { border-style: dashed; border-color: var(--danger); }
+.mnode.sel, .bnode.sel { outline: 2px solid var(--ink); outline-offset: 2px; box-shadow: 0 0 0 5px var(--hi); }
+.mnode.mat, .mnode.idea, .bnode.card { border: 1px solid var(--line); background: var(--bg); box-shadow: none; }
+.bnode.sticky { box-shadow: none; border-color: color-mix(in srgb, var(--c, #e3c13b) 70%, #000); }
+.bnode.frame { border: 1px solid var(--c, var(--ink)); background: transparent; }
+.bnode.frame .frame-label { font-family: var(--mono); text-transform: uppercase; font-size: 12px; letter-spacing: .06em; }
+.map-vp { background-color: var(--bg); background-image: linear-gradient(var(--hair) 1px, transparent 1px), linear-gradient(90deg, var(--hair) 1px, transparent 1px); background-size: 40px 40px; }
+
+/* focus timer + brainstorm */
+.focus-timer, .bs-clock { font-family: var(--mono); }
+
+/* blog: same system, quieter */
+.blog { --blog-font: var(--sans); }
+.blog-side, .blog-tree, .blog-title, .blog-search, .blog-foot, .blog .tag, .p-pager, .blog-post h1 { font-family: var(--mono); }
+.blog-title { text-transform: uppercase; letter-spacing: .12em; font-weight: 600; }
+.blog-search { box-shadow: none; border: 1px solid var(--line); }
+.blog .tag { box-shadow: none; border: 1px solid var(--line); color: var(--ink); font-size: 11px; }
+.blog .tag.on, .blog .tag:hover { background: var(--hi); color: var(--on-hi); box-shadow: none; }
+.blog-tree .folder-title { text-transform: uppercase; font-size: 12px; letter-spacing: .06em; color: var(--ink); }
+.blog-tree .folder-items { border-left: 1px solid var(--line); }
+.blog-tree li.on > a { background: var(--hi); color: var(--on-hi); text-decoration: none; }
+.blog-post h1 { font-size: 24px; }
+.blog-post .markdown blockquote { background: transparent; border: 1px solid var(--line); border-left-width: 4px; }
+.blog-foot { border-top: 1px solid var(--line); }
+
+.topbar nav a .nav-count { align-self: flex-start; display: inline-block; width: auto; background: var(--ink); color: var(--bg); margin: 2px 0 0; }
+.topbar nav a .nav-count:empty { display: none; }
+table.items th { white-space: nowrap; }
+.idea-col { background: transparent; border: 1px solid var(--line); }

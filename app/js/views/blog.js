@@ -58,7 +58,7 @@ function side(current) {
     </ul>
     <div class="blog-foot">
       <span class="lang-switch" data-no-tr><button data-blog-lang="zh" class="${isEn() ? '' : 'on'}">中</button><button data-blog-lang="en" class="${isEn() ? 'on' : ''}">EN</button></span>
-      <a href="#/map">进入 Thesis Web →</a>
+      <a href="#/map">进入 Marginalia →</a>
       ${viewOnly() ? '' : '<button class="mini" id="newPost">＋ 新文章</button>'}
     </div>
   </aside>`;

@@ -1,4 +1,4 @@
-# Thesis Web
+# Marginalia · 页边
 
 个人 thesis 材料仓库。数据就是 `vault/` 里的 Obsidian 笔记，`app/` 是读写这些笔记的网页工具。
 

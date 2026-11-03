@@ -41,7 +41,7 @@ const UI = {
   '博客': 'Blog',
   '搜索：': 'search:',
   '没有找到': 'Nothing found',
-  '进入 Thesis Web →': 'Open Thesis Web →',
+  '进入 Marginalia →': 'Open Marginalia →',
   '＋ 新文章': '+ New post',
   '标题': 'Title',
   '标签，用逗号分开': 'Tags, separated by commas',
@@ -271,7 +271,7 @@ const UI = {
   '看了描述觉得有用，计划读': 'Looks useful: plan to read', '读完觉得写得很好，想继续发展': 'Read it, loved it, want to build on it',
   '上图': 'Add to map', '在图上': 'on map', '把这份材料从关键词引到地图上': 'Lead this material out of the keyword onto the map',
   '从地图上移除': 'Remove from map', '实线': 'Solid', '虚线': 'Dashed', '点线': 'Dotted', '细': 'Thin', '粗': 'Thick',
-  '双击打开这份材料': 'Double-click to open', '拖到关键词或便利贴上，画一条线': 'Drag onto a keyword or note to draw a line',
+  '双击打开这篇博客': 'Double-click to open this post', '双击打开这份材料': 'Double-click to open', '拖到关键词或便利贴上，画一条线': 'Drag onto a keyword or note to draw a line',
   '选中关键词，在材料列表里点「上图」，把一份材料从关键词引到地图上': 'Select a keyword and use “Add to map” on one of its materials to lead it onto the map',
   'shift 多选几个节点，点「新建主题气泡」，圈出你想发展的方向': 'Shift-select several nodes and use “New theme bubble” to circle a direction to develop',
   // focus reading

@@ -401,6 +401,13 @@ function nodeHtml(n) {
       ${why ? `<div class="mat-why">${esc(why.length > 150 ? `${why.slice(0, 150)}…` : why)}</div>` : ''}
       <span class="handle" title="拖到关键词或便利贴上，画一条线"></span></div>`;
   }
+  const post = n.type === 'file' ? noteOf(n) : null;
+  if (post?.data.kind === KIND.post) {
+    return `<div class="mnode mat post${sel}${pin}" data-id="${n.id}" style="${style}width:${n.width || 240}px" title="双击打开这篇博客">
+      <div class="mat-head"><span class="mat-type">博客</span></div>
+      <div class="mat-title">${esc(trc(post.data.title || post.name))}</div>
+      <span class="handle" title="拖到关键词或便利贴上，画一条线"></span></div>`;
+  }
   const idea = ideaOf(n);
   if (idea) {
     return `<div class="mnode idea${sel}${pin}" data-id="${n.id}" style="${style}width:${n.width || 260}px" title="双击打开这张想法卡">
@@ -847,7 +854,8 @@ function openNode(n) {
     return;
   }
   const c = conceptOf(n), it = itemOf(n), idea = ideaOf(n);
-  if (idea) location.hash = `#/open/${encodeURIComponent(idea.name)}`;
+  if (noteOf(n)?.data.kind === KIND.post) location.hash = `#/blog/${encodeURIComponent(noteOf(n).name)}`;
+  else if (idea) location.hash = `#/open/${encodeURIComponent(idea.name)}`;
   else if (c) location.hash = `#/open/${encodeURIComponent(c.name)}`;
   else if (it) location.hash = `#/item/${encodeURIComponent(it.path)}`;
 }

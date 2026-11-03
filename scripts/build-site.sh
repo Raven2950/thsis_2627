@@ -26,4 +26,4 @@ files = sorted(os.path.relpath(os.path.join(d, f), root)
 json.dump({'files': files}, open(os.path.join(root, 'manifest.json'), 'w'), ensure_ascii=False, indent=0)
 print(f'manifest: {len(files)} files')
 PY
-printf '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=app/"><a href="app/">Thesis Web</a>\n' > _site/index.html
+printf '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=app/"><a href="app/">Marginalia</a>\n' > _site/index.html
