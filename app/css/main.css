@@ -765,3 +765,4 @@ table.items tbody tr:hover td, table.items tbody tr:hover a, table.items tbody t
 .topbar nav a .nav-count:empty { display: none; }
 table.items th { white-space: nowrap; }
 .idea-col { background: transparent; border: 1px solid var(--line); }
+.bars .bar { background: var(--hair); } .bars .bar i { background: var(--ink); }
