@@ -115,4 +115,5 @@ sw.js        离线缓存（PWA）
 - 每 15 分钟自动发布一次：Mac 上的后台任务运行 `scripts/publish.sh`，把 `vault/` 里的改动提交并推送，网站约 1 分钟后更新。想马上发布，双击 `发布.command`。
 - 只发布 `vault/`。不会上传：`附件/`、PDF、`私密/`、属性里写了 `draft: true` 的笔记、没勾“公开”的灵感板图片（这些由 `scripts/private-paths.py` 写进 `.git/info/exclude`）。
 - 日志：`~/Library/Logs/marginalia-publish.log`。关掉自动发布：`bash scripts/install-autopublish.sh --remove`；重新打开：`bash scripts/install-autopublish.sh`。
+- 双语文章：同一个文件夹里放两个文件，`标题.md`（中文）和 `标题.en.md`（英文）。博客菜单只列一篇；日期旁有一个小小的「English / 中文」切换。网站是英文时默认显示英文那篇，中文时显示中文那篇。有自己写的英文版的文章，不会再拿去机器翻译。
 

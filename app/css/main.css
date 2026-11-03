@@ -881,3 +881,4 @@ table.items .col-why { font-family: var(--sans); }
 .vault-status .lang-switch button { height: 26px; font-size: 12px; }
 .theme-switch button { font-size: 14px; font-family: var(--sans); }
 .owner-btn { color: var(--muted); font-size: 14px; }
+.p-lang { margin-left: 0; font-size: 12px; }

@@ -12,9 +12,26 @@ import { themeSwitch, bindTheme } from '../theme.js';
 
 let query = '', tag = '', editing = null;     // editing: { path, title, date, tags, body, base }
 
-const posts = () => store.byKind(KIND.post)
+// Two-language posts: "X.md" plus "X.en.md" (or "X.zh.md") in the same folder are one post.
+// The menu lists it once; a small link by the date switches the language.
+const PAIR = /\.(en|zh)$/;
+const dirOf = n => n.path.slice(0, n.path.lastIndexOf('/'));
+let postLang = null;                            // the language I picked for posts; null = follow the page
+function versions(n) {
+  const base = n.name.replace(PAIR, ''), here = store.byKind(KIND.post).filter(x => dirOf(x) === dirOf(n));
+  const main = here.find(x => x.name === base), en = here.find(x => x.name === `${base}.en`), zh = here.find(x => x.name === `${base}.zh`);
+  if (!en && !zh) return null;
+  return { main: main || en || zh, en: en || (zh ? main : null), zh: zh || (en ? main : null) };
+}
+const wanted = () => postLang || (isEn() ? 'en' : 'zh');
+// The file to show for a post, and whether it is my own text in that language (then no machine translation).
+function shownOf(n) { const v = versions(n); return v ? { file: v[wanted()] || v.main, own: true, v } : { file: n, own: false, v: null }; }
+const isTranslationFile = n => PAIR.test(n.name) && versions(n)?.main !== n;
+
+const posts = () => store.byKind(KIND.post).filter(n => !isTranslationFile(n))
   .sort((a, b) => String(b.data.date || b.data.created || '').localeCompare(String(a.data.date || a.data.created || '')));
-const titleOf = n => trc(n.data.title || n.name);
+const titleOf = n => { const { file, own } = shownOf(n); const t = file.data.title || file.name.replace(PAIR, ''); return own ? t : trc(t); };
+const bodyOf = n => { const { file, own } = shownOf(n); return own ? file.body : trc(file.body); };
 const dateOf = n => String(n.data.date || n.data.created || '').slice(0, 10);
 const href = n => `#/blog/${encodeURIComponent(n.name)}`;
 function niceDate(d) {
@@ -67,8 +84,9 @@ function side(current) {
 }
 
 function postHtml(n) {
-  const d = n.data;
-  if (editing?.path === n.path) return `<article class="blog-post editing">
+  const d = n.data, { file, v } = shownOf(n);
+  const other = v && v.en && v.zh ? (v.en === file ? 'zh' : 'en') : null;
+  if (editing?.path === file.path) return `<article class="blog-post editing">
     <input id="pTitle" class="p-title" value="${esc(editing.title)}" placeholder="标题" data-no-tr>
     <div class="p-meta"><input id="pDate" type="date" value="${esc(editing.date)}"><input id="pTags" value="${esc(editing.tags)}" placeholder="标签，用逗号分开" data-no-tr></div>
     <textarea id="pBody" spellcheck="false" data-no-tr placeholder="Markdown，和 Obsidian 里写法一样。图片可以用 ![[图片.png]]">${esc(editing.body)}</textarea>
@@ -77,9 +95,9 @@ function postHtml(n) {
   const list = posts(), i = list.indexOf(n), newer = list[i - 1], older = list[i + 1];
   return `<article class="blog-post">
     <h1>${esc(titleOf(n))}</h1>
-    <p class="p-date">${dateOf(n) ? `写于 ${esc(niceDate(dateOf(n)))}` : ''}${viewOnly() ? '' : ' · <button class="link" id="pEdit">编辑</button>'}</p>
+    <p class="p-date">${dateOf(n) ? `写于 ${esc(niceDate(dateOf(n)))}` : ''}${viewOnly() ? '' : ' · <button class="link" id="pEdit">编辑</button>'}${other ? ` · <button class="link p-lang" data-post-lang="${other}" data-no-tr title="${other === 'en' ? 'Read in English' : '读中文版'}">${other === 'en' ? 'English' : '中文'}</button>` : ''}</p>
     ${asList(d.tags).length ? `<p class="blog-tags">${asList(d.tags).map(t => `<button class="tag" data-tag="${esc(t)}">#${esc(t)}</button>`).join('')}</p>` : ''}
-    <div class="markdown">${renderMarkdown(trc(n.body)) || '<p class="muted">（还是空的）</p>'}</div>
+    <div class="markdown">${renderMarkdown(bodyOf(n)) || '<p class="muted">（还是空的）</p>'}</div>
     <nav class="p-pager">${older ? `<a href="${href(older)}">← ${esc(titleOf(older))}</a>` : '<span></span>'}${newer ? `<a href="${href(newer)}">${esc(titleOf(newer))} →</a>` : ''}</nav>
   </article>`;
 }
@@ -89,7 +107,7 @@ function indexHtml() {
   return `<article class="blog-post blog-index">
     <h1>${tag ? `#${esc(tag)}` : '所有文章'}</h1>
     <ul class="blog-list">${shown.map(n => {
-      const text = trc(n.body).replace(/!\[\[[^\]]*\]\]|!\[[^\]]*\]\([^)]*\)|[#>*_`\[\]]/g, ' ').replace(/\s+/g, ' ').trim();
+      const text = bodyOf(n).replace(/!\[\[[^\]]*\]\]|!\[[^\]]*\]\([^)]*\)|[#>*_`\[\]]/g, ' ').replace(/\s+/g, ' ').trim();
       return `<li><a href="${href(n)}">${esc(titleOf(n))}</a><span class="p-date">${esc(niceDate(dateOf(n)))}</span>
         ${text ? `<p>${esc(text.slice(0, 160))}${text.length > 160 ? '…' : ''}</p>` : ''}</li>`;
     }).join('') || `<li class="muted">${posts().length ? '没有符合的文章' : '还没有文章。'}</li>`}</ul>
@@ -99,11 +117,13 @@ function indexHtml() {
 export function renderBlog(main, name) {
   document.body.classList.add('blog-mode');
   main.classList.add('wide');
-  const post = name ? store.resolve(name) : null;
+  let post = name ? store.resolve(name) : null;
+  // A link straight to "X.en" opens post X in English.
+  if (post && isTranslationFile(post)) { postLang = post.name.match(PAIR)[1]; post = versions(post).main; }
   if (name && (!post || post.data.kind !== KIND.post)) {
     main.innerHTML = `<section class="blog">${side(null)}<article class="blog-post"><p class="muted">没有这篇文章。</p></article></section>`;
   } else {
-    if (editing && editing.path !== post?.path) editing = null;
+    if (editing && editing.path !== (post && shownOf(post).file.path)) editing = null;
     main.innerHTML = `<section class="blog">${side(post)}${post ? postHtml(post) : indexHtml()}</section>`;
   }
   hydrate(main);
@@ -124,8 +144,10 @@ function bind(main, post) {
     if (post) location.hash = '#/blog'; else renderBlog(main, '');
   });
   bindTheme(main);
+  for (const b of main.querySelectorAll('[data-post-lang]')) b.addEventListener('click', () => { postLang = b.dataset.postLang; renderBlog(main, post.name); });
   for (const b of main.querySelectorAll('[data-blog-lang]')) b.addEventListener('click', () => {
     if (b.dataset.blogLang === lang()) return;
+    postLang = null;
     setLang(b.dataset.blogLang);
     window.dispatchEvent(new HashChangeEvent('hashchange'));
   });
@@ -145,8 +167,9 @@ function bind(main, post) {
   });
   if (!post) return;
   main.querySelector('#pEdit')?.addEventListener('click', () => {
-    const d = post.data;
-    editing = { path: post.path, title: d.title || post.name, date: dateOf(post) || today(), tags: asList(d.tags).join(', '), body: post.body.replace(/^\n/, ''), base: post.body };
+    // Edit the version on screen (in a two-language post, that language's file).
+    const f = shownOf(post).file, d = f.data;
+    editing = { path: f.path, title: d.title || f.name.replace(PAIR, ''), date: dateOf(f) || dateOf(post) || today(), tags: asList(d.tags || post.data.tags).join(', '), body: f.body.replace(/^\n/, ''), base: f.body };
     renderBlog(main, post.name);
     main.querySelector('#pBody')?.focus();
   });

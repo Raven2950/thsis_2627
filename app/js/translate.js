@@ -18,7 +18,9 @@ export async function collect() {
     if (SKIP_KINDS.has(n.data.kind) || n.path.startsWith('私密/')) continue;
     add(n.name);
     for (const f of ['title', 'why', 'summary', 'definition', 'question', 'creator']) add(n.data[f]);
-    if (CJK.test(n.body)) add(n.body, true);
+    const paired = n.path.startsWith('博客/') && (/\.(en|zh)$/.test(n.name)
+      || store.all().some(x => x.path === n.path.replace(/\.md$/, '.en.md') || x.path === n.path.replace(/\.md$/, '.zh.md')));
+    if (CJK.test(n.body) && !paired) add(n.body, true);
   }
   const [map, org] = await Promise.all([store.readMap(), store.readMapOrg()]);
   for (const node of map.nodes) if (node.type === 'text') add(node.text, true);
