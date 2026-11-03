@@ -1,7 +1,7 @@
-// Offline support. App files: network first (so edits show up), cache as fallback.
+// Offline support. App files: network first, revalidated (so edits show up), cache as fallback.
 // Pinned CDN libraries: cache first (their URLs carry exact versions).
 // AI and catalogue requests are never cached.
-const CACHE = 'thesis-web-v1';
+const CACHE = 'thesis-web-v2';
 const CDN = ['https://cdn.jsdelivr.net/npm/'];
 
 self.addEventListener('install', () => self.skipWaiting());
@@ -19,7 +19,8 @@ self.addEventListener('fetch', e => {
       return res;
     })));
   } else if (url.origin === location.origin) {
-    e.respondWith(fetch(req).then(res => {
+    // no-cache: always ask the server whether a file changed, so a new version shows on the next reload.
+    e.respondWith(fetch(req.mode === 'navigate' ? req.url : req, { cache: 'no-cache' }).then(res => {
       if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(req, copy)); }
       return res;
     }).catch(() => caches.match(req, { ignoreSearch: true }).then(hit => hit || caches.match('./index.html'))));
