@@ -32,9 +32,10 @@ function matches(n) {
   return true;
 }
 
-function row(n, depth = 0) {
+function row(n, depth = 0, num = 0) {
   const d = n.data, pending = unconfirmed(d).length;
   return `<tr data-path="${esc(n.path)}" tabindex="0" class="${depth ? 'child' : ''}">
+    <td class="num-cell">${depth ? '' : String(num).padStart(2, '0')}</td>
     <td class="mark-cell">${marksHtml(n)}</td>
     <td class="title-cell"><a href="#/item/${encodeURIComponent(n.path)}">${esc(d.title || n.name)}</a>
       ${d.creator ? `<div class="sub">${esc(d.creator)}${d.year ? ` · ${esc(d.year)}` : ''}</div>` : ''}</td>
@@ -61,9 +62,10 @@ export function renderList(main) {
   const next = queue().slice(0, 5);
 
   const rows = [];
+  let count = 0;
   for (const n of topLevel.sort(SORTS[filter.sort] || byDate)) {
     const kids = store.children(n).filter(k => shown.has(k));
-    if (shown.has(n) || kids.length) rows.push(row(n), ...kids.map(k => row(k, 1)));
+    if (shown.has(n) || kids.length) rows.push(row(n, 0, ++count), ...kids.map(k => row(k, 1)));
   }
   const noWhy = items.filter(n => isEmpty(n.data.why)).length;
 
@@ -71,28 +73,32 @@ export function renderList(main) {
     <section class="list-view">
       <div class="list-head">
         <h1>材料 <span class="count">${items.length}</span></h1>
-        ${viewOnly() ? '' : `<span class="hint">把 PDF、图片或链接拖进窗口就能收录</span>
-          <button id="fromFile">从文件收录…</button><button class="primary" id="newItem">＋ 新材料</button>`}
-        ${noWhy ? `<p class="nudge">有 ${noWhy} 份材料还没写「为什么存它」。</p>` : ''}
+        ${viewOnly() ? '' : `<div class="list-actions"><button id="fromFile">从文件收录…</button><button class="primary" id="newItem">＋ 新材料</button></div>`}
       </div>
-      ${next.length ? `<div class="up-next"><b>接下来要读</b>${next.map(n => `<a href="#/item/${encodeURIComponent(n.path)}">⭐ ${esc(trc(n.data.title || n.name))}${n.data.plan ? ` <span class="muted">${esc(n.data.plan)}</span>` : ''}</a>`).join('')}
+      ${viewOnly() ? '' : `<p class="list-meta"><span>把 PDF、图片或链接拖进窗口就能收录</span>${noWhy ? `<button class="link" id="showNoWhy">有 ${noWhy} 份材料还没写「为什么存它」。</button>` : ''}</p>`}
+      ${next.length ? `<div class="up-next"><h2>接下来要读</h2><ol>${next.map(n => `<li><a href="#/item/${encodeURIComponent(n.path)}"><span class="star">★</span>${esc(trc(n.data.title || n.name))}</a><span class="when">${esc(n.data.plan || '')}</span></li>`).join('')}</ol>
         <a href="#/plan" class="more">阅读计划 →</a></div>` : ''}
       <div class="filters">
         <input type="search" id="fq" placeholder="搜索标题、作者、为什么、正文…" value="${esc(filter.q)}">
-        <select id="ftype">${options(store.vocab('type'), items.map(n => n.data.type), filter.type, '全部类型')}</select>
-        <select id="fstatus">${options(store.vocab('status'), items.map(n => n.data.status), filter.status, '全部状态')}</select>
-        <select id="frole">${options(store.vocab('roles'), items.flatMap(n => asList(n.data.roles)), filter.role, '全部角色')}</select>
-        <select id="fimp">${options(store.vocab('importance'), items.map(n => n.data.importance), filter.importance, '全部重要性')}</select>
-        <label class="check"><input type="checkbox" id="fnowhy"${filter.noWhy ? ' checked' : ''}> 只看没写「为什么」的</label>
-        <label class="check"><input type="checkbox" id="fstar"${filter.star ? ' checked' : ''}> 只看 ⭐</label>
-        <label class="check"><input type="checkbox" id="flike"${filter.like ? ' checked' : ''}> 只看 ♥</label>
-        <select id="fsort" title="排序">${Object.entries({ new: '最新收录', star: '⭐ 优先', like: '♥ 优先', title: '按标题' }).map(([k, v]) => `<option value="${k}"${filter.sort === k ? ' selected' : ''}>${v}</option>`).join('')}</select>
+        <div class="filter-row">
+          <select id="ftype">${options(store.vocab('type'), items.map(n => n.data.type), filter.type, '全部类型')}</select>
+          <select id="fstatus">${options(store.vocab('status'), items.map(n => n.data.status), filter.status, '全部状态')}</select>
+          <select id="frole">${options(store.vocab('roles'), items.flatMap(n => asList(n.data.roles)), filter.role, '全部角色')}</select>
+          <select id="fimp">${options(store.vocab('importance'), items.map(n => n.data.importance), filter.importance, '全部重要性')}</select>
+          <select id="fsort" title="排序">${Object.entries({ new: '最新收录', star: '★ 优先', like: '♥ 优先', title: '按标题' }).map(([k, v]) => `<option value="${k}"${filter.sort === k ? ' selected' : ''}>${v}</option>`).join('')}</select>
+        </div>
+        <div class="filter-toggles">
+          <label class="toggle"><input type="checkbox" id="fstar"${filter.star ? ' checked' : ''}> 只看 ★</label>
+          <label class="toggle"><input type="checkbox" id="flike"${filter.like ? ' checked' : ''}> 只看 ♥</label>
+          <label class="toggle"><input type="checkbox" id="fnowhy"${filter.noWhy ? ' checked' : ''}> 只看没写「为什么」的</label>
+          <span class="hint">${shown.size} / ${items.length}</span>
+        </div>
       </div>
       ${items.length === 0
         ? `<p class="empty">这个文件夹里还没有 <code>kind: 材料</code> 的笔记。</p>`
         : `<table class="items">
-            <thead><tr><th class="mark-cell"></th><th>标题</th><th>类型</th><th>状态</th><th>重要性</th><th>为什么存它</th><th></th></tr></thead>
-            <tbody>${rows.join('') || '<tr><td colspan="7" class="empty">没有符合筛选的材料</td></tr>'}</tbody>
+            <thead><tr><th class="num-cell">#</th><th class="mark-cell"></th><th>标题</th><th>类型</th><th>状态</th><th>重要性</th><th>为什么存它</th><th></th></tr></thead>
+            <tbody>${rows.join('') || '<tr><td colspan="8" class="empty">没有符合筛选的材料</td></tr>'}</tbody>
           </table>`}
     </section>`;
 
@@ -107,6 +113,7 @@ export function renderList(main) {
   bind('#fstar', 'star', 'checked'); bind('#flike', 'like', 'checked'); bind('#fsort', 'sort');
   bindMarks(main);
 
+  main.querySelector('#showNoWhy')?.addEventListener('click', () => { filter.noWhy = true; renderList(main); });
   main.querySelector('#newItem')?.addEventListener('click', newItem);
   main.querySelector('#fromFile')?.addEventListener('click', pickAndCapture);
 

@@ -396,7 +396,7 @@ function nodeHtml(n) {
   if (item) {
     const d = item.data, why = trc(String(d.why || ''));
     return `<div class="mnode mat${sel}${pin}" data-id="${n.id}" style="${style}width:${n.width || 240}px" title="双击打开这份材料">
-      <div class="mat-head"><span class="mat-type">${esc(d.type || '材料')}</span><span class="mat-marks">${d.star ? '⭐' : ''}${d.like ? '♥' : ''}</span></div>
+      <div class="mat-head"><span class="mat-type">${esc(d.type || '材料')}</span><span class="mat-marks">${d.star ? '★' : ''}${d.like ? '♥' : ''}</span></div>
       <div class="mat-title">${esc(trc(d.title || item.name))}</div>
       ${why ? `<div class="mat-why">${esc(why.length > 150 ? `${why.slice(0, 150)}…` : why)}</div>` : ''}
       <span class="handle" title="拖到关键词或便利贴上，画一条线"></span></div>`;
@@ -642,7 +642,7 @@ function panel() {
     const it = mats[0], d = it.data;
     html = `<p class="kind">材料</p><h2>${esc(d.title || it.name)}</h2>
       ${d.why ? `<p class="hint">${esc(d.why)}</p>` : ''}
-      ${ro ? '' : `<div class="actions left"><button class="mini${d.star ? ' on' : ''}" id="matStar" title="看了描述觉得有用，计划读">${d.star ? '⭐ 计划读' : '☆ 计划读'}</button>
+      ${ro ? '' : `<div class="actions left"><button class="mini${d.star ? ' on' : ''}" id="matStar" title="看了描述觉得有用，计划读">${d.star ? '★ 计划读' : '☆ 计划读'}</button>
         <button class="mini${d.like ? ' on' : ''}" id="matLike" title="读完觉得写得很好，想继续发展">${d.like ? '♥ 喜欢' : '♡ 喜欢'}</button></div>`}
       <div class="actions"><a href="#/item/${encodeURIComponent(it.path)}">打开材料页</a>${ro ? '' : '<button id="matSticky">＋ 连一张便利贴</button>'}</div>`;
   } else if (nodes.length === 1 && nodes[0].type === 'text') {

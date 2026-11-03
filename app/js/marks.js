@@ -1,4 +1,4 @@
-// ⭐ star = I read the description and plan to read it. ♥ like = I read it and want to develop it.
+// ★ star = I read the description and plan to read it. ♥ like = I read it and want to develop it.
 // plan = the day I mean to read it. All three are plain properties on the material note.
 import { store } from './store.js';
 import { viewOnly } from './i18n.js';
@@ -13,7 +13,7 @@ export function marksHtml(n) {
   const btn = (key, on, off, title) => ro
     ? (d[key] ? `<span class="mark on" title="${title}">${on}</span>` : '')
     : `<button class="mark${d[key] ? ' on' : ''}" data-mark="${key}" data-path="${esc(n.path)}" title="${title}">${d[key] ? on : off}</button>`;
-  return `<span class="marks">${btn('star', '⭐', '☆', '计划读')}${btn('like', '♥', '♡', '读完觉得很好，想继续发展')}</span>`;
+  return `<span class="marks">${btn('star', '★', '☆', '计划读')}${btn('like', '♥', '♡', '读完觉得很好，想继续发展')}</span>`;
 }
 
 export function toggleMark(path, key) {

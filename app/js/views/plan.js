@@ -39,10 +39,10 @@ export function renderPlan(main) {
   main.innerHTML = `<section class="plan-view">
     <h1>阅读计划</h1>
     <p class="week-stats" id="weekStats"></p>
-    <p class="hint">⭐ 计划读的材料按日期排在这里；给它填个日期就进日程，点「读完」就从计划里移走。♥ 是读完觉得很好、想继续发展的。</p>
+    <p class="hint">★ 计划读的材料按日期排在这里；给它填个日期就进日程，点「读完」就从计划里移走。♥ 是读完觉得很好、想继续发展的。</p>
     ${q.length ? groups.filter(([, l]) => l.length).map(([title, list]) => `<h2>${title} <span class="count">${list.length}</span></h2>
       <ul class="plan-list">${list.map(row).join('')}</ul>`).join('')
-      : '<p class="empty">还没有 ⭐ 的材料。在「列表」或材料页点 ☆，就会出现在这里。</p>'}
+      : '<p class="empty">还没有 ★ 的材料。在「列表」或材料页点 ☆，就会出现在这里。</p>'}
     <h2>♥ 喜欢的 <span class="count">${liked.length}</span></h2>
     ${liked.length ? `<ul class="plan-list">${liked.map(row).join('')}</ul>` : '<p class="empty">读完觉得好的，点 ♡。</p>'}
     ${recent.length ? `<h2>最近读完</h2><ul class="plan-list done">${recent.map(n => `<li class="plan-row"><a href="#/item/${encodeURIComponent(n.path)}" class="plan-title">${esc(trc(n.data.title || n.name))}</a><span class="muted">${esc(n.data.read)}</span></li>`).join('')}</ul>` : ''}

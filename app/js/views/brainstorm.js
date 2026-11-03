@@ -97,7 +97,7 @@ function setupHtml() {
     <div class="bs-picks">
       ${ideaNotes.length ? `<select id="bsFromIdea"><option value="">从一张想法卡开始…</option>${ideaNotes.map(n => `<option value="${esc(n.name)}">${esc(String(n.data.idea || n.name).slice(0, 50))}</option>`).join('')}</select>` : ''}
       ${kws.length ? `<select id="bsFromKw"><option value="">从一个关键词开始…</option>${kws.map(k => `<option>${esc(k)}</option>`).join('')}</select>` : ''}
-      ${liked.length ? '<button class="mini" id="bsFromLiked">从我 ⭐/♥ 的材料里随机挑一个</button>' : ''}
+      ${liked.length ? '<button class="mini" id="bsFromLiked">从我 ★/♥ 的材料里随机挑一个</button>' : ''}
     </div>
     <h2>2. 轮次 <span class="hint">（可以调时长、关掉某一轮；会记住你的设置）</span></h2>
     <table class="bs-rounds"><tbody>${bs.rounds.map((r, i) => `<tr class="${r.on ? '' : 'off'}">
