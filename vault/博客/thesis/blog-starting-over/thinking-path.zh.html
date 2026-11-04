@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>Thinking Path</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+  /* Marginalia · 页边: the Thesis Web grid theme */
+  :root { --bg:#fff; --ink:#000; --muted:#6e6e6e; --line:#000; --hair:#dcdcdc; --hi:#d4ff00;
+    --mono:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, "PingFang SC", monospace;
+    --sans:"IBM Plex Sans", -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; }
+  * { box-sizing:border-box; margin:0; border-radius:0; }
+  body { background:var(--bg); color:var(--ink); font:14px/1.55 var(--mono); width:1400px; padding:48px; }
+  .sheet { border:1px solid var(--line); }
+
+  /* header: a row of cells, like the top bar */
+  .head { display:grid; grid-template-columns:auto 1fr auto; border-bottom:1px solid var(--line); }
+  .head > div { padding:14px 20px; display:flex; align-items:center; }
+  .brand { border-right:1px solid var(--line); font-weight:600; letter-spacing:.12em; text-transform:uppercase; gap:8px; }
+  .brand::after { content:"/"; font-weight:400; color:var(--muted); }
+  .head .meta { border-left:1px solid var(--line); color:var(--muted); font-size:12px; letter-spacing:.04em; text-transform:uppercase; }
+  .title { padding:28px 20px 24px; border-bottom:1px solid var(--line); }
+  h1 { font:600 30px/1.2 var(--mono); letter-spacing:-.01em; }
+  h1 mark { background:var(--hi); color:var(--ink); padding:0 4px; }
+  .title p { margin-top:8px; color:var(--muted); font-size:12px; letter-spacing:.04em; text-transform:uppercase; }
+
+  /* each stage: number cell · label cell · content */
+  .stage { display:grid; grid-template-columns:64px 200px 1fr; border-bottom:1px solid var(--line); }
+  .stage:last-child { border-bottom:0; }
+  .num { border-right:1px solid var(--line); padding:18px 0; text-align:center; font-size:12px; color:var(--muted); }
+  .label { border-right:1px solid var(--line); padding:18px 16px; }
+  .label b { display:block; font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  .label span { display:block; margin-top:6px; font-size:15px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; line-height:1.3; }
+  .stage.key .num, .stage.key .label { background:var(--hi); color:var(--ink); }
+  .stage.key .label b { color:var(--ink); }
+  .body { padding:18px 20px; }
+  .body h2 { font:600 18px/1.35 var(--sans); }
+  .body p { font:15px/1.55 var(--sans); margin-top:6px; }
+  .q { display:inline-block; margin-top:12px; background:var(--hi); padding:2px 8px; font:600 15px/1.5 var(--mono); }
+  .body .via, .body .sub { font-family:var(--mono); font-size:11px; }
+  .via { font-size:11px; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; margin-top:14px; }
+  .via::before { content:"↓ "; color:var(--ink); }
+
+  /* grids of small cells */
+  .cells { display:grid; border:1px solid var(--line); margin-top:14px; }
+  .cells > div { padding:10px 12px; border-right:1px solid var(--line); font:14px/1.45 var(--sans); }
+  .cells > div:last-child { border-right:0; }
+  .cells b { display:block; font:600 11px/1.3 var(--mono); letter-spacing:.06em; text-transform:uppercase; margin-bottom:4px; }
+  .cells i { display:block; font:normal 10px/1 var(--mono); color:var(--muted); margin-bottom:6px; }
+  .c5 { grid-template-columns:repeat(5,1fr); }
+  .c3 { grid-template-columns:repeat(3,1fr); }
+  .c3 > div:nth-child(3n) { border-right:0; }
+  .c3 > div:nth-child(-n+3) { border-bottom:1px solid var(--line); }
+  .threads > div { font:600 13px/1.35 var(--mono); text-transform:uppercase; letter-spacing:.04em; display:flex; align-items:center; gap:8px; min-height:56px; }
+  .threads > div::before { content:"■"; font-size:10px; }
+  .sub { font:600 11px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; margin-top:18px; }
+
+  .tension { display:grid; grid-template-columns:1fr 56px 1fr; border:1px solid var(--line); margin-top:10px; }
+  .tension > div { padding:12px 14px; font:italic 15px/1.4 var(--sans); }
+  .tension .a { background:var(--hi); }
+  .tension .vs { border-left:1px solid var(--line); border-right:1px solid var(--line); text-align:center; font:600 18px/1 var(--mono); display:flex; align-items:center; justify-content:center; font-style:normal; }
+  .note { margin-top:12px; font:14px/1.5 var(--sans); color:var(--muted); }
+
+  .split { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--line); margin-top:14px; }
+  .split > div { padding:12px 14px; font:14px/1.5 var(--sans); }
+  .split > div:first-child { border-right:1px solid var(--line); }
+  .split .content { background:var(--ink); color:var(--bg); }
+  .split b { display:block; font:600 12px/1.3 var(--mono); letter-spacing:.06em; text-transform:uppercase; margin-bottom:6px; }
+  .split .content b mark { background:var(--hi); color:var(--ink); padding:0 3px; }
+  .label span { letter-spacing:.08em; } h1 { letter-spacing:0; }
+</style></head><body>
+<div class="sheet">
+  <div class="head"><div class="brand">Thesis</div><div></div><div class="meta">Update 4 · 第二轮实践研究 · 2026 年 11 月</div></div>
+  <div class="title"><h1>从“我应该做的”到 <mark>“我真正喜欢的”</mark></h1><p>我的 thesis 方向是怎么变的 · 思路脉络</p></div>
+
+  <div class="stage"><div class="num">00</div><div class="label"><b>之前</b><span>起点</span></div>
+    <div class="body"><h2>无障碍与 alt text</h2>
+    <p>选它，一部分是因为我有渠道能访谈相关的人，一部分是因为它比较实用，适合做成找工作的作品集。</p>
+    <p class="via">研究的过程中……</p></div></div>
+
+  <div class="stage key"><div class="num">01</div><div class="label"><b>转折</b><span>一个意识</span></div>
+    <div class="body"><h2>我之前做的很多东西，都是我觉得<em>应该</em>做的</h2>
+    <p>实用、好找工作，但我不讨厌也不喜欢。我对很多东西一直是无所谓的态度。于是我决定把之前的全部推翻，从头开始。</p>
+    <span class="q">“我到底喜欢什么？”</span>
+    <p class="via">于是我把研究对准了自己</p></div></div>
+
+  <div class="stage"><div class="num">02</div><div class="label"><b>探索一</b><span>挖掘自己</span></div>
+    <div class="body"><h2>五张手绘思维导图</h2>
+    <div class="cells c5">
+      <div><i>P.33</i><b>我喜欢的东西</b>文艺的感觉、荒诞、世界观、排版、金句、颓废</div>
+      <div><i>P.35</i><b>为什么爱赛博朋克 2077</b>撞色、义体、强冲突、悲剧结局、自由感</div>
+      <div><i>P.37</i><b>为什么爱极乐迪斯科</b>油画般的美术、金句、只言片语、颓废、荒诞</div>
+      <div><i>P.39</i><b>我喜欢的感觉</b>沉沦、自由、反叛、地下室、酗酒、伤疤</div>
+      <div><i>P.41</i><b>我</b>一张矛盾清单：自傲 / 自卑，反社会 / 倾诉欲</div>
+    </div>
+    <p class="sub">反复出现的五条线</p>
+    <div class="cells c5 threads">
+      <div>沉沦的人</div><div>分裂的自我</div><div>理想失败之后的世界</div><div>荒诞与寻找意义</div><div>身体与伤痕</div>
+    </div>
+    <p class="sub">……以及一个核心矛盾</p>
+    <div class="tension"><div class="a">“只想过有意义的人生”</div><div class="vs">⇄</div><div>行动力下降 · 表达无能</div></div>
+    <p class="note">“难道我喜欢颓丧的 loser 风，远胜于优雅贵族老钱风？”是的，因为吸引我的，是那些认真对待失败、并给失败以尊严的作品。</p>
+    <p class="via">接着我问：这两个游戏为什么吸引我</p></div></div>
+
+  <div class="stage"><div class="num">03</div><div class="label"><b>探索二</b><span>拆解参考作品</span></div>
+    <div class="body"><h2>吸引我的不是它们的世界观，而是一种共同的气质</h2>
+    <div class="cells c3">
+      <div>主角在故事开始前就已经崩溃了</div>
+      <div>世界处在一场革命或反叛失败之后</div>
+      <div>脑子里不止一个声音</div>
+      <div>身体和精神在被慢慢消耗</div>
+      <div>世界观只给碎片，要自己拼起来</div>
+      <div>腐烂之中，有片刻的恩典</div>
+    </div>
+    <p class="note">极乐迪斯科向内（心智就是世界），赛博朋克 2077 向外（城市和身体就是世界）。我按这五条线，整理了约 80 部作品和资料：小说、电影、游戏、哲学，以及赛博朋克的源流。</p>
+    <p class="via">这改变了我看待自己项目的方式</p></div></div>
+
+  <div class="stage key"><div class="num">04</div><div class="label"><b>重新定位</b><span>我的决定</span></div>
+    <div class="body"><h2>照搬它们那样的世界观，最后会太过悬浮，也不够真情实感</h2>
+    <div class="split">
+      <div><b>形式 / 质感 ← 参考作品</b>研究它们，是为了学习它们怎么营造那种感觉。我的关键词表达的是气质，不是剧情。</div>
+      <div class="content"><b><mark>内容 / 故事 ← 我自己的生活</mark></b>一个更小的、我自己更有感触的故事。</div>
+    </div>
+    <p><b>载体：</b>明年五月交一个完整的、故事主导的游戏（Unity，极乐迪斯科那样的气质，但小而深）。游戏是我熟悉的媒介，能同时承载视觉和文本，而且我喜欢写作。</p>
+    <p class="via">于是留下一个悬而未决的问题</p></div></div>
+
+  <div class="stage"><div class="num">05</div><div class="label"><b>下一步</b><span>待解决的问题</span></div>
+    <div class="body"><span class="q" style="margin-top:0">怎么从一种气质，走到一个真正的故事？</span>
+    <p><b>探索三：</b>用我自己互相矛盾的几个声音，像极乐迪斯科那样，写一个真实的生活瞬间。它会让人觉得真诚吗？</p></div></div>
+</div>
+</body></html>
