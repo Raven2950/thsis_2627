@@ -8,15 +8,15 @@ Tversky 演讲中最有启发性的观点之一，是手势并不只是思想形
 
 我想设计一个名为 **“Body Engine” 或“身体引擎”** 的界面。这个界面把思考表现为一个机械发动机。用户的身体成为发动机的一部分：身体前倾代表吸入，身体收缩或向中心靠拢代表压缩，保持稳定姿势代表燃烧，身体后仰或打开手臂代表排出。这个交互并不是点击按钮完成任务，而是让用户逐渐进入一种身体节奏，然后把这种节奏转化为视觉和声音反馈。
 
-**【此处插入图片 1：基础发动机结构图】**  
-**建议图注：图 1。作为具身认知隐喻的机械发动机结构。**
+![[截屏2026-10-31 17.27.55.png|472]]
+图 1：作为具身认知隐喻的机械发动机结构。
 
 第一张截图可以用来介绍整个界面的核心隐喻。活塞、气缸、进气阀、排气阀和火花塞共同构成一个物理模型。在数字界面中，活塞可以代表用户的注意力，而压力和运动则可以代表思考过程中的心理努力。
 
 第二张截图可以用来说明界面的交互流程：
+![[截屏2026-10-31 17.27.58.png|478]]
 
-**【此处插入图片 2：四冲程交互流程图】**  
-**建议图注：图 2。基于身体动作的四个交互阶段：吸入、压缩、燃烧和排出。**
+图 2：基于身体动作的四个交互阶段：吸入、压缩、燃烧和排出。
 
 这四个阶段可以对应四种身体状态：
 
@@ -28,24 +28,3 @@ Tversky 演讲中最有启发性的观点之一，是手势并不只是思想形
 这个项目也让我意识到，我们使用的很多抽象表达都建立在物理隐喻之上。我们会说“向前推进一个想法”、“回到之前的阶段”、“进入信息”、“承担责任”、“达到目标”、“突破问题”或“陷入困境”。这些表达都把抽象思考转化成了空间中的运动。我的界面也使用相同的逻辑：抽象思想可以被身体推动、压缩、释放或重新导向。
 
 我从 Tversky 的演讲中得到的最重要启发是，一个好的界面不应该只是展示信息。它应该建立用户身体、物理世界和意义生产之间的关系。当身体参与进来之后，思考会变得更慢、更容易被感知，也更容易被记住。
-
-![[截屏2026-10-31 17.27.55.png|472]]
-Figure 1. The mechanical engine as a metaphor for embodied cognition.
-
-The first screenshot can be used to introduce the central metaphor. The piston, cylinder, intake valve, exhaust valve, and spark plug provide a physical model for the interface. In the digital version, the piston can represent the user’s attention, while pressure and movement can represent mental effort.
-
-The second screenshot can be used to explain the interaction flow:
-![[截屏2026-10-31 17.27.58.png]]
-
-Figure 2. Four stages of body-based interaction: intake, compression, combustion, and exhaust.
-
-The four stages can become four different body states:
-
-1. **Intake:** the user leans forward or opens the arms. The system collects visual and audio input.
-2. **Compression:** the user moves inward or shifts weight toward the center. The collected information becomes denser.
-3. **Combustion:** the user holds a stable posture for several seconds. The system generates a visual transformation or sound.
-4. **Exhaust:** the user leans backward or opens the arms. The system releases the result into the surrounding space.
-
-This project also makes me aware of how many abstract expressions are based on physical metaphors. We talk about “moving forward” with an idea, “going back” to an earlier point, “entering” information, “carrying” responsibility, “reaching” a goal, “breaking through” a problem, or “being stuck” in a difficult situation. These expressions transform abstract thinking into movement through space. My interface uses the same logic: abstract thought becomes something that can be pushed, compressed, released, or redirected by the body.
-
-The most important lesson I take from Tversky is that a good interface does not merely display information. It creates a relationship among the user’s body, the physical world, and the meaning being produced. By asking the body to participate, the interface can make thinking slower, more perceptible, and more memorable.
