@@ -30,8 +30,13 @@ const isTranslationFile = n => PAIR.test(n.name) && versions(n)?.main !== n;
 
 const posts = () => store.byKind(KIND.post).filter(n => !isTranslationFile(n))
   .sort((a, b) => String(b.data.date || b.data.created || '').localeCompare(String(a.data.date || a.data.created || '')));
-const titleOf = n => { const { file, own } = shownOf(n); const t = file.data.title || file.name.replace(PAIR, ''); return own ? t : trc(t); };
-const bodyOf = n => { const { file, own } = shownOf(n); return own ? file.body : trc(file.body); };
+// A post without a title property takes its first "# heading" as the title (and that heading
+// isn't repeated in the body); otherwise the file name.
+const H1 = /^\s*#\s+(.+?)\s*(?:\n|$)/;
+const titleIn = f => f.data.title || f.body.match(H1)?.[1] || f.name.replace(PAIR, '');
+const bodyIn = f => (f.data.title ? f.body : f.body.replace(H1, ''));
+const titleOf = n => { const { file, own } = shownOf(n); const t = titleIn(file); return own ? t : trc(t); };
+const bodyOf = n => { const { file, own } = shownOf(n); return own ? bodyIn(file) : trc(bodyIn(file)); };
 const dateOf = n => String(n.data.date || n.data.created || '').slice(0, 10);
 const href = n => `#/blog/${encodeURIComponent(n.name)}`;
 function niceDate(d) {
@@ -44,7 +49,9 @@ const matches = n => (!tag || asList(n.data.tags).map(String).includes(tag))
   && (!query || `${n.data.title} ${n.name} ${trc(n.body)} ${n.body}`.toLowerCase().includes(query.toLowerCase()));
 
 // Folders under 博客/ are the menu's sections (like a course or a project); open ones are remembered.
-const folderOf = n => n.path.split('/').slice(1, -1).join('/');
+// Only the first level counts: a deeper folder just keeps one post's files together
+// (博客/thesis/starting-over/… is still in "thesis").
+const folderOf = n => (n.path.split('/').length > 2 ? n.path.split('/')[1] : '');
 const OPEN_KEY = 'thesis-web-blog-open';
 // { folder: true | false } for folders I opened or closed by hand; others open when they hold the post I'm reading.
 const folderState = () => { try { const v = JSON.parse(localStorage.getItem(OPEN_KEY) || '{}'); return v && !Array.isArray(v) ? v : {}; } catch (e) { return {}; } };
@@ -169,7 +176,7 @@ function bind(main, post) {
   main.querySelector('#pEdit')?.addEventListener('click', () => {
     // Edit the version on screen (in a two-language post, that language's file).
     const f = shownOf(post).file, d = f.data;
-    editing = { path: f.path, title: d.title || f.name.replace(PAIR, ''), date: dateOf(f) || dateOf(post) || today(), tags: asList(d.tags || post.data.tags).join(', '), body: f.body.replace(/^\n/, ''), base: f.body };
+    editing = { path: f.path, title: titleIn(f), origTitle: titleIn(f), date: dateOf(f) || dateOf(post) || today(), tags: asList(d.tags || post.data.tags).join(', '), body: f.body.replace(/^\n/, ''), base: f.body };
     renderBlog(main, post.name);
     main.querySelector('#pBody')?.focus();
   });
@@ -182,7 +189,8 @@ function bind(main, post) {
     const e = editing;
     try {
       await store.update(e.path, data => {
-        data.title = e.title.trim() || data.title;
+        // Only write a title property when I changed it (a title taken from the heading stays in the heading).
+        if (e.title.trim() && e.title.trim() !== e.origTitle) data.title = e.title.trim();
         data.date = e.date || data.date;
         data.tags = e.tags.split(/[,，]/).map(t => t.trim().replace(/^#/, '')).filter(Boolean);
         return { data, body: `\n${e.body.replace(/^\n/, '')}` };

@@ -7,6 +7,8 @@ cd "$(dirname "$0")/.." || exit 1
 [ -e .git/index.lock ] && { echo "git 正忙，下次再发布"; exit 0; }
 
 python3 scripts/private-paths.py
+# Photos lose their location and camera data before they leave this computer.
+python3 scripts/strip_photo_meta.py --changed
 git add -A vault
 if git diff --cached --quiet; then
   echo "$(date '+%F %T') 没有新的改动"
