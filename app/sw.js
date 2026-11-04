@@ -1,7 +1,7 @@
 // Offline support. App files: network first, revalidated (so edits show up), cache as fallback.
 // Pinned CDN libraries: cache first (their URLs carry exact versions).
 // AI and catalogue requests are never cached.
-const CACHE = 'thesis-web-v2';
+const CACHE = 'thesis-web-v3';
 const CDN = ['https://cdn.jsdelivr.net/npm/'];
 
 self.addEventListener('install', () => self.skipWaiting());

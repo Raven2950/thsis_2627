@@ -65,6 +65,34 @@ async function runTranslate() {
   refreshTranslateButton();
 }
 
+/* ---------- 发布 button ----------
+   The page can't run git itself, so it leaves a note in the vault (_系统/发布请求.json); a small
+   background program on this Mac (scripts/install-autopublish.sh) sees it, runs scripts/publish.sh
+   and writes the result to _系统/发布状态.json, which we wait for here. */
+let publishing = false;
+const setPublishLabel = t => { const b = document.getElementById('publishBtn'); if (b) { b.textContent = t; b.disabled = publishing; } };
+async function publish() {
+  if (publishing) return;
+  publishing = true;
+  setPublishLabel('发布中…');
+  const asked = Date.now();
+  let done = null;
+  try {
+    await store.writeJson('_系统/发布请求.json', { at: asked });
+    for (let i = 0; i < 45 && !done; i++) {
+      await new Promise(r => setTimeout(r, 2000));
+      const s = await store.readJson('_系统/发布状态.json', null);
+      if (s && s.at >= asked - 1000) done = s;
+    }
+  } catch (e) { done = { result: 'fail', message: e.message }; }
+  publishing = false;
+  setPublishLabel('发布');
+  if (!done) toast('没等到发布结果：后台程序可能没开，运行一次 scripts/install-autopublish.sh，或双击「发布.command」', true);
+  else if (done.result === 'ok') toast('已发布，网站一两分钟后更新');
+  else if (done.result === 'none') toast('没有新的改动，网站已经是最新的');
+  else toast(done.message || '发布失败', true);
+}
+
 function render() {
   const v = store.vault;
   applyLang();
@@ -74,7 +102,8 @@ function render() {
   statusEl.innerHTML = !v ? '' : v.published
     ? (canWrite ? '<button class="ghost owner-btn" id="ownerBtn" title="打开我的库来编辑">✎</button>' : '')
     : `<span class="vault-name" title="库文件夹"><i>库</i>${esc(v.name)}</span>${v.readOnly ? '<span class="badge">只读</span>' : ''}${v.demo ? '<span class="badge demo" title="测试用：修改只保存在这个页面里">测试</span>' : ''}
-       <button class="ghost" id="reloadBtn" title="重新读取库里的文件">重新载入</button>`;
+       <button class="ghost" id="reloadBtn" title="重新读取库里的文件">重新载入</button>
+       ${!v.readOnly && !v.demo ? '<button class="publish-btn" id="publishBtn" title="把库里的改动发布到网站上">发布</button>' : ''}`;
   statusEl.insertAdjacentHTML('afterbegin', langSwitch() + themeSwitch());
   bindTheme(statusEl);
   if (v && !v.readOnly && !v.demo) {
@@ -88,6 +117,8 @@ function render() {
     route();
   });
   document.getElementById('reloadBtn')?.addEventListener('click', () => store.reload().then(() => toast('已重新载入')));
+  document.getElementById('publishBtn')?.addEventListener('click', publish);
+  if (publishing) setPublishLabel('发布中…');
   document.getElementById('ownerBtn')?.addEventListener('click', () => renderWelcome());
   if (!v) return renderWelcome();
 

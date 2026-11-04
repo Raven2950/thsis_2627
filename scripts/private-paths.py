@@ -1,11 +1,13 @@
 # Keep private things out of the public repo (and so off the website):
 #   - images of moodboards not marked public (vault/_系统/灵感板.json)
 #   - notes with `draft: true` in their properties
+#   - the publish button's request/result files
 # They go into .git/info/exclude (local only) and are untracked if they were published before.
 import json, os, re, subprocess
 
 os.chdir(os.path.join(os.path.dirname(__file__), '..'))
-private = []
+# The publish button's request and result files only matter on this computer.
+private = ['vault/_系统/发布请求.json', 'vault/_系统/发布状态.json']
 
 try: boards = json.load(open('vault/_系统/灵感板.json')).get('boards', {})
 except (OSError, ValueError): boards = {}

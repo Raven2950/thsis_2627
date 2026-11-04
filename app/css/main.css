@@ -882,3 +882,8 @@ table.items .col-why { font-family: var(--sans); }
 .theme-switch button { font-size: 14px; font-family: var(--sans); }
 .owner-btn { color: var(--muted); font-size: 14px; }
 .p-lang { margin-left: 0; font-size: 12px; }
+
+/* 发布 button: the one filled button in the header */
+.vault-status .publish-btn { background: var(--hi); color: #000; border: 0; border-left: 1px solid var(--line); font-weight: 600; padding: 0 16px; cursor: pointer; font-family: var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+.vault-status .publish-btn:hover { background: #000; color: var(--hi); }
+.vault-status .publish-btn:disabled { opacity: .6; cursor: progress; }
