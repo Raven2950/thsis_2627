@@ -69,7 +69,7 @@ function side(current) {
   const item = n => `<li${n === current ? ' class="on"' : ''}><a href="${href(n)}">${esc(titleOf(n))}</a></li>`;
   const folders = [...groups].filter(([f]) => f);
   return `<aside class="blog-side">
-    <a class="blog-title" href="#/blog">raven’s thesis blog</a>
+    <a class="blog-title" href="#/blog">raven’s blog</a>
     <input class="blog-search" id="blogQ" type="search" placeholder="搜索：" value="${esc(query)}">
     ${tag ? `<p class="blog-tags"><button class="tag on" data-tag="${esc(tag)}">#${esc(tag)} ×</button></p>` : ''}
     <ul class="blog-tree">
