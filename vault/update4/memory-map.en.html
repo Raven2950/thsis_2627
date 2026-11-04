@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Memory Map</title>
+<style>
+@font-face {
+  font-family: "Hand";
+  src: local("HannotateSC-W5"), local("Hannotate SC"),
+       url("file:///System/Library/AssetsV2/com_apple_MobileAsset_Font8/00bfc46ccb002b730e29def5116e0a571fb617d8.asset/AssetData/Hannotate.ttc");
+}
+html, body { margin: 0; background: #fbfbf8; }
+svg { display: block; font-family: "Hand", "Kaiti SC", serif; }
+.k { fill: #111; }
+.b { fill: #1f3fae; }
+.r { fill: #d0283a; }
+</style>
+</head>
+<body>
+<svg id="s" width="1790" height="1090" viewBox="0 0 1790 1090"></svg>
+<script>
+// A hand-drawn look: every line wobbles a little and is drawn twice.
+const S = document.getElementById('s');
+const NS = 'http://www.w3.org/2000/svg';
+let seed = 11;
+const rnd = (a) => { seed = (seed * 9301 + 49297) % 233280; return (seed / 233280 - 0.5) * 2 * a; };
+const C = { k: '#111', b: '#1f3fae', r: '#d0283a' };
+
+function el(tag, attrs, parent = S) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  parent.appendChild(e); return e;
+}
+function wob(x1, y1, x2, y2, color, w = 1.8, dash) {
+  for (let i = 0; i < 2; i++) {
+    const mx = (x1 + x2) / 2 + rnd(2.2), my = (y1 + y2) / 2 + rnd(2.2);
+    el('path', {
+      d: `M${x1 + rnd(1.2)},${y1 + rnd(1.2)} Q${mx},${my} ${x2 + rnd(1.2)},${y2 + rnd(1.2)}`,
+      stroke: color, 'stroke-width': i ? w * 0.6 : w, fill: 'none', 'stroke-linecap': 'round',
+      ...(dash ? { 'stroke-dasharray': dash } : {}), opacity: i ? 0.55 : 1,
+    });
+  }
+}
+function box(x, y, w, h, color = C.k, dash) {
+  wob(x, y, x + w, y, color, 2, dash); wob(x + w, y, x + w, y + h, color, 2, dash);
+  wob(x + w, y + h, x, y + h, color, 2, dash); wob(x, y + h, x, y, color, 2, dash);
+}
+function head(x, y, ang, color) {
+  for (const s of [-1, 1]) {
+    const a = ang + Math.PI + s * 0.45;
+    wob(x, y, x + Math.cos(a) * 14, y + Math.sin(a) * 14, color, 2);
+  }
+}
+// Straight arrow; both = arrowheads at both ends.
+function arrow(x1, y1, x2, y2, color, both) {
+  wob(x1, y1, x2, y2, color, 2);
+  head(x2, y2, Math.atan2(y2 - y1, x2 - x1), color);
+  if (both) head(x1, y1, Math.atan2(y1 - y2, x1 - x2), color);
+}
+// Curved arrow through a control point.
+function curve(x1, y1, cx, cy, x2, y2, color, both) {
+  el('path', { d: `M${x1},${y1} Q${cx},${cy} ${x2},${y2}`, stroke: color, 'stroke-width': 2, fill: 'none', 'stroke-linecap': 'round' });
+  head(x2, y2, Math.atan2(y2 - cy, x2 - cx), color);
+  if (both) head(x1, y1, Math.atan2(y1 - cy, x1 - cx), color);
+}
+// Text, one entry per line.
+function txt(x, y, lines, cls = 'k', size = 20, anchor = 'start', lh = 1.32) {
+  [].concat(lines).forEach((l, i) => {
+    const t = el('text', { x, y: y + i * size * lh, class: cls, 'font-size': size, 'text-anchor': anchor });
+    t.textContent = l;
+  });
+}
+function card(x, y, w, h, title, lines, color = C.k) {
+  box(x, y, w, h, color);
+  txt(x + w / 2, y + 36, title, 'k', 24, 'middle');
+  if (lines) txt(x + w / 2, y + 68, lines, 'k', 15.5, 'middle');
+}
+
+/* ---------- Row 1: what happened (blue) ---------- */
+card(30, 50, 300, 170, 'Childhood · Rebellion', ['Hated my mom: too domineering,', 'too controlling. She was the tyranny,', 'I was the rightful rebellion (9)']);
+
+card(450, 50, 310, 170, 'High school · In color', ['Hid from my parents like a spy', '3 books a week, reading while I ate', 'ball · running · rock music (8)']);
+txt(605, 250, '"the one in color in a black-and-white photo" (7)', 'k', 17, 'middle');
+
+card(880, 50, 330, 170, 'After college · Fog', ['Bureaucratic work, effort ≠ reward (6)', 'I often forget what happened (7)', 'Books from 2 months ago: gone (8)']);
+txt(1045, 250, 'nearsighted · brain fog · faded', 'k', 19, 'middle');
+
+card(1400, 50, 350, 170, '4–5 a.m. · Losing control', ['Rejected; crying, writing, cursing myself', 'I failed my parents, and my old self (2)', 'Against the wardrobe, browsing doctors']);
+
+arrow(330, 120, 446, 120, C.b);
+txt(388, 104, 'growing up', 'b', 18, 'middle');
+
+arrow(760, 120, 876, 120, C.b);
+txt(818, 104, 'gaokao', 'b', 18, 'middle');
+txt(818, 148, 'arch. (6)', 'b', 16, 'middle');
+
+arrow(1210, 120, 1396, 120, C.b);
+txt(1303, 104, 'application season', 'b', 18, 'middle');
+txt(1303, 148, 'topics rejected (2)', 'b', 17, 'middle');
+
+/* ---------- Right column: the night, then now ---------- */
+arrow(1575, 220, 1575, 336, C.b);
+txt(1587, 272, 'anxiety &', 'b', 17); txt(1587, 296, 'depression self-tests', 'b', 17);
+
+card(1400, 340, 350, 150, 'A "controllable" answer', ['A hospital would give a "high-confidence', 'answer". "Once I believed I was probably', 'ill, I became calm" (2)']);
+
+arrow(1575, 490, 1575, 596, C.b);
+txt(1587, 540, 'Dad found me after six;', 'b', 17);
+txt(1587, 566, 'I asked them to take me', 'b', 17);
+
+card(1400, 600, 350, 130, 'Me now', ['Still often dazed and hollow (8)', 'Mom: annoyed, but mostly guilty (9)']);
+
+arrow(1575, 730, 1575, 826, C.b);
+txt(1587, 785, 'into a story', 'b', 18);
+
+card(1400, 830, 350, 90, '→ this game ?');
+
+/* ---------- Inside my head (dashed) ---------- */
+box(30, 330, 1300, 560, C.k, '9 7');
+txt(38, 925, 'Inside my head', 'k', 24);
+txt(38, 955, '(voices that never stop talking)', 'k', 17);
+
+// childhood rebellion turns into guilt
+curve(180, 220, 150, 300, 190, 366, C.r);
+txt(205, 300, 'rebellion → guilt', 'r', 18);
+
+card(70, 370, 370, 120, 'Mom\'s voice', ['I failed her investment', 'Someone else would have been better;', 'I make her lose face (9)']);
+card(520, 370, 370, 120, 'The fallen prodigy', ['Early-maturing, taken for gifted', 'mediocre = failure = sin; to be remembered (4)']);
+card(950, 370, 350, 120, 'The interrogator', ['Why? Do I really like it?', 'Are my feelings even real? (1)']);
+
+arrow(444, 430, 516, 430, C.r);
+txt(480, 414, 'hopes', 'r', 17, 'middle');
+
+// mother loop
+txt(255, 540, 'no picture of a life I want', 'r', 17, 'middle');
+txt(255, 566, '→ so live the way she hopes', 'r', 17, 'middle');
+txt(255, 592, '→ can\'t; don\'t even know what she hopes', 'r', 17, 'middle');
+txt(255, 618, '→ "she will never be satisfied"', 'r', 17, 'middle');
+curve(440, 470, 480, 560, 400, 630, C.r);
+curve(100, 630, 30 + 20, 560, 80, 494, C.r);
+
+// questioning loop
+txt(1125, 540, 'an answer → crossed out', 'r', 17, 'middle');
+txt(1125, 566, '→ 100% or nothing', 'r', 17, 'middle');
+txt(1125, 592, '→ deny everything about myself', 'r', 17, 'middle');
+curve(1300, 450, 1330, 540, 1280, 600, C.r);
+curve(970, 600, 930, 540, 960, 494, C.r);
+
+card(70, 700, 250, 130, 'Wanting freedom', ['No rules, no sameness', 'dreaming of digital nomads']);
+card(420, 700, 270, 130, 'Fearing the unknown', ['New places, tedious groundwork', '"I actually liked high school" (3)']);
+arrow(324, 765, 416, 765, C.r, true);
+txt(370, 750, 'arguing', 'r', 17, 'middle');
+
+card(985, 690, 320, 175, 'Drawn to titles', ['Klingsor\'s Last Summer', 'Electric Sheep · Brain in a vat', '"But I don\'t know why" (5)']);
+
+/* ---------- The thread that runs through it (red) ---------- */
+curve(1045, 268, 900, 320, 705, 366, C.r, true);
+txt(1100, 304, 'wanting the absolute  ⇄  fading into fog', 'r', 21, 'start');
+
+txt(330, 925, 'The absolute:', 'r', 20);
+txt(470, 925, 'liking = doing it forever (1)  ·  100% or nothing (1)  ·  mediocrity is a sin (4)', 'r', 18);
+txt(470, 952, 'a certain answer from a hospital (2)  ·  she will never be satisfied (9)', 'r', 18);
+txt(330, 994, 'The fog:', 'r', 20);
+txt(430, 994, 'fog · nearsighted · faded (7)(8)  ·  fear of the unknown (3)  ·  no idea what life I want (9)', 'r', 18);
+txt(330, 1040, '→ Could this contradiction be the engine of the story?', 'r', 21);
+wob(326, 1050, 860, 1052, C.r, 1.6);
+
+/* legend */
+txt(1400, 960, 'blue = what happened', 'b', 18);
+txt(1400, 988, 'red = reactions / loops in my head', 'r', 18);
+txt(1400, 1016, '(n) = entry number in my notebook', 'k', 16);
+</script>
+</body>
+</html>
