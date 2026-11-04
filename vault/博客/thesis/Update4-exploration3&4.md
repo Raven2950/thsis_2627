@@ -63,40 +63,86 @@ Then I tried to put them in one picture, like a system diagram. I started from a
 
 ## Exploration 4: Taking apart the opening of Disco Elysium
 
-**Question:** I keep saying I want Disco Elysium's "temperament." What is it actually made of?
+**Purpose:** Before writing my own scene, figure out how Disco Elysium's "temperament" is actually made.
 
-**What I did:** I replayed the opening: the conversation in the dark, waking up in the room, and the mirror. I interacted with everything in the room, screenshotted almost every line, and wrote down what I felt on a sticky note.
+I replayed the opening: the conversation in the dark, waking up in the room, and looking in the mirror. I interacted with everything in the room, screenshotted almost every line, and wrote down what I felt on a sticky note.
 
 ![[DE开头-便利贴.jpg|240]]
 
-*Hangover · voices in my head → different voice actors · the brain fighting over resources → sets the tone · guitar swelling → waking up · crawling up naked → rebirth · the ceiling fan → a deliberately drunk walk*
+**The sticky note**
 
-Two more things stayed with me:
+- Hangover
+- Voices in my head → different voice actors
+- The brain fighting over resources → sets the tone
+- Guitar swelling → waking up
+- Crawling up naked → rebirth
+- Ceiling fan → a deliberately drunk walk
 
-- Most of the voices in his head feel **cold, like some ancient creature talking**.
-- The moment I remember most is the **mirror**. You see your miserable, hungover face, and one option is to keep insisting you're a *superstar*. With that swollen face that looks like a bitter smile, it's absurd.
+**Two more things I noticed afterwards**
 
-**What I learned** (each as a principle, not a scene to copy):
+- Most of the voices in his head feel cold, like the voice of some ancient creature.
+- The moment that stayed with me most is the mirror: you see your own miserable, hungover face, and one option is "I can keep insisting on being a superstar." With that swollen face that looks like it's smiling bitterly, it feels absurd.
 
-1. **Start after the lowest point.** The game doesn't show how he destroyed himself; it starts after. He has lost his memory, and you rebuild who he is from objects and hints around you. "Rebuilding yourself" becomes the structure. Crawling up naked makes waking up feel like being born.
-2. **Split one person into many voices.** Each inner voice has its own voice actor, and they fight for control of the body. "I" am not one whole person but an internal struggle, and that sets the tone of the whole game. *Every voice needs its own recognizable sound and way of speaking.*
-3. **The temperature of the voices is the temperature of the work.** The voices in the dark are named after the oldest parts of the brain (the Ancient Reptilian Brain, the Limbic System). That's why they feel ancient: they make the inner world feel huge, strange, a little frightening. The voices in my own head are like that too: a cold, merciless judge that only questions and denies, that shows up when I'm anxious or lost, and never when I'm happy.
-4. **Use sound to tell the story.** The move from darkness to waking up happens through music, not images: the guitar grows and he wakes. The sea wind and the ceiling fan do the same.
-5. **The body comes before the mind.** His condition shows in how you move and interact: the stagger, the reactions to things in the room. You *operate* a wrecked body instead of just reading about it, and there's something funny in it. *For me, "brain fog, nearsighted, faded" could become something you see or feel in the controls.*
-6. **Let the player choose to believe the self-myth.** The mirror doesn't judge you; it lets you decide whether to keep believing you're a superstar. The absurdity doesn't come from a joke. It comes from the gap between self-image and reality.
-7. **A room is a self-portrait.** (From my own behavior: I couldn't stop clicking everything.) Every object is a clue to who he was. Searching it feels like going through your own drawers.
+### Analysis
 
-**Comparing it with my own material** (to compare, not to copy):
+#### 1. Starting from rock bottom: hangover, crawling up naked → rebirth
+
+- The story doesn't begin with how the main character destroyed himself. It begins **after** he destroyed himself. The disaster has already happened, and the player wakes up in the wreckage.
+- He has lost his memory after the hangover. The player gradually works out who he is by collecting objects around him and picking up hints from scraps of words, so "rebuilding yourself" becomes the structure of the game itself. "Crawling up naked" makes this waking up feel like a birth.
+
+"**The story can start after the lowest point.** It doesn't have to show the collapse; it can start on the first morning after it."
+![[2551 1.jpg]]
+![[2552 3.jpg]]
+#### 2. One person split into many voices: different voice actors, the brain fighting over resources
+
+- His inner conflict is turned into several "characters," each with its own voice and voice actor. They fight for control of the body.
+- The inner drama becomes something you can hear and talk to. "I" am no longer one whole person but an internal struggle. This sets the tone of the whole work.
+
+"**Every inner voice needs its own recognizable sound and way of speaking.** The conflict between the voices can itself be the gameplay."
+
+#### 3. Cold, ancient voices
+
+- The voices speaking in the dark at the start are named after the oldest parts of the brain (the Ancient Reptilian Brain, the Limbic System).
+- This makes the inner world feel huge, strange, even a little frightening. The voices aren't comforting you; they're watching you from far away.
+- The "temperature" of the voices decides the temperature of the whole work. The voices in my own head are also more like a cold, merciless judge: always denying, always interrogating. They basically only show up when I'm anxious or lost, never when I'm happy.
+
+#### 4. Telling the story with sound: guitar swelling → waking up
+
+- The transition from darkness to waking up is carried by music, not images. The guitar slowly grows stronger, and he slowly wakes up.
+- The sea wind, the sound of the ceiling fan.
+
+#### 5. The body comes before the mind: the ceiling fan, a deliberately drunk walk
+
+- His physical state is shown through movement and interaction, like the way he staggers and reacts to things in the room.
+- The player "operates" a wrecked body instead of just "reading" that it's wrecked. And there's something a little funny in that wreckage.
+- **The body's state can directly change the controls and how the game feels.** For example, my "brain fog, nearsighted, faded" could maybe become changes in the visuals or the controls.
+
+#### 6. The mirror and the superstar: the gap between the self-myth and a wretched reality
+
+- In the mirror is a swollen, hungover face, yet the game gives you an option to keep believing you're a superstar. It doesn't judge you; it **lets you choose whether to believe the myth**.
+- The absurdity doesn't come from a joke. It comes from the gap between self-image on one side and the reality in front of you on the other. That face, which looks like it's smiling bitterly, makes the gap both funny and sad.
+- **If the player can choose to believe the self-myth, the absurdity appears by itself.**
+![[2547.jpg]]
+#### 7. (My own behavior) I interacted with everything in the room
+
+- Every object in the room is a clue to the character's past. The room is a self-portrait.
+- The player gets to know this person by searching through things, like going through your own drawers. I couldn't stop myself from clicking everything, which shows that this kind of exploring is compelling in itself.
+
+### Comparing it with my own material
 
 | Opening of Disco Elysium | What matches it in my material |
 |---|---|
-| Waking up hungover, the morning after collapse | Breaking down at 4–5 a.m.; my dad opening the door after six |
-| Several voices fighting for control | Mom, the fallen prodigy, the interrogator |
+| Waking up hungover, the morning after the collapse | Breaking down at 4–5 a.m.; my dad opening the door a little after six |
+| Several voices fighting for control | Mom's voice, the fallen prodigy, the interrogator |
 | Cold, ancient voices | Sentences like verdicts: "mediocrity is a sin," "she will never be satisfied" |
 | The superstar gap in the mirror | "The one in color in a black-and-white photo," who later faded |
-| The room as a self-portrait | ? (not yet) |
+| The room as the character's self-portrait | ? (haven't thought about it yet) |
 
-**A difference I feel so far** (a hypothesis to test): Disco Elysium is loud, talkative, outwardly absurd, and political. My material is quieter: fog, fading, nearsightedness, guilt, and "once I believed I was ill, I became calm."
+**A difference I feel so far** (a hypothesis to test): Disco Elysium is talkative, loud, outwardly absurd, and very political. My material is quieter: fog, fading, nearsightedness, guilt, and "once I believed I was ill, I became calm."
+
+- Where does my story start? Before the collapse, or after?
+- What's in my "room"?
+- In my story, what is the biggest "gap between the self-myth and reality"?
 
 **Reflection:** After playing, I tried to write my own scene right away, and it immediately turned into a copy of the mirror scene with a different prop. So I'm separating the two: this exploration was for learning *how* it works, and my own scene has to come from my own question.
 
