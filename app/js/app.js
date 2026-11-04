@@ -25,6 +25,15 @@ const main = document.getElementById('main');
 const PUBLISHED = '../vault/';          // where the GitHub Action puts the published vault
 const statusEl = document.getElementById('vaultStatus');
 
+// Header on one line if it fits, otherwise two rows (see .topbar.stacked in main.css).
+const topbar = document.querySelector('.topbar');
+function fitTopbar() {
+  topbar.classList.remove('stacked');
+  if (topbar.scrollWidth > topbar.clientWidth + 1) topbar.classList.add('stacked');
+}
+{ const ro = new ResizeObserver(() => requestAnimationFrame(fitTopbar));
+  for (const el of [document.body, statusEl, topbar.querySelector('nav')]) ro.observe(el); }
+
 // Saving re-renders the page; put the cursor back where it was (e.g. after tabbing to the next field).
 function route() {
   const active = document.activeElement;
@@ -118,6 +127,7 @@ function render() {
   });
   document.getElementById('reloadBtn')?.addEventListener('click', () => store.reload().then(() => toast('已重新载入')));
   document.getElementById('publishBtn')?.addEventListener('click', publish);
+  requestAnimationFrame(fitTopbar);
   if (publishing) setPublishLabel('发布中…');
   document.getElementById('ownerBtn')?.addEventListener('click', () => renderWelcome());
   if (!v) return renderWelcome();
