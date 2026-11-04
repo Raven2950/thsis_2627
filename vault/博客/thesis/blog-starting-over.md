@@ -1,4 +1,4 @@
-# Starting Over
+s# Starting Over
 
 ![From "what I should make" to "what I actually like"](thinking-path.png)
 
