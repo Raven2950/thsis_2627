@@ -894,3 +894,14 @@ table.items .col-why { font-family: var(--sans); }
 .vault-status .publish-btn { background: var(--hi); color: #000; border: 0; border-left: 1px solid var(--line); font-weight: 600; padding: 0 16px; cursor: pointer; font-family: var(--mono); text-transform: uppercase; letter-spacing: .06em; }
 .vault-status .publish-btn:hover { background: #000; color: var(--hi); }
 .vault-status .publish-btn:disabled { opacity: .6; cursor: progress; }
+
+/* highlighter + text colour (highlight.js) */
+.markdown mark { background: #fff38a; color: #000; padding: 0 2px; }
+.hl-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0 0 8px; }
+.hl-group { display: inline-flex; gap: 4px; }
+.hl-bar button, .hl-float button { border: 1px solid var(--line); border-radius: 0; cursor: pointer; font-family: var(--mono); }
+.hl-swatch { width: 22px; height: 22px; padding: 0; }
+.hl-ink { width: 22px; height: 22px; padding: 0; background: var(--bg); font-weight: 700; font-size: 13px; }
+.hl-clear { height: 22px; padding: 0 8px; background: var(--bg); color: var(--ink); font-size: 11px; }
+.hl-bar .hint { font-size: 11px; color: var(--muted); }
+.hl-float { position: absolute; z-index: 50; display: flex; gap: 10px; align-items: center; padding: 6px 8px; background: var(--bg); border: 1px solid var(--line); box-shadow: 3px 3px 0 var(--ink); }

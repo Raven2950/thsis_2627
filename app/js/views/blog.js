@@ -9,6 +9,7 @@ import { hydrate } from '../media.js';
 import { toast, ask } from '../ui.js';
 import { viewOnly, trc, isEn, lang, setLang, confirmTr } from '../i18n.js';
 import { themeSwitch, bindTheme } from '../theme.js';
+import { toolHtml, bindEditorTools, bindReadingTools } from '../highlight.js';
 
 let query = '', tag = '', editing = null;     // editing: { path, title, date, tags, body, base }
 
@@ -96,6 +97,7 @@ function postHtml(n) {
   if (editing?.path === file.path) return `<article class="blog-post editing">
     <input id="pTitle" class="p-title" value="${esc(editing.title)}" placeholder="标题" data-no-tr>
     <div class="p-meta"><input id="pDate" type="date" value="${esc(editing.date)}"><input id="pTags" value="${esc(editing.tags)}" placeholder="标签，用逗号分开" data-no-tr></div>
+    <div class="hl-bar" id="hlBar" data-no-tr>${toolHtml()}<span class="hint">选中文字再点；Obsidian 里也能看到</span></div>
     <textarea id="pBody" spellcheck="false" data-no-tr placeholder="Markdown，和 Obsidian 里写法一样。图片可以用 ![[图片.png]]">${esc(editing.body)}</textarea>
     <div class="actions left"><button class="primary" id="pSave">保存</button><button id="pCancel">取消</button><span class="hint">⌘/Ctrl + S 保存</span></div>
   </article>`;
@@ -173,6 +175,17 @@ function bind(main, post) {
     } catch (e) { toast(e.message, true); }
   });
   if (!post) return;
+  // Reading: select words → highlighter bar (only on my own text, not a machine translation).
+  const reading = main.querySelector('.blog-post:not(.editing) .markdown');
+  if (reading && !viewOnly() && (shownOf(post).own || !isEn())) {
+    const f = shownOf(post).file;
+    bindReadingTools(reading, () => f.body, async body => {
+      try {
+        await store.update(f.path, data => ({ data, body }), { expectBody: f.body });
+        renderBlog(main, post.name);
+      } catch (err) { toast(err instanceof ConflictError ? '这篇文章在 Obsidian 里刚被改过，重新载入后再试' : err.message, true); }
+    });
+  }
   main.querySelector('#pEdit')?.addEventListener('click', () => {
     // Edit the version on screen (in a two-language post, that language's file).
     const f = shownOf(post).file, d = f.data;
@@ -185,6 +198,7 @@ function bind(main, post) {
   const fit = () => { body.style.height = 'auto'; body.style.height = `${Math.max(360, body.scrollHeight + 4)}px`; };
   fit();
   for (const [id, key] of [['#pTitle', 'title'], ['#pDate', 'date'], ['#pTags', 'tags'], ['#pBody', 'body']]) main.querySelector(id).addEventListener('input', e => { editing[key] = e.target.value; if (key === 'body') fit(); });
+  bindEditorTools(main.querySelector('#hlBar'), body, () => { editing.body = body.value; fit(); });
   const save = async (force = false) => {
     const e = editing;
     try {
