@@ -3,10 +3,10 @@ kind: 材料
 title: Café Lehmitz
 creator: 安德斯·彼得森
 year: 1978
-url: 
+url: https://flashbak.com/life-on-the-edge-at-hamburgs-cafe-lehmitz-1967-1970-386568/
 type: 艺术作品
 why: 摄影集：汉堡一间小酒馆里的边缘人
-status: 想读
+status: 在读
 importance:
 roles: []
 voice:
@@ -21,9 +21,4 @@ created: 2026-10-28
 read:
 ---
 
-## 我得到了什么
-
-
-## 待解决的问题
-
-- 
+在图书馆request了copy的借阅

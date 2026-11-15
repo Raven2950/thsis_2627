@@ -6,7 +6,7 @@ year:
 url: https://disabilityvisibilityproject.com/
 type: 组织/资源库
 why: The Disability Visibility Project “is an online community dedicated to creating, sharing, and amplifying disability media and culture.” supports alt text as poetry
-status: 在读
+status: 读过
 importance:
 roles: []
 voice:
@@ -18,7 +18,7 @@ from_ai: []
 from_source: []
 confirmed: []
 created: 2026-10-14
-read:
+read: 2026-11-11
 ---
 
 ## 我得到了什么

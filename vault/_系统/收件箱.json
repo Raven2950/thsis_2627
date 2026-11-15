@@ -2,233 +2,402 @@
   "about": "网页「收件箱」里等待确认的 AI 产出。keep 之后会写进笔记。",
   "entries": [
     {
-      "id": "9d7bece5",
-      "createdAt": "2026-10-14T16:51:33.564Z",
+      "id": "ca50124f",
+      "createdAt": "2026-11-11T19:33:20.000Z",
       "kind": "item",
       "model": "Claude（找资料并核对）",
       "payload": {
-        "title": "Design Meets Disability",
-        "creator": "Graham Pullin",
-        "year": 2009,
+        "title": "游戏故事写作（Narrative Design: The Craft of Writing for Games）",
+        "creator": "迈克尔·布劳特（Michael Breault）",
+        "year": 2023,
         "type": "书",
-        "url": "https://openlibrary.org/works/OL21463017W",
-        "summary": "讨论设计与残障的相遇：辅助产品能不能像眼镜一样，从医疗器具变成时尚和表达。",
-        "reason": "直接回答 Q7「赋权还是污名化」：用设计语言讨论辅助产品的“被看见”。",
+        "url": "https://book.douban.com/subject/36512686/",
+        "summary": "一位做过很多游戏的叙事设计师写的行业指导书，讲游戏叙事从构思、结构、角色到对话的实际做法。中国人民大学出版社「创意写作书系」，2023 年中文版。",
+        "reason": "这几本里最新、最贴近「叙事设计师每天在干什么」的一本，有简体中文版，适合当你的主要方法书。",
         "concepts": [
-          "身份与赋权",
-          "产品形态选择"
+          "叙事设计方法"
         ],
+        "guide": "> [!ai] 导读（AI 写的，看之前读；细节以原书为准）\n> **一句话**：叙事设计师写的实操书。\n> \n> **建议怎么读**：先看目录，挑讲结构和讲对话的章节读。\n> \n> **读的时候留意**\n> - 游戏叙事和小说、电影写作不一样的地方\n> - 怎么把故事拆成玩家能一块块经历的单位\n> \n> **可以记下的方向**：对照你的「一条主干 + 挂在主干上的片段」，看书里有没有类似的结构图。",
         "verify": {
           "status": "verified",
-          "by": "Open Library",
+          "by": "豆瓣",
           "fields": {
-            "url": "https://openlibrary.org/works/OL21463017W"
+            "url": "https://book.douban.com/subject/36512686/"
           }
-        },
-        "guide": "> [!ai] 导读（AI 写的，读之前看；细节以原文为准）\n> **一句话**：这本书的出发点是：眼镜曾经是医疗器具，后来成了时尚单品。作者问其他辅助产品能不能走同样的路。\n> \n> **建议怎么读**：先读讲眼镜的开头，再挑一章讲“时尚 vs 低调”或“身份 vs 能力”的读（约 30 分钟）。\n> \n> **读的时候留意**\n> - 辅助产品应该隐藏，还是可以被看见、被喜欢（Q7）\n> - “简单”和“通用”之间的取舍（Q4）\n> \n> **可以摘录的方向**：书里成对的张力（比如时尚和低调），可以变成你地图上的轴。"
+        }
       }
     },
     {
-      "id": "dbe95f47",
-      "createdAt": "2026-10-14T16:51:33.564Z",
+      "id": "1af29ac9",
+      "createdAt": "2026-11-11T19:33:20.000Z",
       "kind": "item",
       "model": "Claude（找资料并核对）",
       "payload": {
-        "title": "What Can a Body Do? How We Meet the Built World",
-        "creator": "Sara Hendren",
-        "year": 2020,
+        "title": "扣人心弦：游戏叙事技巧与实践（Video Game Storytelling）",
+        "creator": "埃文·斯科尼克（Evan Skolnick）",
+        "year": 2022,
         "type": "书",
-        "url": "https://openlibrary.org/works/OL21380958W",
-        "summary": "设计研究者 Sara Hendren 用义肢、椅子、房间、街道、时钟等案例，讨论身体怎样和人造世界相遇、互相适应。",
-        "reason": "把“适应”看成人和环境双方的事，和你的“可定制”方向一致，而且文字好读。",
+        "url": "https://book.douban.com/subject/35689620/",
+        "summary": "用通俗、带点幽默的方式讲游戏叙事的核心原则：故事结构、角色、冲突，以及叙事怎样和玩法配合。电子工业出版社 2022 年中文版。",
+        "reason": "入门最友好的一本，特别适合你现在「完全不知道怎么开始」的阶段；它很重视叙事和玩法怎么咬合，正好对应你的「表层 / 底层」。",
         "concepts": [
-          "个性化与定制",
-          "身份与赋权"
+          "叙事设计方法"
         ],
+        "guide": "> [!ai] 导读（AI 写的，看之前读；细节以原书为准）\n> **一句话**：游戏叙事的入门原则。\n> \n> **建议怎么读**：可以从头读，篇幅不大。\n> \n> **读的时候留意**\n> - 叙事和玩法冲突时，书里建议怎么取舍\n> - 讲结构的那几章（三幕式在游戏里怎么用）\n> \n> **可以记下的方向**：读完试着把你的「第一天」套进书里的结构看看。",
         "verify": {
           "status": "verified",
-          "by": "Open Library",
+          "by": "豆瓣",
           "fields": {
-            "url": "https://openlibrary.org/works/OL21380958W"
+            "url": "https://book.douban.com/subject/35689620/"
           }
-        },
-        "guide": "> [!ai] 导读（AI 写的，读之前看；细节以原文为准）\n> **一句话**：每章围绕一个日常物件（椅子、房间、时钟……），讲人和环境怎样互相适应，而不是只让人去适应。\n> \n> **建议怎么读**：读引言，加上关于椅子的那一章（约 30 分钟）。\n> \n> **读的时候留意**\n> - “辅助”和“日常设计”的界线其实很模糊\n> - 当事人自己动手改造物件的例子（Q5）\n> - 关于时间的那一章可以和 Crip Time 一起读\n> \n> **可以摘录的方向**：一个具体的改造案例：谁做的、改了什么、为什么。"
+        }
       }
     },
     {
-      "id": "a7cbfdc2",
-      "createdAt": "2026-10-14T16:51:33.564Z",
+      "id": "3dbd4ea2",
+      "createdAt": "2026-11-11T19:33:20.000Z",
       "kind": "item",
       "model": "Claude（找资料并核对）",
       "payload": {
-        "title": "Building Access: Universal Design and the Politics of Disability",
-        "creator": "Aimi Hamraie",
+        "title": "屠龙：互动叙事法（Slay the Dragon: Writing Great Video Games）",
+        "creator": "Robert Denton Bryant、Keith Giglio",
+        "year": 2015,
+        "type": "书",
+        "url": "https://www.eslite.com/product/1001117242682169177007",
+        "summary": "一位游戏制作人和一位电影编剧合写，把影视编剧的方法用到游戏写作上，每章都有练习，最后整合成一份完整的概念文件。繁体中文版收在易博士 2024 年的《美式互动叙事法套书》里。",
+        "reason": "练习很多，适合一边读一边做。缺点是只有繁体中文版。",
+        "concepts": [
+          "叙事设计方法"
+        ],
+        "guide": "> [!ai] 导读（AI 写的，看之前读；细节以原书为准）\n> **一句话**：带练习的游戏写作书。\n> \n> **建议怎么读**：跟着每章的练习做，不用一口气读完。\n> \n> **读的时候留意**\n> - 它的练习能不能直接用在你的设定上\n> - 最后那份「概念文件」长什么样\n> \n> **可以记下的方向**：把它的概念文件格式拿来，写你自己游戏的第一版概念文件。",
+        "verify": {
+          "status": "verified",
+          "by": "诚品",
+          "fields": {
+            "url": "https://www.eslite.com/product/1001117242682169177007"
+          }
+        }
+      }
+    },
+    {
+      "id": "bfc7ed61",
+      "createdAt": "2026-11-11T19:33:20.000Z",
+      "kind": "item",
+      "model": "Claude（找资料并核对）",
+      "payload": {
+        "title": "人物的解剖（Character）",
+        "creator": "罗伯特·麦基（Robert McKee）",
+        "year": 2022,
+        "type": "书",
+        "url": "https://book.douban.com/subject/35911290/",
+        "summary": "编剧导师麦基「故事学三部曲」的第三本，讲怎样设计一个立体、复杂、会变化的主角，以及配角和功能性角色怎样围绕主角安排。繁体中文版 2022 年（漫游者文化）。",
+        "reason": "不是游戏书，但你现在正在用 OC 的方式做角色，这本讲角色设计讲得最系统：表面和内在的矛盾、角色之间的关系网。",
+        "concepts": [
+          "叙事设计方法"
+        ],
+        "guide": "> [!ai] 导读（AI 写的，看之前读；细节以原书为准）\n> **一句话**：怎么设计一个立体的角色。\n> \n> **建议怎么读**：挑讲「角色的表层和深层」和「角色群像」的部分读。\n> \n> **读的时候留意**\n> - 角色的外在形象和内在真相怎么形成反差（对应你写的「看起来迷茫，其实很会社交」）\n> - 配角怎样映照主角\n> \n> **可以记下的方向**：用书里的方法检查你的主角卡：她的表和里够不够矛盾。",
+        "verify": {
+          "status": "verified",
+          "by": "豆瓣",
+          "fields": {
+            "url": "https://book.douban.com/subject/35911290/"
+          }
+        }
+      }
+    },
+    {
+      "id": "be5317d3",
+      "createdAt": "2026-11-11T19:16:04.568Z",
+      "kind": "link",
+      "target": "材料/路边野餐（Kaili Blues）.md",
+      "model": "openai/gpt-5",
+      "payload": {
+        "to": "路边野餐",
+        "type": "启发",
+        "reason": "同一部作品的既有条目，记录了“苏联式的衰败和怪异”等观感，可与本次“影像参考”“记忆与遗忘/理想失败之后的世界”笔记互补"
+      }
+    },
+    {
+      "id": "d7cfde46",
+      "createdAt": "2026-11-11T19:16:04.568Z",
+      "kind": "link",
+      "target": "材料/路边野餐（Kaili Blues）.md",
+      "model": "openai/gpt-5",
+      "payload": {
+        "to": "潜行者",
+        "type": "相关",
+        "reason": "两者皆以“路边野餐”为母本意象系的延展：废墟与信仰/时间错位的旅程形成互证的审美与母题"
+      }
+    },
+    {
+      "id": "81b5ed5e",
+      "createdAt": "2026-11-11T19:16:04.568Z",
+      "kind": "link",
+      "target": "材料/路边野餐（Kaili Blues）.md",
+      "model": "openai/gpt-5",
+      "payload": {
+        "to": "Kentucky Route Zero",
+        "type": "启发",
+        "reason": "同属魔幻现实与时间错置的公路式旅程，美学与叙事节奏可作为“长镜头里混合过去/现在/未来”的跨媒介参考"
+      }
+    },
+    {
+      "id": "fdba77bb",
+      "createdAt": "2026-11-11T19:01:50.188Z",
+      "kind": "concept",
+      "target": "材料/别相信任何人（Before I Go to Sleep）.md",
+      "model": "openai/gpt-5",
+      "payload": {
+        "name": "身份与赋权",
+        "existing": true,
+        "reason": "主人公在失忆中通过自我记录与追索重建自我，体现对身份与能动性的夺回。"
+      }
+    },
+    {
+      "id": "75c69415",
+      "createdAt": "2026-11-11T19:01:50.188Z",
+      "kind": "concept",
+      "target": "材料/别相信任何人（Before I Go to Sleep）.md",
+      "model": "openai/gpt-5",
+      "payload": {
+        "name": "独立与依赖的张力",
+        "existing": true,
+        "reason": "每天需依赖他人提示与工具自证真相，展现依赖他人与争取自主之间的矛盾。"
+      }
+    },
+    {
+      "id": "a7a96be9",
+      "createdAt": "2026-11-11T19:01:50.188Z",
+      "kind": "concept",
+      "target": "材料/别相信任何人（Before I Go to Sleep）.md",
+      "model": "openai/gpt-5",
+      "payload": {
+        "name": "荒诞与寻找意义",
+        "existing": true,
+        "reason": "在被篡改的现实与断裂记忆里持续求索真相，体现在荒诞处境中追寻意义。"
+      }
+    },
+    {
+      "id": "428644da",
+      "createdAt": "2026-11-11T19:01:50.188Z",
+      "kind": "concept",
+      "target": "材料/别相信任何人（Before I Go to Sleep）.md",
+      "model": "openai/gpt-5",
+      "payload": {
+        "name": "AI 的透明与用户控制",
+        "existing": true,
+        "reason": "虽无AI情节，但核心是信息与控制权归谁，类比无障碍技术中对可解释与自控的需求。"
+      }
+    },
+    {
+      "id": "099b0358",
+      "createdAt": "2026-11-11T18:47:15.000Z",
+      "kind": "item",
+      "model": "Claude（找资料并核对）",
+      "payload": {
+        "title": "Outer Wilds",
+        "creator": "Mobius Digital",
+        "year": 2019,
+        "type": "艺术作品",
+        "url": "https://en.wikipedia.org/wiki/Outer_Wilds",
+        "summary": "太阳系每 22 分钟爆炸一次，时间重来。角色什么都带不走，所有进展都只存在玩家脑子里。",
+        "reason": "玩法上和「玩家记得、主角不记得」最接近的游戏：进度不靠升级，靠玩家知道了什么。",
+        "concepts": [
+          "记忆与遗忘",
+          "叙事设计方法"
+        ],
+        "guide": "> [!ai] 导读（AI 写的，看之前读；细节以原作为准）\n> **一句话**：一个每 22 分钟重来的宇宙，唯一能积累的是玩家的知识。\n> \n> **建议怎么看**：玩 2–3 个小时就够，不用通关。\n> \n> **看的时候留意**\n> - 每一轮循环开始时，游戏怎么让你想起上一轮学到的东西\n> - 飞船里的「日志」怎么记录线索：它就是鬼的笔记本\n> \n> **可以记下的方向**：它和你的区别：在它那里玩家和角色是同一个人；在你这里，玩家和主角是两个存在。",
+        "verify": {
+          "status": "verified",
+          "by": "Wikipedia",
+          "fields": {
+            "url": "https://en.wikipedia.org/wiki/Outer_Wilds"
+          }
+        }
+      }
+    },
+    {
+      "id": "367a10f6",
+      "createdAt": "2026-11-11T18:47:15.000Z",
+      "kind": "item",
+      "model": "Claude（找资料并核对）",
+      "payload": {
+        "title": "暖暖内含光（Eternal Sunshine of the Spotless Mind）",
+        "creator": "Michel Gondry（导演），Charlie Kaufman（编剧）",
+        "year": 2004,
+        "type": "视频",
+        "url": "https://en.wikipedia.org/wiki/Eternal_Sunshine_of_the_Spotless_Mind",
+        "summary": "一对恋人分手后，主动去诊所删除关于对方的记忆；删除进行到一半，男主角又后悔了，在自己的记忆里逃跑。",
+        "reason": "「主动选择遗忘」最直接的参考。你的失忆源头如果是她自己选的，要看它怎么处理「当初为什么要忘」。",
+        "concepts": [
+          "记忆与遗忘"
+        ],
+        "guide": "> [!ai] 导读（AI 写的，看之前读；细节以原作为准）\n> **一句话**：主动删除记忆，又在删除中反悔。\n> \n> **建议怎么看**：看全片。\n> \n> **看的时候留意**\n> - 记忆被删除的过程在画面上怎么表现（这对你的「起雾」很有用）\n> - 「想忘」和「不想忘」两个自己怎么拉扯\n> \n> **可以记下的方向**：注意避开它的结局方向，你的结局要有自己的答案。",
+        "verify": {
+          "status": "verified",
+          "by": "Wikipedia",
+          "fields": {
+            "url": "https://en.wikipedia.org/wiki/Eternal_Sunshine_of_the_Spotless_Mind"
+          }
+        }
+      }
+    },
+    {
+      "id": "14ec2d0b",
+      "createdAt": "2026-11-11T18:47:15.000Z",
+      "kind": "item",
+      "model": "Claude（找资料并核对）",
+      "payload": {
+        "title": "To the Moon（去月球）",
+        "creator": "Freebird Games（高瞰）",
+        "year": 2011,
+        "type": "艺术作品",
+        "url": "https://en.wikipedia.org/wiki/To_the_Moon_(video_game)",
+        "summary": "两个医生进入一个临终老人的记忆，一层层往回走，想帮他完成「去月球」这个一直没实现的愿望。",
+        "reason": "规模很小、主要靠文字的记忆游戏，主题是一个没实现的梦想，和你「被封存的梦想」很近；也是小团队能做完的体量参考。",
+        "concepts": [
+          "记忆与遗忘",
+          "叙事设计方法"
+        ],
+        "guide": "> [!ai] 导读（AI 写的，看之前读；细节以原作为准）\n> **一句话**：在别人的记忆里倒着走，去找一个没实现的愿望。\n> \n> **建议怎么看**：约 4 小时，可以玩完。\n> \n> **看的时候留意**\n> - 记忆片段之间靠什么物件连起来\n> - 玩家知道得比老人多时，情绪怎么被推高\n> - 它的玩法其实很少，靠什么撑住\n> \n> **可以记下的方向**：它的体量（时长、场景数、角色数）可以当你五月目标的参照。",
+        "verify": {
+          "status": "verified",
+          "by": "Wikipedia",
+          "fields": {
+            "url": "https://en.wikipedia.org/wiki/To_the_Moon_(video_game)"
+          }
+        }
+      }
+    },
+    {
+      "id": "1d7cb763",
+      "createdAt": "2026-11-11T18:47:15.000Z",
+      "kind": "item",
+      "model": "Claude（找资料并核对）",
+      "payload": {
+        "title": "Her Story",
+        "creator": "Sam Barlow",
+        "year": 2015,
+        "type": "艺术作品",
+        "url": "https://en.wikipedia.org/wiki/Her_Story_(video_game)",
+        "summary": "玩家在一台旧电脑上搜索警方审讯录像的片段，靠输入关键词，一点点拼出一个女人的故事。",
+        "reason": "「只有碎片，玩家自己拼」的极端例子，而且是用「搜索字词」来推进，和你的「圈字」有共通点。",
+        "concepts": [
+          "叙事设计方法",
+          "分裂的自我"
+        ],
+        "guide": "> [!ai] 导读（AI 写的，看之前读；细节以原作为准）\n> **一句话**：用搜索关键词拼出一个人。\n> \n> **建议怎么看**：1–2 小时就能有完整的体验。\n> \n> **看的时候留意**\n> - 一个词怎么打开下一段内容\n> - 没有固定顺序的故事，怎么保证每个玩家都能拼出主线\n> \n> **可以记下的方向**：如果鬼只能圈字，那「哪些字能用」本身就是一种搜索。",
+        "verify": {
+          "status": "verified",
+          "by": "Wikipedia",
+          "fields": {
+            "url": "https://en.wikipedia.org/wiki/Her_Story_(video_game)"
+          }
+        }
+      }
+    },
+    {
+      "id": "3a02a8f9",
+      "createdAt": "2026-11-11T18:47:15.000Z",
+      "kind": "item",
+      "model": "Claude（找资料并核对）",
+      "payload": {
+        "title": "Return of the Obra Dinn",
+        "creator": "Lucas Pope",
+        "year": 2018,
+        "type": "艺术作品",
+        "url": "https://en.wikipedia.org/wiki/Return_of_the_Obra_Dinn",
+        "summary": "一艘船上的人都死了，玩家用一块怀表看到每个人死前的瞬间，靠推理填出所有人的名字和死因。",
+        "reason": "「表层有确定答案」做得最好的游戏之一：每个谜都有唯一解，玩家用笔记本整理推理。可以学它怎么设计可验证的线索。",
+        "concepts": [
+          "叙事设计方法"
+        ],
+        "guide": "> [!ai] 导读（AI 写的，看之前读；细节以原作为准）\n> **一句话**：从碎片推理出确定答案的游戏。\n> \n> **建议怎么看**：玩 1–2 小时，看它的笔记本系统。\n> \n> **看的时候留意**\n> - 笔记本怎么帮玩家整理信息\n> - 游戏怎么告诉你「推对了」（每猜对三个才确认一次）\n> \n> **可以记下的方向**：你的表层需要一个「推对了」的反馈：主角记住了什么、能多走多远。",
+        "verify": {
+          "status": "verified",
+          "by": "Wikipedia",
+          "fields": {
+            "url": "https://en.wikipedia.org/wiki/Return_of_the_Obra_Dinn"
+          }
+        }
+      }
+    },
+    {
+      "id": "4a2987b7",
+      "createdAt": "2026-11-11T18:47:15.000Z",
+      "kind": "item",
+      "model": "Claude（找资料并核对）",
+      "payload": {
+        "title": "Unpacking",
+        "creator": "Witch Beam",
+        "year": 2021,
+        "type": "艺术作品",
+        "url": "https://en.wikipedia.org/wiki/Unpacking_(video_game)",
+        "summary": "一个几乎没有文字的游戏：玩家一次次搬家、拆箱、摆放物品，从物品里读出一个人十几年的人生。",
+        "reason": "完全靠物件讲故事。你的鬼只能动东西、留痕迹，主角的房间也是一张自画像，这个游戏示范了物件能讲到多深。",
+        "concepts": [
+          "叙事设计方法"
+        ],
+        "guide": "> [!ai] 导读（AI 写的，看之前读；细节以原作为准）\n> **一句话**：用物件讲一个人的一生。\n> \n> **建议怎么看**：约 3 小时，可以玩完。\n> \n> **看的时候留意**\n> - 哪些物件一直跟着她，哪些在某次搬家后消失了\n> - 没有一句台词，怎么让你知道她经历了什么\n> \n> **可以记下的方向**：列出你主角房间里会有的物件，每件写一句「它为什么在这里」（探索五）。",
+        "verify": {
+          "status": "verified",
+          "by": "Wikipedia",
+          "fields": {
+            "url": "https://en.wikipedia.org/wiki/Unpacking_(video_game)"
+          }
+        }
+      }
+    },
+    {
+      "id": "9363cc04",
+      "createdAt": "2026-11-11T18:47:15.000Z",
+      "kind": "item",
+      "model": "Claude（找资料并核对）",
+      "payload": {
+        "title": "What Remains of Edith Finch（艾迪芬奇的记忆）",
+        "creator": "Giant Sparrow",
         "year": 2017,
-        "type": "书",
-        "url": "https://openlibrary.org/works/OL19752590W",
-        "summary": "关于“通用设计”历史和政治的学术书：谁定义了“可及”，谁的知识被算作专业知识。",
-        "reason": "理论深度最高的一本，补你目前缺的“批判与理论”。时间不够可以只读引言。",
+        "type": "艺术作品",
+        "url": "https://en.wikipedia.org/wiki/What_Remains_of_Edith_Finch",
+        "summary": "主角回到家族的老房子，每个上锁的房间里都是一个家人的故事，每个故事都用不同的玩法讲。",
+        "reason": "家庭、房间和遗留下来的东西；每段故事玩法都不一样，可以学「一段记忆一种玩法」。",
         "concepts": [
-          "身份与赋权",
-          "数字服务可及性"
+          "叙事设计方法"
         ],
+        "guide": "> [!ai] 导读（AI 写的，看之前读；细节以原作为准）\n> **一句话**：一栋房子，一个家族，每个房间一种玩法。\n> \n> **建议怎么看**：约 2 小时，可以玩完。\n> \n> **看的时候留意**\n> - 每个房间怎么一眼就告诉你住过的是什么样的人\n> - 罐头厂那一段：重复的工作和脑内的幻想怎么同时进行\n> \n> **可以记下的方向**：罐头厂那一段和你「被迫的数学老师，脑子里想当小说家」非常像。",
         "verify": {
           "status": "verified",
-          "by": "Open Library",
+          "by": "Wikipedia",
           "fields": {
-            "url": "https://openlibrary.org/works/OL19752590W"
+            "url": "https://en.wikipedia.org/wiki/What_Remains_of_Edith_Finch"
           }
-        },
-        "guide": "> [!ai] 导读（AI 写的，读之前看；细节以原文为准）\n> **一句话**：作者梳理通用设计的历史，追问“可及性知识”由谁生产、为谁服务。\n> \n> **建议怎么读**：只读引言（约 30 分钟），留意书里的核心概念。\n> \n> **读的时候留意**\n> - “通用”是不是在掩盖差异\n> - 残障者自己的知识和专家知识之间的张力（Q7）\n> \n> **可以摘录的方向**：一个你可以借用的概念名，用来命名你的研究方向。"
+        }
       }
     },
     {
-      "id": "0a126cec",
-      "createdAt": "2026-10-14T16:51:33.564Z",
+      "id": "5ffece9c",
+      "createdAt": "2026-11-11T18:47:15.000Z",
       "kind": "item",
       "model": "Claude（找资料并核对）",
       "payload": {
-        "title": "Design Justice: Community-Led Practices to Build the Worlds We Need",
-        "creator": "Sasha Costanza-Chock",
+        "title": "把自己作为方法：与项飙谈话",
+        "creator": "项飙、吴琦",
         "year": 2020,
         "type": "书",
-        "url": "https://openlibrary.org/works/OL20742905W",
-        "summary": "提出“设计正义”：由受影响的社群主导设计，关注设计怎样复制或挑战不平等。MIT Press 有开放获取版。",
-        "reason": "和参与式设计、Crip Camp 的 “Nothing about us without us” 是同一条线，给你的研究方法提供伦理框架。",
+        "url": "https://openlibrary.org/works/OL28355174W",
+        "summary": "人类学家项飙的长篇访谈，谈当代中国年轻人的焦虑、「附近」的消失，以及怎样从自己的经验出发去理解世界。",
+        "reason": "两个用处：一是用中国语境谈期待、内卷和无力感；二是回答你之前的问题——怎样把个人经历变成研究。",
         "concepts": [
-          "身份与赋权"
+          "他人的期待"
         ],
+        "guide": "> [!ai] 导读（AI 写的，看之前读；细节以原作为准）\n> **一句话**：把自己的经验当成理解世界的方法。\n> \n> **建议怎么看**：挑讲「附近」和讲年轻人焦虑的部分读，约 1 小时。\n> \n> **看的时候留意**\n> - 他怎样把个人的困惑放进更大的社会结构里看\n> - 「把自己作为方法」和「写得太私人」的区别在哪\n> \n> **可以记下的方向**：写 thesis 论述时可以引用：为什么从个人经历出发是一种研究方法。",
         "verify": {
           "status": "verified",
           "by": "Open Library",
           "fields": {
-            "url": "https://openlibrary.org/works/OL20742905W"
+            "url": "https://openlibrary.org/works/OL28355174W"
           }
-        },
-        "guide": "> [!ai] 导读（AI 写的，读之前看；细节以原文为准）\n> **一句话**：作者从机场安检扫描仪把自己的身体标成“异常”的经历讲起，提出由社群主导的设计原则。\n> \n> **建议怎么读**：读引言，加上设计正义原则的列表（约 25 分钟）。\n> \n> **读的时候留意**\n> - 谁参与设计、谁受益、谁承担风险（Q7）\n> - 这些原则怎么落到你和残障组织的合作里\n> \n> **可以摘录的方向**：挑两三条原则，写成你自己研究要遵守的规则。"
-      }
-    },
-    {
-      "id": "57d9f668",
-      "createdAt": "2026-10-14T16:51:33.564Z",
-      "kind": "item",
-      "model": "Claude（找资料并核对）",
-      "payload": {
-        "title": "Disability studies as a source of critical inquiry for the field of assistive technology",
-        "creator": "Jennifer Mankoff, Gillian R. Hayes, Devva Kasnitz",
-        "year": 2010,
-        "type": "论文",
-        "url": "https://doi.org/10.1145/1878803.1878807",
-        "summary": "ASSETS 2010 论文，把残障研究的视角带进辅助技术研究，批评只从“修复缺陷”出发的做法。",
-        "reason": "辅助技术研究里引用很多的一篇，帮你区分残障的医疗模型和社会模型。",
-        "concepts": [
-          "身份与赋权",
-          "现有工具的局限"
-        ],
-        "verify": {
-          "status": "verified",
-          "by": "Crossref",
-          "fields": {
-            "url": "https://doi.org/10.1145/1878803.1878807"
-          }
-        },
-        "guide": "> [!ai] 导读（AI 写的，读之前看；细节以原文为准）\n> **一句话**：用残障研究的理论去检视辅助技术研究：技术是不是默认残障需要被修好。\n> \n> **建议怎么读**：读引言和讨论部分（约 20 分钟）。\n> \n> **读的时候留意**\n> - 医疗模型和社会模型分别会导向什么样的产品（Q7）\n> - 作者对研究者角色的建议\n> \n> **可以摘录的方向**：一段讲两种模型差别的话，update2 写理论框架时可以用。"
-      }
-    },
-    {
-      "id": "28fc8c50",
-      "createdAt": "2026-10-14T16:51:33.564Z",
-      "kind": "item",
-      "model": "Claude（找资料并核对）",
-      "payload": {
-        "title": "Interdependence as a Frame for Assistive Technology Research and Design",
-        "creator": "Cynthia L. Bennett, Erin Brady, Stacy M. Branham",
-        "year": 2018,
-        "type": "论文",
-        "url": "https://doi.org/10.1145/3234695.3236348",
-        "summary": "ASSETS 2018 论文，提出用“相互依存”代替“独立”来理解辅助技术：可及性是人和人、人和物一起完成的。",
-        "reason": "直接回答 Q6「独立还是依赖」，而且会挑战这个问题本身的提法。",
-        "concepts": [
-          "独立与依赖的张力",
-          "培训、支持与社群"
-        ],
-        "verify": {
-          "status": "verified",
-          "by": "Crossref",
-          "fields": {
-            "url": "https://doi.org/10.1145/3234695.3236348"
-          }
-        },
-        "guide": "> [!ai] 导读（AI 写的，读之前看；细节以原文为准）\n> **一句话**：作者认为“独立”这个目标有问题，可及性其实是在关系里共同完成的，残障者也在为别人提供帮助。\n> \n> **建议怎么读**：读引言和提出框架的部分（约 20 分钟）。\n> \n> **读的时候留意**\n> - 它怎样改变你的 Q6（也许要改写成“支持什么样的相互依存”）\n> - 残障者作为帮助者的例子\n> \n> **可以摘录的方向**：作者对“相互依存”的定义，可以拿来更新你的研究问题。"
-      }
-    },
-    {
-      "id": "94f698a7",
-      "createdAt": "2026-10-14T16:51:33.564Z",
-      "kind": "item",
-      "model": "Claude（找资料并核对）",
-      "payload": {
-        "title": "Xbox Adaptive Controller",
-        "creator": "Microsoft",
-        "year": 2018,
-        "type": "产品/App",
-        "url": "https://www.xbox.com/en-US/accessories/controllers/xbox-adaptive-controller",
-        "summary": "微软给行动不便的玩家做的可扩展手柄，可以接各种外部按钮和开关，常被当作和残障社群合作设计的案例。",
-        "reason": "“可组装、可自定义”的硬件版，正好对应你在软件上想做的可定制（Q5）。",
-        "concepts": [
-          "个性化与定制",
-          "产品形态选择"
-        ],
-        "verify": {
-          "status": "unverifiable"
-        },
-        "guide": "> [!ai] 导读（AI 写的，读之前看；细节以原文为准）\n> **一句话**：一个可以插很多外接开关的手柄，让玩家按自己的身体条件组装控制方式。\n> \n> **建议怎么读**：看产品页，再搜一下它的设计过程或包装设计的报道（约 15 分钟）。\n> \n> **读的时候留意**\n> - 可组装作为一种定制方式（Q5）\n> - 和残障玩家、相关组织合作的过程\n> - 连包装都考虑到“好打开”\n> \n> **可以摘录的方向**：它的定制方式，能不能翻译成软件里的做法。"
-      }
-    },
-    {
-      "id": "3c5f60de",
-      "createdAt": "2026-10-14T16:51:33.564Z",
-      "kind": "item",
-      "model": "Claude（找资料并核对）",
-      "payload": {
-        "title": "Christine Sun Kim",
-        "creator": "Christine Sun Kim",
-        "year": null,
-        "type": "艺术作品",
-        "url": "https://christinesunkim.com/",
-        "summary": "聋人艺术家，用图表、乐谱符号、绘画和表演探讨声音、手语和“谁拥有声音”。",
-        "reason": "把“听不见”变成创作的出发点，而不是缺陷，和 Q7 以及你的 AAC 材料（声音与身份）呼应。",
-        "concepts": [
-          "身份与赋权",
-          "沟通与AAC"
-        ],
-        "verify": {
-          "status": "unverifiable"
-        },
-        "guide": "> [!ai] 导读（AI 写的，读之前看；细节以原文为准）\n> **一句话**：她的作品常用图表和类似乐谱的符号，把聋人对声音的经验视觉化。\n> \n> **建议怎么读**：浏览网站上的作品集，再看一段她的演讲或访谈（约 15 分钟）。\n> \n> **读的时候留意**\n> - 用幽默和图表表达愤怒或日常经验\n> - 手语作为一种语言，而不是辅助工具\n> - 对你的界面设计：信息可以怎样被另一种感官“翻译”\n> \n> **可以摘录的方向**：一件作品：它表达了什么、用了什么形式。"
-      }
-    },
-    {
-      "id": "3cea507b",
-      "createdAt": "2026-10-14T16:51:33.564Z",
-      "kind": "item",
-      "model": "Claude（找资料并核对）",
-      "payload": {
-        "title": "Sins Invalid",
-        "creator": "Sins Invalid",
-        "year": null,
-        "type": "艺术作品",
-        "url": "https://www.sinsinvalid.org/",
-        "summary": "以表演为核心的残障正义项目，以有色人种和酷儿残障艺术家为中心，提出了“残障正义十原则”。",
-        "reason": "把残障、身份、社群放在一起讲，补你材料里缺的“交叉性”视角。",
-        "concepts": [
-          "身份与赋权",
-          "培训、支持与社群"
-        ],
-        "verify": {
-          "status": "unverifiable"
-        },
-        "guide": "> [!ai] 导读（AI 写的，读之前看；细节以原文为准）\n> **一句话**：用表演和身体去讲残障、性别、种族交织在一起的经验。\n> \n> **建议怎么读**：读网站上关于残障正义原则的部分，再看一段表演影像（约 15 分钟）。\n> \n> **读的时候留意**\n> - “残障正义”和“残障权利”有什么不同\n> - 集体照护、相互依存（可以对照 Interdependence 那篇论文）\n> \n> **可以摘录的方向**：挑两条原则，想想它们对一个科技产品意味着什么。"
+        }
       }
     }
   ]

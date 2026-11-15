@@ -1,182 +1,182 @@
 ---
 kind: 博客
-title: 探索六：故事前提（第一稿）
+title: "Exploration 6: Premise (First Draft)"
 date: 2026-11-07
-tags: [thesis, 探索, 故事前提]
+tags: [thesis, exploration, premise]
 created: 2026-11-07
 ---
 
-我又回到了最根本的问题：**我到底要做一个什么游戏？** 如果用一句话概括设定，它是什么？玩家玩完会感受到什么？
+I've gone back to the most basic question: **what game am I actually making?** If I sum up the setting in one sentence, what is it? What will players feel when they finish?
 
-这篇是我对这个问题的第一稿思考。
+This post is my first draft of an answer.
 
-## 问题：我的游戏首先是一个什么游戏？
+## The question: what kind of game is my game, first of all?
 
 ![[p60-我到底要做一个什么游戏.jpg|360]]
 
-拿银松镇举例：它首先是一个**探案悬疑游戏**。它的世界观也许在底层表达了更多东西，但底层未必能被所有人感知，表层可以。
+Take 银松镇 (Yinsong Town) as an example: first of all, it's a **detective mystery game**. Its world may say much more underneath, but not everyone will pick up on what's underneath. Everyone can pick up on the surface.
 
-所以我的游戏除了表达我自己的困惑之外，还需要一些更具体、更实在、更直给的东西。因为我对生命意义的困惑本身就很 vague，但我不想让我的游戏是虚的、意识流的、空中楼阁的。
+So besides expressing my own confusion, my game needs something more concrete, more solid, more direct. My confusion about the meaning of life is vague in itself, but I don't want my game to be hollow, stream-of-consciousness, a castle in the air.
 
-**我不想做"无逻辑的呓语"。**
+**I don't want to make "illogical murmuring."**
 
-## 为什么现在像"无逻辑的呓语"？
+## Why does it feel like "illogical murmuring" right now?
 
-因为现在只有底层，没有表层。
+Because right now there is only an underneath, and no surface.
 
-Disco Elysium 首先也是一个破案游戏：有一具尸体，有一桩要在几天内破的案子。
+Disco Elysium is also a detective game first: there's a body, and a case to crack in a few days.
 
-- **表层的事件有答案。** 那桩凶杀案最后是破了的，有逻辑，玩家每一步都知道自己在干什么。
-- **底层的问题没有答案。** 我是谁、为什么失忆、这个世界还有没有希望，这些是开放的。
+- **The surface events have answers.** The murder does get solved in the end. It's logical, and at every step the player knows what they're doing.
+- **The questions underneath have no answers.** Who am I, why did I lose my memory, is there any hope left for this world: these stay open.
 
-所以：
+So:
 
-- **"模糊"可以是主角的状态，但不能是游戏的结构。** 模糊感应该来自主角对这件事的理解，而不是来自玩家不知道该干嘛。
-- 主角想要一个明确的答案。那就**给主角一件具象的、有答案的事去追**，但他得不到他真正想要的那个答案。
+- **"Vagueness" can be the protagonist's state, but not the game's structure.** The vague feeling should come from the protagonist's understanding of what's happening, not from the player not knowing what to do.
+- The protagonist wants a clear answer. So **give the protagonist something concrete, with an answer, to chase**, while he never gets the answer he actually wants.
 
-> <span style="color: #d93a3a">这是一个【类型】游戏：【一个什么样的人】必须【做一件具体的事】，但【阻碍】。</span>
+> <span style="color: #d93a3a">This is a [genre] game: [what kind of person] must [do something specific], but [obstacle].</span>
 
-## 一个想法：第二天醒来会忘记一切的人
+## An idea: a person who forgets everything when he wakes up the next day
 
 ![[p61-便利贴-失忆的人.jpg|290]]
 
-**便利贴原文**
+**The sticky note, as written**
 
-- 第二天醒来会忘记关于自己的一切的人。
-- 玩家要做的：帮助主角记录自己的记忆 → 到更多的地方去解读主角的记忆。
-- 例如：玩家每帮助第二天醒来的主角记住更多的事，主角的遗忘区间就更长（从一天延长到两三天之类的） → 玩家可以探索更多地方。
-- 记忆区间：设计者 ＞ 玩家 ＞ 主角。
-- 最后找到让主角失忆的源头。
-- 选择：回归记忆、拥抱痛苦 / 继续遗忘 / 别的。
+- A person who wakes up the next day having forgotten everything about himself.
+- What the player does: help the protagonist record his memories → go to more places to interpret his memories.
+- For example: the more the player helps the next-day protagonist remember, the longer his forgetting interval becomes (from one day to two or three days, say) → the player can explore more places.
+- Memory span: designer > player > protagonist.
+- In the end, find the source of the protagonist's amnesia.
+- Choice: return to memory and embrace the pain / keep forgetting / something else.
 
-这个想法来自《别相信任何人》（*Before I Go to Sleep*）：女主角每天醒来都不记得过去，靠偷偷写的日记一天天拼回自己。我记得的大致是：日记藏在衣柜里，医生每天早上打电话告诉她日记在哪，第一页写着"别相信 Ben"。细节可能记得不准。
-另一个是《李米的猜想》。李米一直在找一个缺席的人，手里只有碎片，只能猜。我想要的就是这种感觉：一个人只能靠碎片和猜想去接近答案。
+The idea comes from *Before I Go to Sleep*: the heroine wakes every day with no memory of her past and pieces herself back together, day by day, through a diary she writes in secret. What I roughly remember: the diary is hidden in the wardrobe, a doctor calls each morning to tell her where it is, and the first page says "Don't trust Ben." I may have the details wrong.
+The other is *The Equation of Love and Death* (*Li Mi's Conjecture*). Li Mi keeps searching for someone who is absent; all she has are fragments, so all she can do is guess. That's the feeling I want: someone who can only approach the answer through fragments and guesses.
 
-- **表层终于有了。** 玩家每天在做什么、做成了什么算进步，都很清楚：多记住一点，就能走远一点。
-- **"模糊"变成了机制，而不是结构。** 主角每天都在起雾，但游戏规则是清楚的。
-- **"记忆空间"有潜力。** 玩家比主角知道得多，就会有一种张力：你看着他每天重新犯同样的错，而你知道他不知道的事。这是只有游戏能做到的。
-- **体量合适。** 每天重来一次，可以反复用同一批地点，再逐步解锁新的。
-- **和我的材料对得上，但不是我的经历本身。** 我在列记忆里写过"大学后一切都在脑雾之中"、"现在一切都和近视了一样"。每天醒来都忘记自己，是把这种感觉推到了极端。
+- **Finally there's a surface.** It's clear what the player does each day and what counts as progress: remember a bit more, go a bit further.
+- **"Vagueness" becomes a mechanic, not the structure.** Fog rolls in for the protagonist every day, but the rules of the game are clear.
+- **"Memory space" has potential.** The player knows more than the protagonist, and that creates tension: you watch him make the same mistakes every day, knowing what he doesn't. Only a game can do this.
+- **The scope is right.** Each day starts over, so the same set of places can be reused, with new ones unlocked gradually.
+- **It fits my material without being my own experience.** In my memory lists I wrote "after college everything has been in a brain fog" and "now everything is like being nearsighted." Waking each day having forgotten yourself pushes that feeling to the extreme.
 
 
-- **和已有作品很近。** 失忆 DE 用过了；"每天醒来都忘记"在电影里很常见（《记忆碎片》、《初恋50次》、《别相信任何人》）。游戏里最接近的是 *Outer Wilds*：每 22 分钟循环一次，角色什么都不保留，知识只留在玩家脑子里。我需要一个它们都没有的角度。
-- **结局容易落进俗套。** "创伤导致失忆 → 选择想起来、拥抱痛苦"很常见。一个可能的方向：失忆的源头是主角自己选择的，他曾经为了某个目的主动让自己忘记。这样最后的选择就变成"他当初为什么要这样做，现在的他还同意吗"。
+- **It's very close to existing work.** Disco Elysium has already done amnesia; "forgets everything each morning" is common in film (*Memento*, *50 First Dates*, *Before I Go to Sleep*). The closest game is *Outer Wilds*: a 22-minute loop where the characters keep nothing and knowledge lives only in the player's head. I need an angle none of them have.
+- **The ending can easily fall into cliché.** "Trauma causes amnesia → choose to remember and embrace the pain" is very common. One possible direction: the protagonist chose his own amnesia; at some point he made himself forget, on purpose, for some reason. Then the final choice becomes "why did he do it back then, and does he still agree now?"
 
-## 核心设计问题：玩家记得，主角不记得
+## The core design problem: the player remembers, the protagonist doesn't
 
-我的设想是：**玩家扮演某种鬼魂之类的存在，不能和主角对话，只能留下一些证据或文字记录**，而且因为某些原因，不能把所有东西都直接写下来。
+My idea: **the player plays some kind of ghost-like presence that can't talk to the protagonist and can only leave evidence or written traces**, and for some reason can't simply write everything down.
 
-但问题是：玩家要让主角去探索、找到更多记忆，好像又需要操控主角。**怎么做到玩家不失忆、记得主角前一天经历的一切，又能操控主角，而主角依然保持失忆？**
+But here's the problem: for the protagonist to explore and find more memories, it seems the player has to control him. **How can the player not forget, remember everything the protagonist went through the day before, and control him, while the protagonist still stays amnesiac?**
 
-我觉得"玩家想办法让主角记得更多"本身就是一个有趣的玩法，所以这个问题必须解决。
+I think "the player finding ways to make the protagonist remember more" is an interesting way to play in itself, so this problem has to be solved.
 
-### 思路：把"谁控制身体"和"谁知道事情"分开
+### Approach: separate "who controls the body" from "who knows things"
 
-**方案一：白天和夜晚两个阶段**
-- **白天：玩家操控主角。** 但主角能做的事，受他今天知道的东西限制。
-  - 玩家知道保险箱密码，但主角今天没读到那张写着密码的纸，他就输不进去。
-  - 对话里有些选项是灰的，内心声音说"你不知道这件事"。
-  - 玩家看着他走进一个自己昨天就知道是陷阱的地方，却拦不住他。
-- **夜晚：主角睡着了，玩家变成鬼魂。** 不能说话，只能留下痕迹，让他第二天早上发现。
+**Option 1: two phases, day and night**
+- **Day: the player controls the protagonist.** But what he can do is limited by what he knows today.
+  - The player knows the safe's code, but if the protagonist hasn't read the paper with the code on it today, he can't enter it.
+  - Some dialogue options are greyed out, and an inner voice says "you don't know this."
+  - The player watches him walk into a place the player has known since yesterday is a trap, and can't stop him.
+- **Night: the protagonist is asleep and the player becomes the ghost.** It can't speak, only leave traces for him to find the next morning.
 
-循环是：**白天发现 → 晚上留下痕迹 → 第二天他读到 → 能做的事变多 → 走得更远。**
+The loop is: **discover by day → leave traces at night → he reads them the next day → he can do more → he gets further.**
 
-**方案二：玩家不直接控制主角，只能间接影响**
+**Option 2: the player doesn't control the protagonist directly, only influences him**
 
-主角自己行动，玩家只能通过移动物品、留下线索来引导他。更像鬼魂，但玩家的掌控感弱，容易着急。也许只在个别段落用。
+The protagonist acts on his own; the player can only guide him by moving objects and leaving clues. More ghost-like, but the player has less control and gets impatient easily. Maybe only for certain passages.
 
-### 为什么鬼魂不能把一切都写下来？
+### Why can't the ghost just write everything down?
 
-这些限制本身就是玩法，可以挑一两个：
-1. **每晚能留下的东西有限。** 比如只能写二十个字，或者只能动三样东西。玩家要决定今晚让他记住什么，选择就是控制。
-2. **只能用世界里已有的东西。** 鬼魂没有笔，只能圈报纸上的字、翻开某本书的某一页、把照片换个位置。线索是碎的，主角要自己猜，就像李米的猜想。
-3. **主角早上的时间有限。** 留太多，他读不完，或者读了也记不住。
-4. **主角要相信这些痕迹。** 他会怀疑这是谁留的。如果痕迹和他看到的东西矛盾，他就不信了。
+These limits are the gameplay itself; I could pick one or two:
+1. **What can be left each night is limited.** For example, only twenty characters, or only three objects moved. The player has to decide what to make him remember tonight; choosing is control.
+2. **Only things already in the world can be used.** The ghost has no pen. It can only circle words in a newspaper, open a book to a certain page, move a photo somewhere else. The clues are fragments, and the protagonist has to guess, just like Li Mi's conjecture.
+3. **The protagonist's morning is short.** Leave too much and he can't read it all, or reads it and can't remember it.
+4. **The protagonist has to believe the traces.** He'll wonder who left them. If the traces contradict what he sees, he stops believing them.
 
-### "让他记得更多"怎么变成机制？
+### How does "making him remember more" become a mechanic?
 
-一个可能：**只有能连起来的记忆才能留住。** 孤立的事实，他第二天就忘了；但如果几条线索互相印证、拼成一个说得通的故事，这段记忆就能保留更久。
+One possibility: **only memories that connect can be kept.** An isolated fact is gone by the next day; but if a few clues confirm each other and form a story that makes sense, that memory lasts longer.
 
-这样，玩家努力的方向就是**帮他把碎片拼成一个说得通的自己**。底层还留着一个问题：拼出来的这个"自己"，是真的吗？还是只是一个说得通的猜想？
+So what the player works toward is **helping him piece the fragments into a self that makes sense**. A question stays underneath: is the "self" he pieces together real, or just a conjecture that makes sense?
 
-### 鬼魂是谁？
+### Who is the ghost?
 
-先不定，但它可能就是结局的谜底。几个可能：
+Undecided for now, but it may be the answer to the ending's mystery. A few possibilities:
 
-- 一个已经不在的人，就像李米在找的方文；
-- 主角过去的自己；
-- 主角心里那个永远不会忘记的部分。
+- someone who is already gone, like Fang Wen, whom Li Mi is searching for;
+- the protagonist's past self;
+- the part of the protagonist that will never forget.
 
-## 继续想：鬼怎么表达，鬼是谁
+## Thinking further: how the ghost expresses itself, and who it is
 
 ![[p61-鬼的表达.jpg|360]]
 
-笔记原文**
+**The notes, as written**
 
-- 怎么做提示的设计？
-  - 圈字
-  - → 剪下来的字拼到一起
-  - 直接写字
-- 如何限制鬼的表达？
-  - maybe：只能用放在外面的工具，因为鬼魂力气不够大。
-  - so：当晚能够使用的记录方式，取决于主角白天留了什么在外面。
-  - → 报纸是变化的；笔可能被收起来，所以不是每晚都能直接写。
-- "我"是谁，"鬼"是谁？
-  - → Cyberpunk 2077，银手和 V 的置换。
-  - 某些地方，鬼可以在白天完全操控主角，此时不受记忆限制。
+- How to design the hints?
+  - circling words
+  - → cut-out words pasted together
+  - writing directly
+- How to limit the ghost's expression?
+  - maybe: it can only use tools left out, because a ghost isn't strong enough.
+  - so: how it can record things on a given night depends on what the protagonist left out during the day.
+  - → the newspaper changes; the pen may be put away, so it can't always write directly.
+- Who is "I," and who is "the ghost"?
+  - → Cyberpunk 2077, the swap between Johnny Silverhand and V.
+  - In certain places the ghost can fully control the protagonist during the day, and isn't limited by memory there.
 
 
-- **圈字**：最受限。只能用已经存在的字，想说的话不一定找得到。
-- **剪字拼贴**：可以组合，但需要剪刀和足够的材料，像勒索信。
-- **直接写字**：最自由，但需要一支笔。
-它们可以每晚不一样（取决于当晚有什么工具），也可以随进度解锁。玩家会很直接地感受到"今晚我能说多少"。
+- **Circling words**: the most limited. Only words that already exist can be used, and what you want to say may not be there.
+- **Cut-out collage**: words can be combined, but it needs scissors and enough material, like a ransom note.
+- **Writing directly**: the most freedom, but it needs a pen.
+These can differ from night to night (depending on which tools are around that night), or unlock as the game goes on. The player feels very directly "how much can I say tonight."
 
-”工具取决于白天留了什么“这一条把白天和夜晚咬在了一起：
-- 白天操控主角时，就要开始为晚上做准备：把报纸摊开、把笔留在桌上、把某本书翻到某一页。
-- 白天的每一个动作都有两层意义：一层是主角在做事，一层是我在给今晚的自己留工具。
-- **报纸每天在变**，所以每晚能用的字都不一样。今晚的报纸上没有"别"这个字，就说不了"别相信"。世界本身在限制我能说什么，报纸的内容还能顺便推进世界观和剧情。
+"Tools depend on what was left out during the day" is the rule that locks day and night together:
+- While controlling the protagonist by day, you already have to prepare for the night: spread the newspaper open, leave the pen on the desk, open a book to a certain page.
+- Every action during the day means two things: the protagonist is doing something, and I'm leaving tools for myself tonight.
+- **The newspaper changes every day**, so the words available each night are different. If tonight's paper doesn't contain the word "don't," you can't say "don't trust." The world itself limits what I can say, and the newspaper's content can push the world and story forward along the way.
 
-要想清楚的是：如果白天是玩家在控制主角，玩家会不会每天都直接把笔留在桌上？需要有东西打破这一点，比如：
-- 主角有自己的习惯，晚上会自动收拾东西，玩家只能在某些时刻违背他的习惯；
-- 有别人（照顾他的人，或者"抹掉痕迹"的那个存在）每晚会收走东西；
-- 主角不信任出现在奇怪位置的东西，会把它们收起来。
-**是谁收走了笔、为什么收**，可以变成一条剧情线。
+What I need to think through: if the player controls the protagonist by day, won't the player just leave the pen on the desk every day? Something has to break that, for example:
+- the protagonist has his own habits and tidies up automatically at night; the player can only go against his habits at certain moments;
+- someone else (the person looking after him, or the presence that "erases traces") takes things away every night;
+- the protagonist distrusts things that appear in odd places and puts them away.
+**Who takes the pen away, and why**, could become a storyline.
 
-### 银手和 V 的置换：鬼可能和主角共用一个身体
+### The Silverhand–V swap: the ghost might share a body with the protagonist
 
-如果鬼在某些地方能完全操控主角，那它就不只是一个"外面的存在"，更像是**和主角共用一个身体的另一个意识**。
-- **它接上了"分裂的自我"。** 主角和鬼，可能是同一个人的两部分：一个会忘，一个不会忘。
-- **它是一个释放阀。** 平时我一直被"我知道但他不知道"憋着，到了这些地方终于可以直接用自己的知识。但正因为爽，所以要有代价，比如：
-  - 主角醒来发现自己在陌生的地方，很害怕，对痕迹的信任下降；
-  - 被接管让主角的身体和精神受损；
-  - 每次接管，都让主角更依赖鬼，或者更抗拒鬼。
-- **"某些地方"为什么特殊？** 最好和失忆的源头有关，比如这些地方和过去发生的事有联系，所以鬼在那里更强。
-- **结局会变得更尖锐。** 不只是"要不要想起来"，而是"最后留下的是谁"。这和 Cyberpunk 的结局很像，所以要小心：我的版本要落在"记忆"上，而不是"身体归谁"上。
+If the ghost can fully control the protagonist in certain places, then it's not just "a presence outside," but more like **another consciousness sharing a body with the protagonist**.
+- **It connects to the "split self."** The protagonist and the ghost might be two parts of the same person: one forgets, one doesn't.
+- **It's a release valve.** Normally I'm always held back by "I know but he doesn't," and in these places I can finally use my own knowledge directly. But because it feels so good, it needs a cost, for example:
+  - the protagonist wakes up somewhere unfamiliar, is frightened, and trusts the traces less;
+  - being taken over damages the protagonist's body and mind;
+  - each takeover makes the protagonist more dependent on the ghost, or more resistant to it.
+- **Why are "certain places" special?** Ideally they're tied to the source of the amnesia, for example places connected to what happened in the past, so the ghost is stronger there.
+- **The ending gets sharper.** Not just "should he remember," but "who is left in the end." This is very close to Cyberpunk's ending, so I need to be careful: my version should land on "memory," not on "who owns the body."
 
-### 这一轮之后
-**比较清楚了的：**
-- 鬼的表达受工具限制：圈字、剪字、写字；
-- 工具取决于主角白天留了什么在外面。
-- 玩家作为鬼想方设法留下痕迹并且让主角信任自己应该会是一个比较能够发展的玩法
+### After this round
+**What's clearer now:**
+- The ghost's expression is limited by tools: circling words, cutting out words, writing;
+- the tools depend on what the protagonist left out during the day.
+- Playing as a ghost trying every way to leave traces and get the protagonist to trust you should be a way of playing with room to develop
 
-**新的问题：**
-1. 是谁、为什么，每晚收走主角的东西？
-2. 鬼能完全接管的"某些地方"是哪里，为什么是那里？
-3. 接管的代价是什么？
-4. 鬼是不是主角自己的另一部分？
+**New questions:**
+1. Who takes the protagonist's things away every night, and why?
+2. Where are the "certain places" where the ghost can take over completely, and why there?
+3. What is the cost of taking over?
+4. Is the ghost another part of the protagonist himself?
 
-## 一句话设定（草稿）
+## The setting in one sentence (draft)
 
-> 这是一个以留下痕迹为核心的探索游戏：一个每天醒来都会忘记自己的人，靠一个无法和他说话的存在每晚留下的有限线索，一天比一天走得更远，去找出他为什么会遗忘。
+> This is an exploration game built around leaving traces: a person who forgets himself every time he wakes up gets a little further each day, guided by the limited clues left each night by a presence that cannot speak to him, to find out why he forgets.
 
-**玩家的感受（草稿）：**
+**What the player feels (draft):**
 
-> 一开始只是想帮他记住更多；后来发现，你让他记住什么，他就变成什么样的人；最后要决定，他该不该想起全部。
+> At first you just want to help him remember more; then you realise that what you make him remember shapes who he becomes; in the end you have to decide whether he should remember everything.
 
-## 还没决定的
+## Still undecided
 
-1. 白天和夜晚分开，是不是我想要的方式？
-2. 鬼魂留下痕迹，最主要的限制是哪一个：字数、物品，还是可信度？
-3. 鬼魂是谁？
-4. 主角追的那件"有答案的事"具体是什么？
-5. 失忆的源头是什么，结局给几个选择？
+1. Is splitting day and night the way I want to go?
+2. Which is the main limit on the ghost's traces: number of words, objects, or credibility?
+3. Who is the ghost?
+4. What exactly is the "thing with an answer" the protagonist is chasing?
+5. What is the source of the amnesia, and how many choices does the ending give?
