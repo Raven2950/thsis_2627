@@ -81,31 +81,33 @@ https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-
 ![[Pasted image 20261118034736.png]]
 2. **Build a sentence pool.** I wrote 36 sentences from three sources: her old manuscripts, things her mother says, and the newspaper and neighbours. The three sources come from my thesis, where the main character can't tell which words are her own and which are other people's.
 3. **Interpolate.** A is "I want to write a novel by the river." B is "Find a stable job so your mother can stop worrying." I blend the vectors of A and B in proportion, moving from all A to all B, and at each step I look for the closest sentence in the pool. A and B themselves don't count, and a sentence can't be used twice.
+What the blending gives me is a list of numbers, not a sentence. No sentence sits exactly at that point, and the model can't turn the numbers back into words, so I can only borrow the closest sentence from the pool. To see how good each borrowing is, I also calculate two numbers at every step: where the borrowed sentence actually lands on the line from A to B (landed, where 0 is A and 1 is B), and how close it is to the blended point (fit, where 1 is a perfect match).
 4. **Flip them over.** First you only see the chain of sentences. Only at the end does it show whose words each one was.
-5. **Turn them into paper slips.** The chain becomes a row of paper slips pasted from A to B. Hover over one and it flips over to show its source on the back.
+5. **Turn them into paper slips.** The chain becomes a row of paper slips pasted from A to B. Next to each slip is a scale from A to B: the ring is where I asked to look, the dot is where the borrowed sentence actually sits, and the red line between them is the cost of borrowing. The worse the fit, the fainter the ink on the slip. Hover over one and it flips over to show its source on the back.
 
 This needs me to get hold of the vectors myself, blend them myself, and compare the blended vectors against the pool. Calling an API like Replicate can't do that, so I had to go down a level.
 
 ### Results
 
 ```
-t=0.00   I want to write a novel by the river.
-t=0.12   I write everything I want to say in my notebook.        [Manuscript]
-t=0.25   Can writing put food on the table?                      [Mother]
-t=0.38   Nobody knows what I am writing.                         [Manuscript]
-t=0.50   When I write, I feel real.                              [Manuscript]
-t=0.62   Pass the civil service exam and you'll never have to worry again.   [Mother]
-t=0.75   A steady income is the foundation of happiness.         [Newspaper]
-t=0.88   Throw out that box of old things before we move.        [Mother]
-t=1.00   Find a stable job so your mother can stop worrying.
+asked  landed  fit    sentence
+0.00   0.00    1.00   I want to write a novel by the river.
+0.12   0.39    0.35   I write everything I want to say in my notebook.        [Manuscript]
+0.25   0.43    0.35   Can writing put food on the table?                      [Mother]
+0.38   0.38    0.33   Nobody knows what I am writing.                         [Manuscript]
+0.50   0.40    0.28   When I write, I feel real.                              [Manuscript]
+0.62   0.66    0.27   Pass the civil service exam and you'll never have to worry again.   [Mother]
+0.75   0.70    0.29   A steady income is the foundation of happiness.         [Newspaper]
+0.88   0.63    0.28   Throw out that box of old things before we move.        [Mother]
+1.00   1.00    1.00   Find a stable job so your mother can stop worrying.
 ```
+![[Pasted image 20261118124216.png]]
+![[Pasted image 20261118124140.png]]
 
-![[Pasted image 20261118034919.png]]
-
-![[Pasted image 20261118034932.png]]
+![[Pasted image 20261118124150.png]]
 
 ### What I noticed
 
-- **Every sentence in between is borrowed.** The model didn't write a single new sentence; at each step it could only pick the closest one from sentences that already existed. That's the same idea as my game: the in-between state can only be pieced together from other people's words.
-- **The first half is a tug-of-war.** After leaving "write a novel," her own words and her mother's take turns. Right in the middle it lands on "When I write, I feel real." Past the midpoint it tips all the way toward the civil service exam and a steady income, and the last sentence is "Throw out that box of old things." I didn't arrange this order; the model worked it out.
+- **Every sentence in between is borrowed, and none of them quite fit.** The model didn't write a single new sentence; at each step it could only pick the closest one from sentences that already existed, and the fit is only around 0.3 every time. No sentence actually sits at the blended point. That's the same idea as my game: the in-between state can only be pieced together from other people's words, and the pieces never fit quite right.
+- **The middle is empty.** The borrowed sentences fall into two clumps. One sits around 0.4, on the writing side, where her own words and her mother's take turns. The other sits around 0.65: the civil service exam, a steady income, "Throw out that box of old things." Nothing lands between 0.45 and 0.6. At t = 0.5 it was looking right at the middle, but it still borrowed "When I write, I feel real.", which lands at 0.40. In her words, there is no sentence between wanting to write and needing to be stable; you can only jump from one side to the other. I didn't arrange this; it came out of the numbers.
 - **Change the language and the path changes.** I first used a Chinese sentence pool. With the same A and B and the same method, it borrowed completely different sentences: in the Chinese version, the first sentence after leaving "write a novel" was her mother's "Can writing put food on the table?", and right in the middle was a student's question, "Teacher, did you always want to be a teacher?" The same meaning in a different language, and the "middle" is somewhere else.

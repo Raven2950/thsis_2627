@@ -425,6 +425,33 @@
           }
         }
       }
+    },
+    {
+      "id": "b3414362",
+      "createdAt": "2026-11-18T09:10:56.000Z",
+      "kind": "item",
+      "model": "Claude（按你给的链接整理）",
+      "payload": {
+        "title": "Kaili Blues 片头设计（Haolun Liu，SVA）",
+        "creator": "Haolun Liu（SVA Motion Design）",
+        "year": 2022,
+        "type": "动态设计作品",
+        "url": "https://sva.design/projects/15682/kaili-blues/",
+        "summary": "SVA 动态设计专业学生为《路边野餐》做的一段片头。作者把电影里的重要意象（时钟、火车、风扇）重新画成自己的场景，想保留电影里离别和哀伤的情绪与基调。课程：Motion Workshop，指导老师 Ori Kleiner。",
+        "reason": "你找参考时自己发现、觉得做得好的作品。它示范了怎样从一部电影里提取意象，再转成自己的画面和节奏，可以作为《路边野餐》这条参考线的补充。",
+        "concepts": [
+          "路边野餐",
+          "声音与节奏",
+          "视觉参考"
+        ],
+        "verify": {
+          "status": "verified",
+          "by": "SVA 网站",
+          "fields": {
+            "url": "https://sva.design/projects/15682/kaili-blues/"
+          }
+        }
+      }
     }
   ]
 }

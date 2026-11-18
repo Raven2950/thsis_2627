@@ -82,32 +82,34 @@ https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-
 ![[Pasted image 20261118034736.png]]
 2. **准备一个句子库。** 我写了 36 句话，分成三个来源：她以前的手稿、妈妈说的话、报纸和街坊。这三种来源来自我的毕设，游戏里的主角也分不清哪些话是自己的，哪些是别人的。
 3. **插值。** A 是 "I want to write a novel by the river."，B 是 "Find a stable job so your mother can stop worrying."。把 A 和 B 的向量按比例混合，从全是 A 慢慢变到全是 B，每一步都去句子库里找最接近的那句。A 和 B 本身不算，用过的句子也不再用。
+混合出来的只是一串数字，不是一句话。这个点上没有现成的句子，模型也没法把数字变回文字，所以我只能去句子库里借离它最近的一句。为了看出借得准不准，每一步我还算了两个数：借到的句子实际落在 A 到 B 这条线上的哪里（landed，0 是 A，1 是 B），以及它离混合点有多近（fit，1 是完全吻合）。
 4. **翻面。** 先只看这串句子，最后才显示每句话是谁的。
-5. **拼成纸条。** 把这串句子做成一张张纸条，从 A 贴到 B。鼠标移上去，纸条会翻过来，背面是来源。
+5. **拼成纸条。** 把这串句子做成一张张纸条，从 A 贴到 B。每张纸条旁边有一条从 A 到 B 的刻度：空心圈是我想找的位置，实心点是借到的句子真正所在的位置，中间的红线就是“借”的代价。借得越不准，纸条上的字越淡。鼠标移上去，纸条会翻过来，背面是来源。
 
 这一步需要我自己拿到向量、自己混合，再拿混合出来的向量去比较。只调用 Replicate 这类 API 做不到，所以要往下走一层。
 
 ### 结果
 
 ```
-t=0.00   I want to write a novel by the river.
-t=0.12   I write everything I want to say in my notebook.        [Manuscript]
-t=0.25   Can writing put food on the table?                      [Mother]
-t=0.38   Nobody knows what I am writing.                         [Manuscript]
-t=0.50   When I write, I feel real.                              [Manuscript]
-t=0.62   Pass the civil service exam and you'll never have to worry again.   [Mother]
-t=0.75   A steady income is the foundation of happiness.         [Newspaper]
-t=0.88   Throw out that box of old things before we move.        [Mother]
-t=1.00   Find a stable job so your mother can stop worrying.
+asked  landed  fit    sentence
+0.00   0.00    1.00   I want to write a novel by the river.
+0.12   0.39    0.35   I write everything I want to say in my notebook.        [Manuscript]
+0.25   0.43    0.35   Can writing put food on the table?                      [Mother]
+0.38   0.38    0.33   Nobody knows what I am writing.                         [Manuscript]
+0.50   0.40    0.28   When I write, I feel real.                              [Manuscript]
+0.62   0.66    0.27   Pass the civil service exam and you'll never have to worry again.   [Mother]
+0.75   0.70    0.29   A steady income is the foundation of happiness.         [Newspaper]
+0.88   0.63    0.28   Throw out that box of old things before we move.        [Mother]
+1.00   1.00    1.00   Find a stable job so your mother can stop worrying.
 ```
+![[Pasted image 20261118124224.png]]
 
-![[Pasted image 20261118034919.png]]
 
-![[Pasted image 20261118034932.png]]
-
+![[Pasted image 20261118124238.png]]
+![[Pasted image 20261118124251.png]]
 ### 我注意到的
 
-- **中间的句子都是借来的。** 模型没有写出任何新的句子，每一步都只能从现成的句子里挑最接近的一句。这和我的游戏是一个意思：中间状态只能用别人的话拼出来。
-- **前半段在来回拉扯。** 离开"写小说"之后，她自己的话和妈妈的话交替出现；正中间停在 "When I write, I feel real."，过了中点以后就一路倒向考公、稳定收入，最后一句是"把那箱旧东西扔了"。这个顺序不是我安排的，是模型算出来的。
+- **中间的句子都是借来的，而且都不太合身。** 模型没有写出任何新的句子，每一步都只能从现成的句子里挑最接近的一句，而 fit 都只有 0.3 左右，没有一句真正落在混合点上。这和我的游戏是一个意思：中间状态只能用别人的话拼出来，拼出来也总有点不对。
+- **中间是空的。** 借到的句子挤成两堆：一堆在 0.4 附近，是写作这边，她自己的话和妈妈的话交替出现；一堆在 0.65 附近，是考公、稳定收入、“把那箱旧东西扔了”。0.45 到 0.6 之间一句都没有。t=0.5 的时候，它想找的是正中间，借到的却还是 "When I write, I feel real."，落在 0.40。在她的话里，“想写作”和“要稳定”之间没有中间的话，只能从一边跳到另一边。这个结果不是我安排的，是算出来的。
 - **换一种语言，路就变了。** 我一开始用的是中文句子库，同样的 A 和 B，同样的方法，借到的句子完全不同：中文版离开"写小说"之后的第一句就是妈妈的"写东西能当饭吃吗？"，正中间是学生问的"老师，你小时候就想当老师吗？"。同一个意思，换了语言，"中间"就不在同一个地方。
 
