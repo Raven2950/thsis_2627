@@ -225,6 +225,98 @@
    "width": 246,
    "height": 79,
    "color": "3"
+  },
+  {
+   "id": "d1e50886bf6aecaa",
+   "type": "text",
+   "text": "",
+   "x": -1250,
+   "y": -315,
+   "width": 220,
+   "height": 160,
+   "color": "3"
+  },
+  {
+   "id": "daf94f4951d6e420",
+   "type": "file",
+   "file": "灵感板/图片/Board001/2026-11-16-246e44.webp",
+   "x": 988,
+   "y": 483,
+   "width": 320,
+   "height": 236
+  },
+  {
+   "id": "fb0c1ddb4ca86d5a",
+   "type": "text",
+   "text": "拼贴字得到线索",
+   "x": 904,
+   "y": 345,
+   "width": 220,
+   "height": 160,
+   "color": "3"
+  },
+  {
+   "id": "29b9164cb7d3617f",
+   "type": "file",
+   "file": "灵感板/图片/Board001/2026-11-16-02a1d7.webp",
+   "x": 659,
+   "y": 514,
+   "width": 320,
+   "height": 427
+  },
+  {
+   "id": "5469b25163d40fc4",
+   "type": "file",
+   "file": "灵感板/图片/Board001/2026-11-16-ae1b34.webp",
+   "x": 994,
+   "y": 754,
+   "width": 320,
+   "height": 426
+  },
+  {
+   "id": "1f23ed87a4814e05",
+   "type": "file",
+   "file": "灵感板/图片/Board001/2026-11-16-1c192c.webp",
+   "x": 1322,
+   "y": 525,
+   "width": 320,
+   "height": 427
+  },
+  {
+   "id": "4715e7857b8675a4",
+   "type": "file",
+   "file": "灵感板/图片/Board001/2026-11-16-0989a1.webp",
+   "x": 639,
+   "y": 965,
+   "width": 320,
+   "height": 427
+  },
+  {
+   "id": "ccee194b039cbc92",
+   "type": "file",
+   "file": "灵感板/图片/Board001/2026-11-16-82aca4.webp",
+   "x": 985,
+   "y": 1210,
+   "width": 320,
+   "height": 427
+  },
+  {
+   "id": "e9e16b08bc32c6c3",
+   "type": "file",
+   "file": "灵感板/图片/Board001/2026-11-16-d376a4.webp",
+   "x": 1322,
+   "y": 983,
+   "width": 320,
+   "height": 427
+  },
+  {
+   "id": "3c957e452d22134b",
+   "type": "file",
+   "file": "灵感板/图片/Board001/2026-11-16-d28760.webp",
+   "x": 1323,
+   "y": 1429,
+   "width": 320,
+   "height": 427
   }
  ],
  "edges": []
