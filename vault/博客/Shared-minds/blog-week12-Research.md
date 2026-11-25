@@ -17,73 +17,95 @@
 
 ### What is it?
 
-**Whose Voice?** is a short word-piecing detective game that runs in the browser, about 10 minutes long. It is a playable test of the core mechanic of my thesis game, *What She Left Out*.
+**Whose Voice?** is a short browser game, about 10 minutes long, built on one unsolved case. You collect words from what people said, piece them into your own version of the truth, and the game never tells you whether you are right. Instead, it reads *how* you put the truth together, gives you a personality type, and shows you where your truth sits among everyone else's.
 
-In my thesis, the player recovers what the main character has forgotten by circling and cutting words out of newspapers, ads, family messages and her own old drafts, and piecing them into sentences. I designed two ways of doing this:
+It is also a playable test of the core mechanic of my thesis game, *What She Left Out*, where the main character recovers what she has forgotten by circling and cutting words out of newspapers, family messages and her own old drafts, and can't tell which words were ever hers.
 
-- **Cutting out:** the words stay in the original text. You can't move them or change their order; you can only choose which ones to keep. What you circle *confirms a fact*: the sentence was hidden in the text all along.
-- **Free collage:** you cut words out with scissors and arrange them however you like, mixed with words from other places. What you assemble *chooses a meaning*: the sentence didn't exist before you made it.
+**The case.** The text is Ryūnosuke Akutagawa's *In a Grove* (藪の中, 1922), the story that Kurosawa's *Rashomon* is based on. A samurai is found dead in a bamboo grove. Seven people give statements. Three of them, the bandit, the wife, and the dead man speaking through a medium, each say a different person killed him, and the story never says who is right. The original Japanese is in the public domain, so I translate the lines I use myself.
 
-My rule for the game is: *facts are confirmed by what you assemble; meaning is chosen by what you assemble.* There is no judge for the second kind. But I don't yet know whether this is fun, whether players can find the right words without being told, or whether a sentence with no right answer feels free or just empty.
+**How it plays.**
 
-The story content of my thesis is still being written, and I can't write it well in two weeks. So for the final I'm keeping the **form** and borrowing the **content**. The text comes from a story most people already know: Edgar Allan Poe's *The Murders in the Rue Morgue* (1841), often called the first detective story. It is in the public domain, so every word of it can be circled and cut.
+1. **One goal.** The magistrate wants one sentence from you: who killed him, with what, and why. Nobody will tell you if you're right.
+2. **Words are doors.** The game opens on a full-screen picture of the bamboo grove, with bamboo leaves falling. Four glowing words sit inside the picture: *the body* on the ground, *the bandit* among the stalks, *the wife* to the side, *the dead man* up in the mist. Click one and the word swells and blurs, the grove fades, and that person's picture slowly comes in. This idea comes from a classmate's project, *Words Hold Worlds*, where a word from a novel opens into its own world.
+3. **One line at a time.** Each scene is a picture with subtitles. Only one short line is on screen at once, and you tap to hear the next. Each person says three lines.
+4. **Collect words.** Gold words in the subtitles can be picked up. They fly down into your pocket as paper slips: *rope*, *comb*, *dagger*, *shame*, *contempt*, *jealousy*, *someone*. When you pick up “I”, the slip carries the speaker's name, so you always keep track of whose words you are holding.
+5. **Piece together the truth.** Back in the grove, you open the magistrate's sentence (*The samurai died by the hand of ___, with the ___, because of ___.*) and fill it with your slips, in any combination you want. Then you hand it in. The magistrate takes it and says nothing. There is no right answer and no score.
+6. **A type, not a verdict.** The game reads how you built your sentence and gives you an MBTI-style type with a portrait of someone in the story (*The Medium*, *The Magistrate*, *Tajōmaru*, *The Woodcutter*). It also shows a bar of whose voices your truth is made of: for example, 67% the wife, 33% the dead man.
+7. **A shared map.** Your sentence is turned into an embedding and placed on a map with everyone else's. You can read the truth of the stranger closest to you, and of the one farthest away.
 
-This story fits the mechanic almost too well. Most of the case reaches the reader as a newspaper report: a long list of witness statements printed in the *Gazette des Tribunaux*. Every witness heard a shrill voice during the murder, and every one of them says it was speaking a foreign language, a *different* one each time. A Frenchman thinks it was Spanish, an Englishman thinks German, a Spaniard thinks English, an Italian thinks Russian. And none of them speak the language they name. The answer is not stated anywhere; it only appears when you put the guesses side by side.
+**How the four letters are read from play:**
 
-That is exactly a cutting-out puzzle. And quietly, it is the same question as my thesis: *whose voice is this, when nobody can recognise it?*
+| | Read from |
+|---|---|
+| **E / I** | Whose words you trust: statements said out loud to the magistrate (the bandit, the woodcutter), or private ones (the wife's confession at a temple, the dead man through a medium) |
+| **S / N** | Whether your sentence is built from things (*rope*, *dagger*, *chest*) or from feelings and unknowns (*shame*, *contempt*, *someone*) |
+| **T / F** | Whether your “why” is a cause (*a fight*, *the sword*) or a feeling (*jealousy*, *contempt*) |
+| **J / P** | Whether you handed in your sentence before opening every door, and whether you left the killer open (*someone*) |
 
-### What it looks like
+It's a personality quiz for fun, the kind people screenshot and send to friends. But it is built on the question my thesis keeps asking: when you put a truth together out of other people's words, whose truth is it?
 
-One case, three rooms of paper:
+### What changed, and why
 
-1. **The testimonies (cutting out).** A newspaper page with the witness statements. The player circles each witness's guess about the voice. When all of them are on the table, a fact locks in: *the voice was not human.*
-2. **The scene (cutting out).** The police report on the locked room: the nailed window, the broken nail, the lightning rod. The player circles words to fill a few blanks in a sentence, like *The Case of the Golden Idol*. There is one right answer, and it locks in a second fact: *it came in and out through the window.*
-3. **Tomorrow's headline (free collage).** The player cuts words from everything they've read and pastes together a headline for tomorrow's paper. There is **no right answer** here. Instead, the game measures which *voice* the headline sounds like, using sentence embeddings (the same model I used for Borrowed Sentences last week), and three voices answer back:
-   - **Dupin**, the cold reasoner
-   - **The Prefect**, whose police have already arrested the wrong man
-   - **The Gazette**, which only wants a sensational story
+My first plan used Edgar Allan Poe's *The Murders in the Rue Morgue*. I built two prototypes of its first puzzle, and I was the first playtester:
 
-   The only rule is that a headline can't contradict a fact the player has already locked in.
+- **Version 1** was a newspaper page with six witness statements and a case sheet to fill in. It felt like a reading comprehension test.
+- **Version 2** let the player hear the strange voice first, climb the stairs one witness at a time, and watch circled words turn into arrows on a map. It was more fun, but I still had to read a lot. Every click told me right or wrong, so there was no feeling of reasoning. I never knew *why* I was circling, so I didn't feel like a detective. And it wasn't what I meant by my own mechanic: I never pieced anything together.
 
-The three voices are a test version of the inner voices in my thesis (Mom, the fallen prodigy, the interrogator). If this works, I can swap the text and the voices and the same system becomes my game.
+What I learned:
 
-The look is paper: newsprint, red pen circles, scissors and glue. No dashboards, no scores, no progress bars.
+- **Words should come to you.** No more than one or two sentences on screen at once.
+- **Judge the whole sentence, not each click.** Checking every pick gives the answer away.
+- **Give the player a reason** before giving them a task.
+- **The case has to stay open.** *Rue Morgue* has one famous answer (it was an orangutan), so everyone's truth would end up in the same place, and there would be nothing to read about the player. *In a Grove* has no answer, which is exactly what the “no judge” half of my mechanic needs.
+
+Then I switched to *In a Grove*:
+
+- **Version 3** had the new structure (doors, slips, the sentence, the type) but was still all text on a dark page. It was the right game, but it looked like a document, and I didn't want to look at it.
+- **Version 4** is the current slice. Every scene is a picture, made with FLUX schnell through the ITP Replicate proxy we used in class, all in one woodblock-print style. The words sit inside the grove picture, subtitles come one line at a time, and picked-up words fly into the pocket. It's still very simple, but it is the first version that feels like the thing I mean.
 
 ### Who is it for?
 
-- **Players** who like reading-heavy deduction and narrative games: *The Case of the Golden Idol*, *Return of the Obra Dinn*, *Her Story*, *Disco Elysium*. Using a famous story means they don't need any background to start.
-- **Me, as a designer.** This is a test bench for my thesis. Every question I ask playtesters here is a question I would otherwise have to answer later in Unity, with much more at stake.
+- **Players** who like short narrative and mystery games (*The Case of the Golden Idol*, *Her Story*) and people who love personality quizzes. A ten-minute game with a shareable type at the end is something people will send to friends.
+- **My classmates**, who will be the first players on the shared map.
+- **Me, as a designer.** Every question I ask here is one my thesis would otherwise have to answer later in Unity, with much more at stake.
 
 ### Why do I want to do it?
 
-Last week I wrote that the level I want to own is where *a feeling becomes a rule*, and that I want to *stay close to what I'm making*. My thesis has a mechanic on paper and a lot of open questions: how does a cutting-out level work, how does the player know which words to take, what happens if they pick wrong, how can a free collage affect the ending without a judge? I tried one paper prototype before and the feedback was that it was too complicated. I don't want to spend the spring planning in my head. I'd rather build the smallest playable thing now and watch people play it.
+In week 11 I wrote that the level I want to own is where *a feeling becomes a rule*, and that I want to *stay close to what I'm making*. My thesis has a mechanic on paper and many open questions. This project lets me test them now, with a story people already find gripping, and without waiting for my own story to be written.
 
-Separating form from content also helps me. When I test with my own story, I can't tell whether people are reacting to the mechanic or to the writing. With a story they already know, the mechanic is the only variable.
+It also brings my thesis closer to what this class is about. In week 5 I wrote that I don't want one story to win, and I don't want to average all the stories, because some experiences disappear in the middle. I'd rather have many stories with visible connections between them. The shared map is that: the same words and the same evidence, and many different truths, side by side. It is shared minds in the most literal way: every truth on the map is made of the same seven people's words.
+
+And I just like personality quizzes.
 
 ### How will I do it?
 
-**Tech:** HTML + JavaScript, running in the browser. For the collage step, I need to embed the player's sentence *as they make it*, because every headline is new. Last week's Colab notebook precomputed everything, which won't work here. So the plan is to run the same multilingual MiniLM model directly in the browser with **transformers.js**, with no server and no Colab.
+**Tech:** HTML and JavaScript in the browser. The pictures are generated ahead of time with **FLUX schnell through the ITP Replicate proxy**, in one shared style, so every player sees the same world. **transformers.js** runs the multilingual MiniLM embedding model in the browser, so every new sentence can be placed on the map the moment it's made. **Firebase** stores everyone's sentences and types for the shared map. The personality reading uses simple rules on the slips you use. The embedding handles the map and finds your nearest stranger.
 
 | Date | Benchmark |
 |---|---|
-| 11/25 · Proof of concept | The embedding model runs in the browser. I can drag word slips into a sentence and see which of the three voices it is closest to. No art. |
-| 11/26 – 12/01 · Prototype v1 | All three steps playable end to end with the real Rue Morgue text. The voices' responses are written. A first pass on the paper look. |
-| 12/02 · User testing | 4–5 players. Questions: (1) In the cutting-out steps, can they *see* the answer without being told which words matter? (2) With no right answer in the collage, does it feel free or disappointing? (3) Do the voices' responses make them want to try another headline? |
-| 12/03 – 12/08 · Prototype v2 | Fix what the playtest shows. Add sound and small touches (ink fading, scissors). |
-| 12/09 · Final | Present the slice, the playtest findings, and what they change in my thesis. |
+| 11/25 · Proof of concept | A playable slice: four doors, collecting slips, building the sentence, the type card, and a map with sample answers. No backend yet. |
+| 11/26 – 12/01 · Prototype v1 | Embeddings running in the browser. Firebase stores real answers. The door transitions, and the type descriptions written for all four temperaments. |
+| 12/02 · User testing | 5–6 classmates play, all on the same shared map. Questions: (1) Do they understand why they are collecting words? (2) Does having no right answer feel freeing, or like a letdown? (3) Does their type feel “accurate” enough to share? (4) Do they read the strangers' truths on the map? |
+| 12/03 – 12/08 · Prototype v2 | Fix what testing shows. Sound for each scene, polish the slips and the map. |
+| 12/09 · Final | Present the game, the map of the class's truths, and what this means for my thesis. |
 
 ### Prior Art
 
-- ***The Case of the Golden Idol*** (Color Gray Games, 2022). You solve each scene by dragging words you've found into blanks in a sentence. The closest thing to my cutting-out mode, except it always has a judge, and my collage mode doesn't.
-- ***Return of the Obra Dinn*** (Lucas Pope, 2018). Deduction that you confirm a few answers at a time, so the player trusts their own reasoning.
-- ***Her Story*** (Sam Barlow, 2015). The story only exists in the fragments you search up; the player assembles it themselves.
-- ***Disco Elysium*** (ZA/UM, 2019). Inner voices that argue with you. The model for the three voices.
-- **Semantris** (Google, 2018) and **Semantle** (2022). Word games built on semantic similarity. They show the distance as a score or rank; I want the distance to come back as a *voice*.
+- **Akutagawa's *In a Grove*** (1922) and **Kurosawa's *Rashomon*** (1950). The source text, and the reason “the Rashomon effect” is a phrase.
+- ***Words Hold Worlds*** by a classmate in this class. Words in a passage open into their own scenes. This is where my “words are doors” came from.
+- ***The Case of the Golden Idol*** (Color Gray Games, 2022). You collect words from a scene and drag them into sentences. The closest thing to my mechanic, except it always has a judge, and mine doesn't.
+- ***Her Story*** (Sam Barlow, 2015). The story only exists in the fragments you find. The player assembles it.
+- **Personality quizzes** like 16Personalities and BuzzFeed quizzes. The pleasure of being told who you are, and sharing it.
+- **The Rorschach test.** An ambiguous picture, where what you see says something about you. *In a Grove* works the same way.
+- **Semantris** (Google, 2018). A word game built on semantic similarity.
 - **William S. Burroughs' cut-up technique** and **Austin Kleon's *Newspaper Blackout***. Making your own words out of someone else's.
 
 ### The very first step
 
-I wrote down the slice above, picked the text, and started the technical research below: getting the model to run in the browser, since everything else depends on it.
+I built and tested two prototypes with *Rue Morgue*, wrote down why they didn't work, switched to *In a Grove*, and built a first playable slice: four doors in a picture of the grove, one subtitle at a time, slips that fly into your pocket, the magistrate's sentence, a type card with a portrait, and a map with sample answers.
+
+**Play it:** https://raven2950.github.io/Sharedminds_Raven_26fall/final/
+**Code:** https://github.com/Raven2950/Sharedminds_Raven_26fall/tree/main/final
 
 ## Making
 
@@ -100,23 +122,16 @@ I wrote down the slice above, picked the text, and started the technical researc
 
 What I'm putting in:
 
-- All my writing for this class (exported from My Dashboard)
-- My thesis posts: *Starting Over*, the explorations, and my notes on *Disco Elysium*
-- The full text of *The Murders in the Rue Morgue*
-- My notes on *The Case of the Golden Idol*
-- Last week's Borrowed Sentences notebook and sentence pool
+- All my blog posts for this class (weeks 1–7 and 9–12), one file per week
+- My thesis posts: *Starting Over*, *Exploration 7: Gameplay*, and my notes on *Disco Elysium*
+- *In a Grove* (the original text)
 
-The question I want to ask it: *if Dupin, the Prefect and the Gazette all read the same headline, what would each of them say?* The answers can become first drafts for the voices.
+The question I want to ask it: *across this semester, how did I end up at a game about building the truth out of other people's words?*
 
-### Technical gap: embeddings in the browser
+### Technical gaps
 
-Borrowed Sentences ran in Colab, and the sentence pool was fixed, so every vector could be computed ahead of time. In the game, the player's headline doesn't exist until they make it, so it has to be embedded on the spot, in the browser, without a server.
-
-What I'm testing with transformers.js:
-
-1. **Can it run the same model?** I need a browser (ONNX) version of paraphrase-multilingual-MiniLM-L12-v2, so the results match last week's notebook.
-2. **How long does the first load take?** The model has to download before the first sentence can be embedded. If it's slow, the loading time could happen during the first cutting-out step, where no embedding is needed yet.
-3. **How fast is one sentence?** The voices should answer as soon as the player pastes the headline down.
-4. **Do the three voices separate?** I'll write a few reference sentences for each voice and check whether test headlines land clearly closer to one of them, or whether everything ends up in the middle, like last week's empty middle.
+1. **Embeddings in the browser.** The player's sentence doesn't exist until they make it, so it has to be embedded on the spot. I'm testing whether transformers.js can run the same multilingual MiniLM model I used in Borrowed Sentences, how long the first load takes, and how fast one sentence is.
+2. **A shared map.** Firebase for storing everyone's sentences, and a way to place hundreds of sentences in 2D (UMAP, or simply projecting onto the four type axes).
+3. **Reading a type from a sentence.** Which slips count as “things” or “feelings”, “out loud” or “private”, and whether the results feel believable to players. This one will be tested with people, not code.
 
 *(Results to be added.)*
