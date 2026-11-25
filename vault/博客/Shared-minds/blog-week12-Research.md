@@ -30,7 +30,7 @@ It is also a playable test of the core mechanic of my thesis game, *What She Lef
 3. **One line at a time.** Each scene is a picture with subtitles. Only one short line is on screen at once, and you tap to hear the next. Each person says three lines.
 4. **Collect words.** Gold words in the subtitles can be picked up. They fly down into your pocket as paper slips: *rope*, *comb*, *dagger*, *shame*, *contempt*, *jealousy*, *someone*. When you pick up “I”, the slip carries the speaker's name, so you always keep track of whose words you are holding.
 5. **Piece together the truth.** Back in the grove, you open the magistrate's sentence (*The samurai died by the hand of ___, with the ___, because of ___.*) and fill it with your slips, in any combination you want. Then you hand it in. The magistrate takes it and says nothing. There is no right answer and no score.
-6. **A type, not a verdict.** The game reads how you built your sentence and gives you an MBTI-style type with a portrait of someone in the story (*The Medium*, *The Magistrate*, *Tajōmaru*, *The Woodcutter*). It also shows a bar of whose voices your truth is made of: for example, 67% the wife, 33% the dead man.
+6. **A type, not a verdict.** The game reads how you built your sentence and gives you a type similar to an MBTI type, with a portrait of someone in the story (*The Medium*, *The Magistrate*, *Tajōmaru*, *The Woodcutter*). It also shows a bar of whose voices your truth is made of: for example, 67% the wife, 33% the dead man.
 7. **A shared map.** Your sentence is turned into an embedding and placed on a map with everyone else's. You can read the truth of the stranger closest to you, and of the one farthest away.
 
 **How the four letters are read from play:**
@@ -118,20 +118,17 @@ I built and tested two prototypes with *Rue Morgue*, wrote down why they didn't 
 
 ### NotebookLM
 
-*(Link to be added.)*
+https://notebook.google.com/notebook/3f9522d1-7bd8-4006-aaa4-ea4ab5c7238e
 
 What I'm putting in:
 
 - All my blog posts for this class (weeks 1–7 and 9–12), one file per week
 - My thesis posts: *Starting Over*, *Exploration 7: Gameplay*, and my notes on *Disco Elysium*
 - *In a Grove* (the original text)
-
-The question I want to ask it: *across this semester, how did I end up at a game about building the truth out of other people's words?*
+- *In a Grove* (an English translation)
 
 ### Technical gaps
 
 1. **Embeddings in the browser.** The player's sentence doesn't exist until they make it, so it has to be embedded on the spot. I'm testing whether transformers.js can run the same multilingual MiniLM model I used in Borrowed Sentences, how long the first load takes, and how fast one sentence is.
 2. **A shared map.** Firebase for storing everyone's sentences, and a way to place hundreds of sentences in 2D (UMAP, or simply projecting onto the four type axes).
 3. **Reading a type from a sentence.** Which slips count as “things” or “feelings”, “out loud” or “private”, and whether the results feel believable to players. This one will be tested with people, not code.
-
-*(Results to be added.)*
